@@ -5,7 +5,8 @@ def exibir_menu_principal():
         print("2. Cadastrar Vendedores")
         print("3. Cadastrar Produtos")
         print("4. Registrar Vendas")
-        print("5. Sair")
+        print("5. Consultar histórico)
+        print("6. Sair")
 
         opcao = input("Escolha uma opção: ")
 
@@ -22,6 +23,9 @@ def exibir_menu_principal():
             pass
             # Chamar o controller de vendas
         elif opcao == '5':
+            pass #atraves do menu consultar o historico
+            
+        elif opcao == '6':
             print("Saindo do sistema...")
             break
         else:
