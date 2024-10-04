@@ -5,7 +5,7 @@ def exibir_menu_principal():
         print("2. Cadastrar Vendedores")
         print("3. Cadastrar Produtos")
         print("4. Registrar Vendas")
-        print("5. Consultar histórico)
+        print("5. Consultar histórico")
         print("6. Sair")
 
         opcao = input("Escolha uma opção: ")
