@@ -1,5 +1,13 @@
 class Produto:
-    def __init__(self, codigo: int, nome: str, descricao: str, tamanho: str, cor: str, preco: float):
+    def __init__(
+            self,
+            codigo: int,
+            nome: str,
+            descricao: str,
+            tamanho: str,
+            cor: str,
+            preco: float
+    ):
         self.__codigo = codigo
         self.__nome = nome
         self.__descricao = descricao
@@ -23,7 +31,7 @@ class Produto:
 
     @nome.setter
     def nome(self, nome):
-        if not isinstance(nome,  str):
+        if not isinstance(nome, str):
             raise TypeError("O nome do produto inválido.")
         self.__nome = nome
 
@@ -52,7 +60,7 @@ class Produto:
         return self.__cor
 
     @cor.setter
-    def cor(self, cor:str):
+    def cor(self, cor: str):
         if not isinstance(cor, str):
             raise TypeError("Cor do produto inválida.")
         self.__cor = cor
@@ -68,4 +76,3 @@ class Produto:
         if preco < 0:
             raise ValueError("O preço do produto não pode ser negativo.")
         self.__preco = preco
-        

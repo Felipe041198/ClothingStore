@@ -1,10 +1,11 @@
 from validador import Validador
-from Cliente import Cliente
-from Vendedor import Vendedor
+from cliente import Cliente
+from vendedor import Vendedor
 from produto import Produto
 
+
 class Venda:
-    def __init__(self, cliente:Cliente, vendedor: Vendedor, produtos:list[Produto], data_venda: str):
+    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[Produto], data_venda: str):
         self.__cliente = cliente
         self.__vendedor = vendedor
         self.__produtos = produtos
@@ -24,7 +25,7 @@ class Venda:
 
     @cliente.setter
     def cliente(self, cliente):
-        if not isinstance(cliente,  Cliente):
+        if not isinstance(cliente, Cliente):
             raise TypeError("Cliente inválido.")
         self.__cliente = cliente
 
@@ -34,7 +35,7 @@ class Venda:
 
     @vendedor.setter
     def vendedor(self, vendedor):
-        if not isinstance(vendedor,  Vendedor):
+        if not isinstance(vendedor, Vendedor):
             raise TypeError("Vendedor inválido.")
         self.__vendedor = vendedor
 
@@ -58,4 +59,5 @@ class Venda:
             if not isinstance(produto, Produto):
                 raise TypeError("Produto não cadastrado.")
         self.__produtos = produtos
-        self.__valor_total = self.calcular_total() #recalcula se algo mudar
+        # Recalcula se algo mudar
+        self.__valor_total = self.calcular_total()

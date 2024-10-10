@@ -1,17 +1,24 @@
 from datetime import datetime, timedelta
 from venda import Venda
-from Cliente import Cliente
-from Vendedor import Vendedor
+from cliente import Cliente
+from vendedor import Vendedor
+
 
 class RelatorioVendas:
-    
-    def __init__(self, vendas: list[Venda], cliente=None, vendedor=None, inicio=None, fim=None):
+
+    def __init__(
+            self,
+            vendas: list[Venda],
+            cliente=None,
+            vendedor=None,
+            inicio=None,
+            fim=None
+    ):
         self.__vendas = vendas
         self.__cliente = cliente
         self.__vendedor = vendedor
         self.__inicio = inicio
         self.__fim = fim
-
         self.__vendas = self.aplicar_filtros()
 
     @property
@@ -84,11 +91,13 @@ class RelatorioVendas:
 
     # Última compra por cliente ou vendedor
     def ultima_compra_cliente(self, cliente: Cliente):
-        vendas_cliente = sorted(self.gerar_relatorio_completo(cliente=cliente), key=lambda x: x.data_venda, reverse=True)
+        vendas_cliente = sorted(self.gerar_relatorio_completo(cliente=cliente), key=lambda x: x.data_venda,
+                                reverse=True)
         return vendas_cliente[0].produtos if vendas_cliente else []
 
     def ultima_compra_vendedor(self, vendedor: Vendedor):
-        vendas_vendedor = sorted(self.gerar_relatorio_completo(vendedor=vendedor), key=lambda x: x.data_venda, reverse=True)
+        vendas_vendedor = sorted(self.gerar_relatorio_completo(vendedor=vendedor), key=lambda x: x.data_venda,
+                                 reverse=True)
         return vendas_vendedor[0].produtos if vendas_vendedor else []
 
     def valor_total(self):
@@ -123,5 +132,6 @@ class RelatorioVendas:
         ano = ano or agora.year
         mes = mes or agora.month
         inicio = datetime(ano, mes, 1)
-        fim = datetime(ano, mes + 1, 1) - timedelta(seconds=1) if mes < 12 else datetime(ano + 1, 1, 1) - timedelta(seconds=1)
+        fim = datetime(ano, mes + 1, 1) - timedelta(seconds=1) \
+            if mes < 12 else datetime(ano + 1, 1, 1) - timedelta(seconds=1)
         return self.filtrar_por_periodo(self.__vendas, inicio, fim)

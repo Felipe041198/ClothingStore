@@ -23,8 +23,8 @@ def exibir_menu_principal():
             pass
             # Chamar o controller de vendas
         elif opcao == '5':
-            pass #atraves do menu consultar o historico
-            
+            pass
+            # Atraves do menu consultar o historico
         elif opcao == '6':
             print("Saindo do sistema...")
             break

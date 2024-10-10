@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class Validador:
     @staticmethod
     def validar_cpf(cpf):
