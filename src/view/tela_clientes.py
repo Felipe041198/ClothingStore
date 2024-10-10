@@ -29,7 +29,10 @@ class TelaClientes(AbstractTelaClientes):
     def exibir_clientes(self, clientes: List[Cliente]):
         print("\n--- Lista de Clientes ---")
         for cliente in clientes:
-            print(f"Nome: {cliente.nome}, CPF: {cliente.cpf}, Data de nascimento: {cliente.data_nasc}, Categoria: {cliente.categoria}")
+            print(f"Nome: {cliente.nome}, "
+                  f"CPF: {cliente.cpf}, "
+                  f"Data de nascimento: {cliente.data_nasc}, "
+                  f"Categoria: {cliente.categoria}")
 
     def opcao_invalida(self):
         print("Opção inválida, tente novamente.")
