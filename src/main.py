@@ -1,4 +1,9 @@
+from src.controller.controlador_clientes import ControladorClientes
+
+
 def exibir_menu_principal():
+    __controlador_clientes = ControladorClientes()
+
     while True:
         print("\n--- Sistema de Gerenciamento de Loja de Roupas ---")
         print("1. Cadastrar Clientes")
@@ -11,8 +16,8 @@ def exibir_menu_principal():
         opcao = input("Escolha uma opção: ")
 
         if opcao == '1':
-            pass
             # Chamar o controller de clientes
+            __controlador_clientes.menu_clientes()
         elif opcao == '2':
             pass
             # Chamar o controller de vendedores
