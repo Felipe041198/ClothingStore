@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from src.model.cliente import Cliente
+from src.utils.enum_operacoes_cliente import OperacoesCliente
 
 
 class AbstractTelaClientes(ABC):
@@ -11,7 +13,19 @@ class AbstractTelaClientes(ABC):
         pass
 
     @abstractmethod
+    def obter_cpf(self, tipo_busca: OperacoesCliente) -> int:
+        pass
+
+    @abstractmethod
     def sucesso_cadastro(self):
+        pass
+
+    @abstractmethod
+    def sucesso_alteracao(self):
+        pass
+
+    @abstractmethod
+    def sucesso_exclusao(self, nome_cliente: str):
         pass
 
     @abstractmethod
@@ -19,7 +33,19 @@ class AbstractTelaClientes(ABC):
         pass
 
     @abstractmethod
+    def cliente_nao_encontrado(self):
+        pass
+
+    @abstractmethod
+    def exibir_cliente(self, cliente: Cliente):
+        pass
+
+    @abstractmethod
     def exibir_clientes(self, clientes):
+        pass
+
+    @abstractmethod
+    def editar_dados_cliente(self, cliente: Cliente):
         pass
 
     @abstractmethod

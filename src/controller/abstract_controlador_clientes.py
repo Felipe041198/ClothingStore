@@ -10,5 +10,25 @@ class AbstractControladorClientes(ABC):
 
     # Retorna a lista de clientes
     @abstractmethod
-    def listar_clientes(self) -> list:
+    def listar_clientes(self):
+        pass
+
+    # Retorna um cliente buscando pelo CPF
+    @abstractmethod
+    def busca_cliente(self):
+        pass
+
+    # Retorna um cliente buscando pelo CPF
+    @abstractmethod
+    def lista_cliente(self, cpf: int):
+        pass
+
+    # Edita um cliente buscando pelo CPF
+    @abstractmethod
+    def editar_cliente(self):
+        pass
+
+    # Retorna a lista de clientes
+    @abstractmethod
+    def exclui_cliente(self):
         pass

@@ -16,7 +16,6 @@ def exibir_menu_principal():
         opcao = input("Escolha uma opção: ")
 
         if opcao == '1':
-            # Chamar o controller de clientes
             __controlador_clientes.menu_clientes()
         elif opcao == '2':
             pass
@@ -30,7 +29,7 @@ def exibir_menu_principal():
         elif opcao == '5':
             pass
             # Atraves do menu consultar o historico
-        elif opcao == '6':
+        elif opcao == '0':
             print("Saindo do sistema...")
             break
         else:
