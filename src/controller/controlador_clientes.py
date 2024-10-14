@@ -1,4 +1,7 @@
+from typing import List
+
 from src.controller.abstract_controlador_clientes import AbstractControladorClientes
+from src.model.cliente import Cliente
 from src.utils.enum_operacoes_cliente import OperacoesCliente
 from src.view.tela_clientes import TelaClientes
 
@@ -31,25 +34,24 @@ class ControladorClientes(AbstractControladorClientes):
         self.__clientes.append(cliente)
         self.__tela_clientes.sucesso_cadastro()
 
-    def listar_clientes(self):
+    def listar_clientes(self) -> List[Cliente]:
         if not self.__clientes:
             self.__tela_clientes.sem_clientes()
         else:
             self.__tela_clientes.exibir_clientes(self.__clientes)
+        return self.__clientes
 
-    def busca_cliente(self):
+    def busca_cliente(self) -> int:
         cpf = self.__tela_clientes.obter_cpf(OperacoesCliente.BUSCA)
         self.lista_cliente(cpf)
+        return cpf
 
-    def lista_cliente(self, cpf: int):
-        tem_cliente = False
+    def lista_cliente(self, cpf: int) -> Cliente | None:
         for cliente in self.__clientes:
             if cliente.cpf == cpf:
                 self.__tela_clientes.exibir_cliente(cliente)
-                tem_cliente = True
-                break
-        if not tem_cliente:
-            self.__tela_clientes.cliente_nao_encontrado()
+                return cliente
+        return None
 
     def exclui_cliente(self):
         cpf = self.__tela_clientes.obter_cpf(OperacoesCliente.EXCLUI)
