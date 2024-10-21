@@ -1,6 +1,6 @@
 from typing import List
 from src.model.cliente import Cliente
-from src.utils.enum_operacoes_cliente import OperacoesCliente
+from src.utils.enum_operacoes import Operacao
 from src.view.abstract_tela_clientes import AbstractTelaClientes
 
 
@@ -24,7 +24,7 @@ class TelaClientes(AbstractTelaClientes):
         categoria = input("Categoria: ")
         return Cliente(int(cpf), nome, data_nasc, int(categoria))
 
-    def obter_cpf(self, tipo_busca: OperacoesCliente) -> int:
+    def obter_cpf(self, tipo_busca: Operacao) -> int:
         print(f"\n--- Qual CPF do cliente que deseja {tipo_busca.value}? ---")
         cpf = input("CPF: ")
         return int(cpf)

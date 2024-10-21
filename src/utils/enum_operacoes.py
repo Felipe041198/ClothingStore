@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class OperacoesCliente(Enum):
+class Operacao(Enum):
     BUSCA = "buscar"
     EXCLUI = "excluir"
     EDITA = "editar"

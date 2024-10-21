@@ -5,6 +5,9 @@ class Pessoa(ABC):
 
     @abstractmethod
     def __init__(self, cpf: int, nome: str, data_nasc: str):
+        self.__cpf = None
+        self.__nome = None
+        self.__data_nasc = None
         if isinstance(cpf, int):
             self.__cpf = cpf
         if isinstance(nome, str):
