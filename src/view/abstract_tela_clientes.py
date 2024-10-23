@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from src.model.cliente import Cliente
-from src.utils.enum_operacoes_cliente import OperacoesCliente
+from src.utils.enum_operacoes import Operacao
 
 
 class AbstractTelaClientes(ABC):
@@ -13,7 +13,7 @@ class AbstractTelaClientes(ABC):
         pass
 
     @abstractmethod
-    def obter_cpf(self, tipo_busca: OperacoesCliente) -> int:
+    def obter_cpf(self, tipo_busca: Operacao) -> int:
         pass
 
     @abstractmethod
