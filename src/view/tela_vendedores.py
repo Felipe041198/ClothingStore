@@ -23,9 +23,9 @@ class TelaVendedores:
                 data_nasc = Validador.validar_data_nascimento()
                 codigo = input("Código: ")
                 salario = input("Salário: ")
-                
+
                 return Vendedor(cpf, nome, data_nasc, int(codigo), float(salario))
-            
+
             except ValueError as e:
                 print(f"Erro ao cadastrar vendedor: {e}. Tente novamente.")
 
@@ -63,7 +63,10 @@ class TelaVendedores:
         print("Deixe em branco para manter os dados atuais.")
         nome = input(f"Nome atual: {vendedor.nome} (novo nome): ") or vendedor.nome
         cpf = input(f"CPF atual: {vendedor.cpf} (novo CPF): ") or vendedor.cpf
-        data_nasc = input(f"Data de nascimento atual: {vendedor.data_nasc} (nova data de nascimento): ") or vendedor.data_nasc
+        data_nasc = (
+            input(f"Data de nascimento atual: {vendedor.data_nasc} (nova data de nascimento): ")
+            or vendedor.data_nasc
+        )
         codigo = input(f"Código atual: {vendedor.codigo} (novo código): ") or vendedor.codigo
         salario = input(f"Salário atual: {vendedor.salario} (novo salário): ") or vendedor.salario
 
