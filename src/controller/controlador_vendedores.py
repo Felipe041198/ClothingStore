@@ -34,7 +34,7 @@ class ControladorVendedores(AbstractControladorVendedores):
                 vendedor_existente = self.busca_vendedor(vendedor.cpf)
                 if vendedor_existente:
                     self.__tela_vendedores.cpf_ja_cadastrado()
-                    return 
+                    return
                 self.__vendedores.append(vendedor)
                 self.__tela_vendedores.sucesso_cadastro()
                 self.__tela_vendedores.exibir_vendedor(vendedor)
