@@ -49,11 +49,11 @@ class Validador:
             if not isinstance(nome, str) or not nome:
                 print("Nome inválido! O nome não pode estar vazio. Tente novamente.")
                 continue
-            
+         
             if not re.match(r'^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$', nome):
                 print("Nome inválido! O nome não pode conter números, sinais ou pontuação. Tente novamente.")
                 continue
-            
+         
             if len(nome.split()) < 2:
                 print("Nome inválido! Insira pelo menos dois nomes (nome e sobrenome). Tente novamente.")
                 continue
