@@ -1,12 +1,16 @@
 from typing import List
 from src.model.cliente import Cliente
 from src.utils.enum_operacoes import Operacao
+from src.view.abstract_tela import AbstractTela
 from src.view.abstract_tela_clientes import AbstractTelaClientes
 
 
-class TelaClientes(AbstractTelaClientes):
+class TelaClientes(AbstractTelaClientes, AbstractTela):
 
-    def menu(self):
+    def __init__(self) -> None:
+        pass
+
+    def menu(self, opcoes):
         print("\n--- Menu de Clientes ---")
         print("1. Cadastrar novo cliente")
         print("2. Listar clientes")
@@ -14,7 +18,8 @@ class TelaClientes(AbstractTelaClientes):
         print("4. Excluir cliente por CPF")
         print("5. Editar cliente por CPF")
         print("0. Voltar ao menu principal")
-        return input("Escolha uma opção: ")
+        opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
+        return opcao
 
     def obter_dados_cliente(self) -> Cliente:
         print("\n--- Cadastro de Cliente ---")

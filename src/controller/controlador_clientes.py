@@ -1,30 +1,27 @@
-from src.controller.abstract_controlador_clientes import AbstractControladorClientes
+from src.controller.abstract_controlador_cadastro import AbstractControladorCadastro
 from src.utils.enum_operacoes import Operacao
 from src.view.tela_clientes import TelaClientes
 
 
-class ControladorClientes(AbstractControladorClientes):
-    def __init__(self):
+class ControladorClientes(AbstractControladorCadastro):
+
+    def __init__(self, controlador_sistema):
+        super().__init__(controlador_sistema)
         self.__tela_clientes = TelaClientes()
         self.__clientes = []
 
-    def menu_clientes(self):
+    def abre_tela(self):
+        lista_opcoes = {
+            1: self.cadastrar_cliente,
+            2: self.listar_clientes,
+            3: self.busca_cliente,
+            4: self.exclui_cliente,
+            5: self.editar_cliente,
+            0: self.retornar
+        }
+
         while True:
-            opcao = self.__tela_clientes.menu()
-            if opcao == '1':
-                self.cadastrar_cliente()
-            elif opcao == '2':
-                self.listar_clientes()
-            elif opcao == '3':
-                self.busca_cliente()
-            elif opcao == '4':
-                self.exclui_cliente()
-            elif opcao == '5':
-                self.editar_cliente()
-            elif opcao == '0':
-                break
-            else:
-                self.__tela_clientes.opcao_invalida()
+            lista_opcoes[self.__tela_clientes.menu(lista_opcoes.keys())]()
 
     def cadastrar_cliente(self):
         cliente = self.__tela_clientes.obter_dados_cliente()
