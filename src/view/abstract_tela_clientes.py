@@ -47,7 +47,3 @@ class AbstractTelaClientes(ABC):
     @abstractmethod
     def editar_dados_cliente(self, cliente: Cliente):
         pass
-
-    @abstractmethod
-    def opcao_invalida(self):
-        pass
