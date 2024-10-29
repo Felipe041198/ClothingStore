@@ -1,9 +1,9 @@
-from src.controller.abstract_controlador_cadastro import AbstractControladorCadastro
+from src.controller.abstract_controlador_cadastro import AbstractControlador
 from src.utils.enum_operacoes import Operacao
 from src.view.tela_clientes import TelaClientes
 
 
-class ControladorClientes(AbstractControladorCadastro):
+class ControladorClientes(AbstractControlador):
 
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
