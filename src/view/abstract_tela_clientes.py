@@ -5,7 +5,7 @@ from src.utils.enum_operacoes import Operacao
 
 class AbstractTelaClientes(ABC):
     @abstractmethod
-    def menu(self):
+    def menu(self, opcoes):
         pass
 
     @abstractmethod
