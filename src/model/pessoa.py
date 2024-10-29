@@ -4,16 +4,10 @@ from abc import ABC, abstractmethod
 class Pessoa(ABC):
 
     @abstractmethod
-    def __init__(self, cpf: int, nome: str, data_nasc: str):
-        self.__cpf = None
-        self.__nome = None
-        self.__data_nasc = None
-        if isinstance(cpf, int):
-            self.__cpf = cpf
-        if isinstance(nome, str):
-            self.__nome = nome
-        if isinstance(data_nasc, str):
-            self.__data_nasc = data_nasc
+    def __init__(self, cpf, nome, data_nasc):
+        self.__cpf = cpf
+        self.__nome = nome
+        self.__data_nasc = data_nasc
 
     @property
     def cpf(self):

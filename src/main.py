@@ -1,8 +1,10 @@
 from src.controller.controlador_clientes import ControladorClientes
+from src.controller.controlador_vendedores import ControladorVendedores
 
 
 def exibir_menu_principal():
     __controlador_clientes = ControladorClientes()
+    __controlador_vendedores = ControladorVendedores()
 
     while True:
         print("\n--- Sistema de Gerenciamento de Loja de Roupas ---")
@@ -18,8 +20,7 @@ def exibir_menu_principal():
         if opcao == '1':
             __controlador_clientes.menu_clientes()
         elif opcao == '2':
-            pass
-            # Chamar o controller de vendedores
+            __controlador_vendedores.menu_vendedores()
         elif opcao == '3':
             pass
             # Chamar o controller de produtos
