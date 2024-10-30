@@ -1,25 +1,14 @@
 from typing import List
+
 from src.model.cliente import Cliente
-from src.utils.enum_operacoes import Operacao
-from src.view.abstract_tela import AbstractTela
-from src.view.abstract_tela_clientes import AbstractTelaClientes
+from src.utils.enum_tipo_cadastro import TipoCadastro
+from src.view.abstract_tela_cadastro import AbstractTelaCadastro
 
 
-class TelaClientes(AbstractTelaClientes, AbstractTela):
+class TelaClientes(AbstractTelaCadastro):
 
-    def __init__(self) -> None:
-        pass
-
-    def menu(self, opcoes):
-        print("\n--- Menu de Clientes ---")
-        print("1. Cadastrar novo cliente")
-        print("2. Listar clientes")
-        print("3. Procurar cliente por CPF")
-        print("4. Excluir cliente por CPF")
-        print("5. Editar cliente por CPF")
-        print("0. Voltar ao menu principal")
-        opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
-        return opcao
+    def __init__(self):
+        super().__init__(tipo_cadastro=TipoCadastro.CLIENTE)
 
     def obter_dados_cliente(self) -> Cliente:
         print("\n--- Cadastro de Cliente ---")
@@ -28,26 +17,6 @@ class TelaClientes(AbstractTelaClientes, AbstractTela):
         data_nasc = input("Data de nascimento: ")
         categoria = input("Categoria: ")
         return Cliente(int(cpf), nome, data_nasc, int(categoria))
-
-    def obter_cpf(self, tipo_busca: Operacao) -> int:
-        print(f"\n--- Qual CPF do cliente que deseja {tipo_busca.value}? ---")
-        cpf = input("CPF: ")
-        return int(cpf)
-
-    def sucesso_cadastro(self):
-        print("Cliente cadastrado com sucesso!")
-
-    def sucesso_alteracao(self):
-        print("Cliente alterado com sucesso!")
-
-    def sucesso_exclusao(self, nome_cliente: str):
-        print(f"Cliente {nome_cliente} excluído com sucesso!")
-
-    def sem_clientes(self):
-        print("Não há clientes cadastrados.")
-
-    def cliente_nao_encontrado(self):
-        print("CPF não encontrado.")
 
     def exibir_cliente(self, cliente: Cliente):
         print(f"Nome: {cliente.nome}, "
@@ -75,6 +44,3 @@ class TelaClientes(AbstractTelaClientes, AbstractTela):
 
         # Atualiza os dados do cliente mantendo os não alterados
         return Cliente(int(cpf), nome, data_nasc, int(categoria))
-
-    def opcao_invalida(self):
-        print("Opção inválida, tente novamente.")

@@ -1,9 +1,9 @@
-from src.controller.abstract_controlador_cadastro import AbstractControladorCadastro
+from src.controller.abstract_controlador_cadastro import AbstractControlador
 from src.utils.enum_operacoes import Operacao
 from src.view.tela_clientes import TelaClientes
 
 
-class ControladorClientes(AbstractControladorCadastro):
+class ControladorClientes(AbstractControlador):
 
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
@@ -21,7 +21,7 @@ class ControladorClientes(AbstractControladorCadastro):
         }
 
         while True:
-            lista_opcoes[self.__tela_clientes.menu(lista_opcoes.keys())]()
+            lista_opcoes[self.__tela_clientes.menu(list(lista_opcoes.keys()))]()
 
     def cadastrar_cliente(self):
         cliente = self.__tela_clientes.obter_dados_cliente()
@@ -30,7 +30,7 @@ class ControladorClientes(AbstractControladorCadastro):
 
     def listar_clientes(self):
         if not self.__clientes:
-            self.__tela_clientes.sem_clientes()
+            self.__tela_clientes.sem_cadastro()
         else:
             self.__tela_clientes.exibir_clientes(self.__clientes)
 
@@ -46,7 +46,7 @@ class ControladorClientes(AbstractControladorCadastro):
                 tem_cliente = True
                 break
         if not tem_cliente:
-            self.__tela_clientes.cliente_nao_encontrado()
+            self.__tela_clientes.cadastro_nao_encontrado()
 
     def exclui_cliente(self):
         cpf = self.__tela_clientes.obter_cpf(Operacao.EXCLUI)
@@ -58,7 +58,7 @@ class ControladorClientes(AbstractControladorCadastro):
                 tem_cliente = True
                 break
         if not tem_cliente:
-            self.__tela_clientes.cliente_nao_encontrado()
+            self.__tela_clientes.cadastro_nao_encontrado()
 
     def editar_cliente(self):
         cpf = self.__tela_clientes.obter_cpf(Operacao.EDITA)
@@ -73,4 +73,4 @@ class ControladorClientes(AbstractControladorCadastro):
                 break
 
         if not cliente_encontrado:
-            self.__tela_clientes.cliente_nao_encontrado()
+            self.__tela_clientes.cadastro_nao_encontrado()

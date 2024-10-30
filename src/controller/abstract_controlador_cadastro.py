@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractControladorCadastro(ABC):
+class AbstractControlador(ABC):
     @abstractmethod
     def __init__(self, controlador_sistema) -> None:
         self._controlador_sistema = controlador_sistema
