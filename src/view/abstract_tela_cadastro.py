@@ -1,4 +1,3 @@
-from abc import ABC
 from typing import List
 
 from src.utils.enum_operacoes import Operacao
@@ -6,7 +5,7 @@ from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.view.abstract_tela import AbstractTela
 
 
-class AbstractTelaCadastro(AbstractTela, ABC):
+class AbstractTelaCadastro(AbstractTela):
     def __init__(self, tipo_cadastro: TipoCadastro) -> None:
         self.tipo_cadastro = tipo_cadastro
 

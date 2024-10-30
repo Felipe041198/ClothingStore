@@ -1,19 +1,20 @@
-from validador import Validador
-from cliente import Cliente
-from vendedor import Vendedor
-from produto import Produto
+from datetime import date
+
+from src.model.cliente import Cliente
+from src.model.item_venda import ItemVenda
+from src.model.vendedor import Vendedor
 
 
 class Venda:
-    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[Produto], data_venda: str):
+    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[ItemVenda]):
         self.__cliente = cliente
         self.__vendedor = vendedor
         self.__produtos = produtos
-        self.__data_venda = Validador.validar_data_nascimento(data_venda)
+        self.__data_venda = date.today()
         self.__valor_total = self.calcular_total()
 
     def calcular_total(self):
-        return sum(produto.preco for produto in self.produtos)
+        return sum(produto.preco_venda for produto in self.__produtos)
 
     @property
     def valor_total(self):
@@ -43,21 +44,15 @@ class Venda:
     def data_venda(self):
         return self.__data_venda
 
-    @data_venda.setter
-    def data_venda(self, data_venda):
-        self.__data_venda = Validador.validar_data_nascimento(data_venda)
-
     @property
     def produtos(self):
         return self.__produtos
 
     @produtos.setter
     def produtos(self, produtos):
-        if not isinstance(produtos, list):
-            raise TypeError("Produtos deve ser uma lista.")
         for produto in produtos:
-            if not isinstance(produto, Produto):
-                raise TypeError("Produto não cadastrado.")
+            if not isinstance(produto, ItemVenda):
+                raise TypeError("Produto invalido.")
         self.__produtos = produtos
         # Recalcula se algo mudar
         self.__valor_total = self.calcular_total()
