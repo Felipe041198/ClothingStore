@@ -38,5 +38,11 @@ class AbstractTelaCadastro(AbstractTela, ABC):
     def sem_cadastro(self):
         print(f"Não há {self.tipo_cadastro.plural} cadastrados.")
 
+    def opcao_invalida(self):
+        print("Opção inválida, tente novamente.")
+
+    def cpf_ja_cadastrado(self):
+        print(f"Erro: {self.tipo_cadastro.singular} já cadastrado com este CPF.")
+
     def cadastro_nao_encontrado(self):
         print("CPF não encontrado.")

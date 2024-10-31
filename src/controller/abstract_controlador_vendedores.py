@@ -11,13 +11,13 @@ class AbstractControladorVendedores(ABC):
         pass
 
     @abstractmethod
-    def busca_vendedor(self, cpf: int):
+    def busca_vendedor(self):
         pass
 
     @abstractmethod
-    def editar_vendedor(self, cpf: int):
+    def editar_vendedor(self):
         pass
 
     @abstractmethod
-    def exclui_vendedor(self, cpf: int):
+    def exclui_vendedor(self):
         pass
