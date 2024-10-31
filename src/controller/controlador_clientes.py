@@ -25,10 +25,15 @@ class ControladorClientes(AbstractControlador):
         while True:
             lista_opcoes[self.__tela_clientes.menu(list(lista_opcoes.keys()))]()
 
-    def cadastrar_cliente(self) -> Cliente:
+    def cadastrar_cliente(self):
         cliente = self.__tela_clientes.obter_dados_cliente()
+        cliente_existente = self.busca_cliente(cliente.cpf)
+        if cliente_existente:
+            self.__tela_clientes.cpf_ja_cadastrado()
+            return
         self.__clientes.append(cliente)
         self.__tela_clientes.sucesso_cadastro()
+        self.__tela_clientes.exibir_cliente(cliente)
         return cliente
 
     def listar_clientes(self) -> list[Cliente]:
@@ -38,41 +43,44 @@ class ControladorClientes(AbstractControlador):
             self.__tela_clientes.exibir_clientes(self.__clientes)
         return self.__clientes
 
-    def busca_cliente(self):
-        cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
-        self.lista_cliente(cpf)
-
-    def lista_cliente(self, cpf: int) -> Cliente:
+    def busca_cliente(self, cpf = None):
+        if cpf is None:
+            cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
+        
         for cliente in self.__clientes:
             if cliente.cpf == cpf:
                 self.__tela_clientes.exibir_cliente(cliente)
                 return cliente
         self.__tela_clientes.cadastro_nao_encontrado()
 
+
     def exclui_cliente(self) -> Cliente:
         cpf = self.__tela_clientes.obter_cpf(Operacao.EXCLUI)
-        for cliente in self.__clientes:
-            if cliente.cpf == cpf:
-                self.__clientes.remove(cliente)
-                self.__tela_clientes.sucesso_exclusao(cliente.nome)
-                return cliente
-        self.__tela_clientes.cadastro_nao_encontrado()
+        cliente = self.busca_cliente(cpf)
 
-    def editar_cliente(self) -> Cliente:
+        if cliente:
+            self.__clientes.remove(cliente)
+            self.__tela_clientes.sucesso_exclusao(cliente.nome)
+            return cliente
+        else:
+            self.__tela_clientes.cadastro_nao_encontrado()
+
+    def editar_cliente(self):
         cpf = self.__tela_clientes.obter_cpf(Operacao.EDITA)
+        cliente = self.busca_cliente(cpf)
 
-        for i, cliente in enumerate(self.__clientes):
-            if cliente.cpf == cpf:
-                cliente_atualizado = self.__tela_clientes.editar_dados_cliente(cliente)
-                self.__clientes[i] = cliente_atualizado  # Substitui o cliente na lista
-                self.__tela_clientes.sucesso_alteracao()
-                return cliente
-
-        self.__tela_clientes.cadastro_nao_encontrado()
+        if cliente:
+            cliente_atualizado = self.__tela_clientes.editar_dados_cliente(cliente)
+            self.__clientes[self.__clientes.index(cliente)] = cliente_atualizado
+            self.__tela_clientes.sucesso_alteracao()
+            self.__tela_clientes.exibir_cliente(cliente_atualizado)
+            return cliente
+        else:
+            self.__tela_clientes.cadastro_nao_encontrado()
 
     def adicionar_mock_clientes(self):
         clientes = {
-            Cliente(1146, "Felipe Vieira", "04/11/1998", 1),
+            Cliente(1146,"Felipe Vieira", "04/11/1998", 1),
             Cliente(1111, "Cliente teste 1", "01/01/1999", 1),
             Cliente(2222, "Cliente teste 2", "02/02/2002", 2),
             Cliente(3333, "Cliente teste 3", "03/03/2003", 2),

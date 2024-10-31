@@ -1,86 +1,76 @@
-from src.controller.abstract_controlador_vendedores import AbstractControladorVendedores
+from src.controller.abstract_controlador_cadastro import AbstractControlador
+from src.utils.enum_operacoes import Operacao
 from src.view.tela_vendedores import TelaVendedores
 
 
-class ControladorVendedores(AbstractControladorVendedores):
-    def __init__(self):
+class ControladorVendedores(AbstractControlador):
+    def __init__(self, controlador_sistema):
+        super().__init__(controlador_sistema)
         self.__tela_vendedores = TelaVendedores()
         self.__vendedores = []
 
-    def menu_vendedores(self):
+    def abre_tela(self):
+        lista_opcoes = {
+            1: self.cadastrar_vendedor,
+            2: self.listar_vendedores,
+            3: self.busca_vendedor,
+            4: self.exclui_vendedor,
+            5: self.editar_vendedor,
+            0: self.retornar
+        }
+
         while True:
-            opcao = self.__tela_vendedores.menu()
-            if opcao == '1':
-                self.cadastrar_vendedor()
-            elif opcao == '2':
-                self.listar_vendedores()
-            elif opcao == '3':
-                self.busca_vendedor()
-            elif opcao == '4':
-                self.editar_vendedor()
-            elif opcao == '5':
-                self.exclui_vendedor()
-            elif opcao == '0':
-                break
-            else:
-                self.__tela_vendedores.opcao_invalida()
+            opcao = self.__tela_vendedores.menu(list(lista_opcoes.keys()))
+            lista_opcoes[opcao]()
 
     def cadastrar_vendedor(self):
-        while True:
-            try:
-                vendedor = self.__tela_vendedores.obter_dados_vendedor()
+        vendedor = self.__tela_vendedores.obter_dados_vendedor()
+        vendedor_existente = self.busca_vendedor(vendedor.cpf)
 
-                # verifica se o vendedor já está cadastrado
-                vendedor_existente = self.busca_vendedor(vendedor.cpf)
-                if vendedor_existente:
-                    self.__tela_vendedores.cpf_ja_cadastrado()
-                    return
-                self.__vendedores.append(vendedor)
-                self.__tela_vendedores.sucesso_cadastro()
-                self.__tela_vendedores.exibir_vendedor(vendedor)
-                break
-            except ValueError as e:
-                print(f"Erro ao cadastrar vendedor: {e}. Tente novamente.")
+        # verifica se o vendedor já está cadastrado
+        if vendedor_existente:
+            self.__tela_vendedores.cpf_ja_cadastrado()
+            return
+        self.__vendedores.append(vendedor)
+        self.__tela_vendedores.sucesso_cadastro()
+        self.__tela_vendedores.exibir_vendedor(vendedor)
 
     def listar_vendedores(self):
         if not self.__vendedores:
-            self.__tela_vendedores.sem_vendedores()
+            self.__tela_vendedores.sem_cadastro()
         else:
             self.__tela_vendedores.exibir_vendedores(self.__vendedores)
 
-    def busca_vendedor(self, cpf: int = None):
+    def busca_vendedor(self, cpf = None):
         if cpf is None:
-            cpf = self.__tela_vendedores.obter_cpf()
+            cpf = self.__tela_vendedores.obter_cpf(Operacao.BUSCA)
+        
         for vendedor in self.__vendedores:
             if vendedor.cpf == cpf:
                 self.__tela_vendedores.exibir_vendedor(vendedor)
                 return vendedor
-        self.__tela_vendedores.vendedor_nao_encontrado()
+        
+        self.__tela_vendedores.cadastro_nao_encontrado()
         return None
 
     def editar_vendedor(self):
-        cpf = self.__tela_vendedores.obter_cpf()
-        vendedor_encontrado = False
+        cpf = self.__tela_vendedores.obter_cpf(Operacao.EDITA)
+        vendedor = self.busca_vendedor(cpf)
 
-        for i, vendedor in enumerate(self.__vendedores):
-            if vendedor.cpf == cpf:
-                vendedor_atualizado = self.__tela_vendedores.editar_dados_vendedor(vendedor)
-                self.__vendedores[i] = vendedor_atualizado
-                self.__tela_vendedores.sucesso_alteracao()
-                vendedor_encontrado = True
-                break
-
-        if not vendedor_encontrado:
-            self.__tela_vendedores.vendedor_nao_encontrado()
+        if vendedor:
+            vendedor_atualizado = self.__tela_vendedores.editar_dados_vendedor(vendedor)
+            self.__vendedores[self.__vendedores.index(vendedor)] = vendedor_atualizado
+            self.__tela_vendedores.sucesso_alteracao()
+            self.__tela_vendedores.exibir_vendedor(vendedor_atualizado)
+        else:
+            self.__tela_vendedores.cadastro_nao_encontrado()
 
     def exclui_vendedor(self):
-        cpf = self.__tela_vendedores.obter_cpf()
-        tem_vendedor = False
-        for vendedor in self.__vendedores:
-            if vendedor.cpf == cpf:
-                self.__vendedores.remove(vendedor)
-                self.__tela_vendedores.sucesso_exclusao(vendedor.nome)
-                tem_vendedor = True
-                break
-        if not tem_vendedor:
-            self.__tela_vendedores.vendedor_nao_encontrado()
+        cpf = self.__tela_vendedores.obter_cpf(Operacao.EXCLUI)
+        vendedor = self.busca_vendedor(cpf)
+
+        if vendedor:
+            self.__vendedores.remove(vendedor)
+            self.__tela_vendedores.sucesso_exclusao(vendedor.nome)
+        else:
+            self.__tela_vendedores.cadastro_nao_encontrado()

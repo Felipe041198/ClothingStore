@@ -1,73 +1,72 @@
 from src.model.vendedor import Vendedor
 from typing import List
 from src.model.validador import Validador
+from src.view.abstract_tela_cadastro import AbstractTelaCadastro
+from src.utils.enum_tipo_cadastro import TipoCadastro
+from src.utils.codigo_gerador import GeradorCodigo
 
 
-class TelaVendedores:
-    def menu(self):
-        print("\n--- Menu de Vendedores ---")
-        print("1. Cadastrar novo vendedor")
-        print("2. Listar vendedores")
-        print("3. Buscar vendedor por CPF")
-        print("4. Editar vendedor por CPF")
-        print("5. Excluir vendedor por CPF")
-        print("0. Voltar ao menu principal")
-        return input("Escolha uma opção: ")
+class TelaVendedores(AbstractTelaCadastro):
+    def __init__(self):
+        super().__init__(tipo_cadastro=TipoCadastro.VENDEDOR)
 
     def obter_dados_vendedor(self) -> Vendedor:
-        while True:
-            try:
-                print("\n--- Cadastro de Vendedor ---")
-                cpf = Validador.validar_cpf()
-                nome = Validador.validar_nome()
-                data_nasc = Validador.validar_data_nascimento()
-                codigo = input("Código: ")
-                salario = input("Salário: ")
+        print("\n--- Cadastro de Vendedor ---")
+        cpf = Validador.validar_cpf()
+        nome = Validador.validar_nome()
+        data_nasc = Validador.validar_data_nascimento()
+        codigo = GeradorCodigo().gerar_codigo("vendedor")
+        print(f"Código gerado: {codigo}")
+        salario = input("Salário: ")
 
-                return Vendedor(cpf, nome, data_nasc, int(codigo), float(salario))
-
-            except ValueError as e:
-                print(f"Erro ao cadastrar vendedor: {e}. Tente novamente.")
-
-    def cpf_ja_cadastrado(self):
-        print("Erro: Vendedor já cadastrado com este CPF.")
-
-    def obter_cpf(self) -> str:
-        return Validador.validar_cpf()
-
-    def sucesso_cadastro(self):
-        print("Vendedor cadastrado com sucesso!")
-
-    def sucesso_alteracao(self):
-        print("Vendedor alterado com sucesso!")
-
-    def sucesso_exclusao(self, nome_vendedor: str):
-        print(f"Vendedor {nome_vendedor} excluído com sucesso!")
-
-    def sem_vendedores(self):
-        print("Não há vendedores cadastrados.")
-
-    def vendedor_nao_encontrado(self):
-        print("Vendedor não encontrado.")
+        return Vendedor(int(cpf), nome, data_nasc, int(codigo), float(salario))
 
     def exibir_vendedor(self, vendedor: Vendedor):
-        print(f"Nome: {vendedor.nome}, CPF: {vendedor.cpf}, Salário: {vendedor.salario}")
+        salario_formatado = f"R${vendedor.salario}".replace('.', ',')
+        print(f"Nome: {vendedor.nome}, "
+              f"CPF: {vendedor.cpf}, "
+              f"Data de nascimento: {vendedor.data_nasc}, "
+              f"Categoria: {vendedor.codigo}, "
+              f"Salário: {salario_formatado}")
 
     def exibir_vendedores(self, vendedores: List[Vendedor]):
         print("\n--- Lista de Vendedores ---")
         for vendedor in vendedores:
-            print(f"Nome: {vendedor.nome}, CPF: {vendedor.cpf}, Salário: {vendedor.salario}")
+            salario_formatado = f"R${vendedor.salario}".replace('.', ',')
+            print(f"Nome: {vendedor.nome}, "
+                f"CPF: {vendedor.cpf}, "
+                f"Data de nascimento: {vendedor.data_nasc}, "
+                f"Categoria: {vendedor.codigo}, "
+                f"Salário: {salario_formatado}")
 
     def editar_dados_vendedor(self, vendedor: Vendedor) -> Vendedor:
         print("\n--- Editar Vendedor ---")
         print("Deixe em branco para manter os dados atuais.")
-        nome = input(f"Nome atual: {vendedor.nome} (novo nome): ") or vendedor.nome
-        cpf = input(f"CPF atual: {vendedor.cpf} (novo CPF): ") or vendedor.cpf
-        data_nasc = (
-            input(f"Data de nascimento atual: {vendedor.data_nasc} (nova data de nascimento): ")
-            or vendedor.data_nasc
-        )
-        codigo = input(f"Código atual: {vendedor.codigo} (novo código): ") or vendedor.codigo
-        salario = input(f"Salário atual: {vendedor.salario} (novo salário): ") or vendedor.salario
+        nome = vendedor.nome
+        cpf = vendedor.cpf
+        data_nasc = vendedor.data_nasc
+        salario = vendedor.salario
+        codigo = vendedor.codigo
 
-        return Vendedor(cpf, nome, data_nasc, int(codigo), float(salario))
+        nome_novo = input(f"Nome atual ({nome}): ") or nome
+        if nome_novo != nome:
+            Validador.validar_nome(nome_novo)
+            nome = nome_novo
+
+        cpf_novo = input(f"CPF atual ({cpf}): ") or cpf
+        if cpf_novo != cpf:
+            Validador.validar_cpf(cpf_novo)
+            cpf = cpf_novo
+
+        data_nasc_novo = input(f"Data de nascimento atual ({data_nasc}): ") or data_nasc
+        if data_nasc_novo != data_nasc:
+            Validador.validar_data_nascimento(data_nasc_novo)
+            data_nasc = data_nasc_novo
+
+        salario_novo = input(f"Salário atual ({salario:.2f}): ") or salario
+        try:
+            salario = float(salario_novo)
+        except ValueError:
+            print("Salário inválido. Mantendo o valor atual.")
+
+        return Vendedor(int(cpf), nome, data_nasc, codigo, salario)
