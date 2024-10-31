@@ -1,4 +1,5 @@
 from src.controller.controlador_clientes import ControladorClientes
+from src.controller.controlador_vendas import ControladorVendas
 from src.view.tela_sistema import TelaSistema
 
 
@@ -6,6 +7,9 @@ class ControladorSistema:
 
     def __init__(self):
         self.__controlador_clientes = ControladorClientes(self)
+        self.__controlador_vendedores = None
+        self.__controlador_produtos = None
+        self.__controlador_vendas = ControladorVendas(self)
         self.__tela_sistema = TelaSistema()
 
     @property
@@ -18,6 +22,9 @@ class ControladorSistema:
     def cadastra_clientes(self):
         self.__controlador_clientes.abre_tela()
 
+    def registra_venda(self):
+        self.__controlador_vendas.abre_tela()
+
     @staticmethod
     def encerra_sistema():
         exit(0)
@@ -25,6 +32,7 @@ class ControladorSistema:
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastra_clientes,
+            4: self.registra_venda,
             0: self.encerra_sistema
         }
 
