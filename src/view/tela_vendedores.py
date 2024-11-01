@@ -11,15 +11,16 @@ class TelaVendedores(AbstractTelaCadastro):
         super().__init__(tipo_cadastro=TipoCadastro.VENDEDOR)
 
     def obter_dados_vendedor(self) -> Vendedor:
-        print("\n--- Cadastro de Vendedor ---")
-        cpf = Validador.validar_cpf()
-        nome = Validador.validar_nome()
-        data_nasc = Validador.validar_data_nascimento()
-        codigo = GeradorCodigo().gerar_codigo("vendedor")
-        print(f"Código gerado: {codigo}")
-        salario = input("Salário: ")
+        while True:
+            print("\n--- Cadastro de Vendedor ---")
+            cpf = Validador.validar_cpf()
+            nome = Validador.validar_nome()
+            data_nasc = Validador.validar_data_nascimento()
+            codigo = GeradorCodigo().gerar_codigo("vendedor")
+            print(f"Código gerado: {codigo}")
+            salario = input("Salário: ")
 
-        return Vendedor(int(cpf), nome, data_nasc, int(codigo), float(salario))
+            return Vendedor(cpf, nome, data_nasc, int(codigo), float(salario))
 
     def exibir_vendedor(self, vendedor: Vendedor):
         salario_formatado = f"R${vendedor.salario}".replace('.', ',')

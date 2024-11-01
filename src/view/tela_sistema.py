@@ -13,6 +13,6 @@ class TelaSistema(AbstractTela):
         print("3. Cadastrar Produtos")
         print("4. Registrar Vendas")
         print("5. Consultar histórico")
-        print("6. Sair")
+        print("0. Sair")
         opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
         return opcao

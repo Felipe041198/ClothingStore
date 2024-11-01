@@ -2,6 +2,7 @@ from typing import List
 
 from src.model.cliente import Cliente
 from src.utils.enum_tipo_cadastro import TipoCadastro
+from src.utils.codigo_gerador import GeradorCodigo
 from src.model.validador import Validador
 from src.view.abstract_tela_cadastro import AbstractTelaCadastro
 
@@ -12,16 +13,12 @@ class TelaClientes(AbstractTelaCadastro):
         super().__init__(tipo_cadastro=TipoCadastro.CLIENTE)
 
     def obter_dados_cliente(self) -> Cliente:
-        try:
-            print("\n--- Cadastro de Cliente ---")
-            cpf = Validador.validar_cpf()
-            nome = Validador.validar_nome()
-            data_nasc = Validador.validar_data_nascimento()
-            categoria = input("Categoria: ")
-            return Cliente(int(cpf), nome, data_nasc, int(categoria))
-
-        except ValueError as e:
-                print(f"Erro ao cadastrar cliente: {e}. Tente novamente.")
+        print("\n--- Cadastro de Cliente ---")
+        cpf = Validador.validar_cpf()
+        nome = Validador.validar_nome()
+        data_nasc = Validador.validar_data_nascimento()
+        categoria =  GeradorCodigo().gerar_codigo("cliente")
+        return Cliente(int(cpf), nome, data_nasc, int(categoria))
 
     def exibir_cliente(self, cliente: Cliente):
         print(f"Nome: {cliente.nome}, "

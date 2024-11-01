@@ -1,13 +1,28 @@
 from src.controller.abstract_controlador_cadastro import AbstractControlador
 from src.utils.enum_operacoes import Operacao
+from src.controller.abstract_controlador_cadastro import AbstractControlador
+from src.utils.enum_operacoes import Operacao
 from src.view.tela_vendedores import TelaVendedores
 
 
 class ControladorVendedores(AbstractControlador):
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
+class ControladorVendedores(AbstractControlador):
+    def __init__(self, controlador_sistema):
+        super().__init__(controlador_sistema)
         self.__tela_vendedores = TelaVendedores()
         self.__vendedores = []
+
+    def abre_tela(self):
+        lista_opcoes = {
+            1: self.cadastrar_vendedor,
+            2: self.listar_vendedores,
+            3: self.busca_vendedor,
+            4: self.exclui_vendedor,
+            5: self.editar_vendedor,
+            0: self.retornar
+        }
 
     def abre_tela(self):
         lista_opcoes = {
