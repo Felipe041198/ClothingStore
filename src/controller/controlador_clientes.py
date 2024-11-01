@@ -33,7 +33,6 @@ class ControladorClientes(AbstractControlador):
             return
         self.__clientes.append(cliente)
         self.__tela_clientes.sucesso_cadastro()
-        self.__tela_clientes.exibir_cliente(cliente)
         return cliente
 
     def listar_clientes(self) -> list[Cliente]:
