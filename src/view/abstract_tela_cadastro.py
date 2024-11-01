@@ -1,4 +1,3 @@
-from abc import ABC
 from typing import List
 
 from src.utils.enum_operacoes import Operacao
