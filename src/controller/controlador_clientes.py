@@ -43,16 +43,15 @@ class ControladorClientes(AbstractControlador):
             self.__tela_clientes.exibir_clientes(self.__clientes)
         return self.__clientes
 
-    def busca_cliente(self, cpf = None):
+    def busca_cliente(self, cpf=None):
         if cpf is None:
             cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
-        
+
         for cliente in self.__clientes:
             if cliente.cpf == cpf:
                 self.__tela_clientes.exibir_cliente(cliente)
                 return cliente
         self.__tela_clientes.cadastro_nao_encontrado()
-
 
     def exclui_cliente(self) -> Cliente:
         cpf = self.__tela_clientes.obter_cpf(Operacao.EXCLUI)
@@ -80,7 +79,7 @@ class ControladorClientes(AbstractControlador):
 
     def adicionar_mock_clientes(self):
         clientes = {
-            Cliente(1146,"Felipe Vieira", "04/11/1998", 1),
+            Cliente(1146, "Felipe Vieira", "04/11/1998", 1),
             Cliente(1111, "Cliente teste 1", "01/01/1999", 1),
             Cliente(2222, "Cliente teste 2", "02/02/2002", 2),
             Cliente(3333, "Cliente teste 3", "03/03/2003", 2),

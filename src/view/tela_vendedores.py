@@ -1,6 +1,6 @@
 from src.model.vendedor import Vendedor
 from typing import List
-from src.model.validador import Validador
+from titi.ClothingStore.src.utils.validador import Validador
 from src.view.abstract_tela_cadastro import AbstractTelaCadastro
 from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.utils.codigo_gerador import GeradorCodigo
@@ -20,7 +20,7 @@ class TelaVendedores(AbstractTelaCadastro):
             print(f"Código gerado: {codigo}")
             salario = input("Salário: ")
 
-            return Vendedor(cpf, nome, data_nasc, int(codigo), float(salario))
+            return Vendedor(int(cpf), nome, data_nasc, int(codigo), float(salario))
 
     def exibir_vendedor(self, vendedor: Vendedor):
         salario_formatado = f"R${vendedor.salario}".replace('.', ',')
@@ -35,10 +35,10 @@ class TelaVendedores(AbstractTelaCadastro):
         for vendedor in vendedores:
             salario_formatado = f"R${vendedor.salario}".replace('.', ',')
             print(f"Nome: {vendedor.nome}, "
-                f"CPF: {vendedor.cpf}, "
-                f"Data de nascimento: {vendedor.data_nasc}, "
-                f"Categoria: {vendedor.codigo}, "
-                f"Salário: {salario_formatado}")
+                  f"CPF: {vendedor.cpf}, "
+                  f"Data de nascimento: {vendedor.data_nasc}, "
+                  f"Categoria: {vendedor.codigo}, "
+                  f"Salário: {salario_formatado}")
 
     def editar_dados_vendedor(self, vendedor: Vendedor) -> Vendedor:
         print("\n--- Editar Vendedor ---")

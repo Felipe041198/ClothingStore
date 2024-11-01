@@ -4,7 +4,7 @@ from src.view.tela_sistema import TelaSistema
 from src.controller.controlador_vendedores import ControladorVendedores
 
 
-class ControladorSistema(AbstractControlador):
+class ControladorSistema:
 
     def __init__(self):
         self.__controlador_clientes = ControladorClientes(self)

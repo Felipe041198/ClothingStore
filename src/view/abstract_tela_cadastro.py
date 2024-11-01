@@ -27,13 +27,13 @@ class AbstractTelaCadastro(AbstractTela, ABC):
         return int(cpf)
 
     def sucesso_cadastro(self):
-        print(f"{self.tipo_cadastro.singular} cadastrado com sucesso!")
+        print(f"{self.tipo_cadastro.singular.capitalize()} cadastrado com sucesso!")
 
     def sucesso_alteracao(self):
-        print(f"{self.tipo_cadastro.singular} alterado com sucesso!")
+        print(f"{self.tipo_cadastro.singular.capitalize()} alterado com sucesso!")
 
     def sucesso_exclusao(self, nome: str):
-        print(f"{self.tipo_cadastro.singular} {nome} excluído com sucesso!")
+        print(f"{self.tipo_cadastro.singular.capitalize()} {nome} excluído com sucesso!")
 
     def sem_cadastro(self):
         print(f"Não há {self.tipo_cadastro.plural} cadastrados.")
