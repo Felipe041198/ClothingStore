@@ -14,9 +14,9 @@ class AbstractTelaCadastro(AbstractTela, ABC):
         print(f"\n--- Menu de {self.tipo_cadastro.plural.capitalize()} ---")
         print(f"1. Cadastrar novo {self.tipo_cadastro.singular}")
         print(f"2. Listar {self.tipo_cadastro.plural}")
-        print(f"3. Procurar {self.tipo_cadastro.singular} por CPF")
-        print(f"4. Excluir {self.tipo_cadastro.singular} por CPF")
-        print(f"5. Editar {self.tipo_cadastro.singular} por CPF")
+        print(f"3. Procurar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
+        print(f"4. Excluir {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
+        print(f"5. Editar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
         print("0. Voltar ao menu principal")
         opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
         return opcao
@@ -42,4 +42,4 @@ class AbstractTelaCadastro(AbstractTela, ABC):
         print(f"Erro: {self.tipo_cadastro.singular} já cadastrado com este CPF.")
 
     def cadastro_nao_encontrado(self):
-        print("CPF não encontrado.")
+        print("Cadastro não encontrado.")
