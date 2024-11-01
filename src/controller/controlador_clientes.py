@@ -25,7 +25,7 @@ class ControladorClientes(AbstractControlador):
         while True:
             lista_opcoes[self.__tela_clientes.menu(list(lista_opcoes.keys()))]()
 
-    def cadastrar_cliente(self):
+    def cadastrar_cliente(self -> Cliente):
         cliente = self.__tela_clientes.obter_dados_cliente()
         cliente_existente = self.busca_cliente(cliente.cpf)
         if cliente_existente:
