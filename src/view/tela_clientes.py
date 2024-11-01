@@ -3,7 +3,7 @@ from typing import List
 from src.model.cliente import Cliente
 from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.utils.codigo_gerador import GeradorCodigo
-from titi.ClothingStore.src.utils.validador import Validador
+from src.utils.validador import Validador
 from src.view.abstract_tela_cadastro import AbstractTelaCadastro
 
 
