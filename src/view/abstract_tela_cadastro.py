@@ -6,7 +6,7 @@ from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.view.abstract_tela import AbstractTela
 
 
-class AbstractTelaCadastro(AbstractTela, ABC):
+class AbstractTelaCadastro(AbstractTela):
     def __init__(self, tipo_cadastro: TipoCadastro) -> None:
         self.tipo_cadastro = tipo_cadastro
 
