@@ -15,15 +15,15 @@ class ControladorSistema:
         self.__tela_sistema = TelaSistema()
 
     @property
-    def controlador_clientes(self):
+    def controlador_clientes(self) -> ControladorClientes:
         return self.__controlador_clientes
 
     @property
-    def controlador_vendedores(self):
+    def controlador_vendedores(self) -> ControladorVendedores:
         return self.__controlador_vendedores
 
     @property
-    def controlador_produtos(self):
+    def controlador_produtos(self) -> ControladorProduto:
         return self.__controlador_produtos
 
     def inicializa_sistema(self):

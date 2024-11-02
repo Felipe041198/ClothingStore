@@ -22,9 +22,9 @@ class ControladorVendas(AbstractControlador):
             lista_opcoes[self.__tela_venda.menu(list(lista_opcoes.keys()))]()
 
     def realizar_venda(self):
-        clientes = self._controlador_sistema.controlador_clientes.listar_clientes()
-        vendedores = []
-        produtos = []
+        clientes = self._controlador_sistema.controlador_clientes.clientes
+        vendedores = self._controlador_sistema.controlador_vendedores.vendedores
+        produtos = self._controlador_sistema.controlador_produtos.produtos
         venda = self.__tela_venda.obter_dados_venda(clientes, vendedores, produtos)
         self.__vendas.append(venda)
         self.__tela_venda.sucesso_venda()

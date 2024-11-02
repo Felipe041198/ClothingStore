@@ -9,6 +9,10 @@ class ControladorProduto(AbstractControlador):
         self.__produtos = []
         self.__tela_produto = TelaProduto()
 
+    @property
+    def produtos(self) -> list[Produto]:
+        return self.__produtos
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastrar_produto,
