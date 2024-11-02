@@ -42,5 +42,4 @@ class TelaClientes(AbstractTelaCadastro):
             f"Data de nascimento atual: {cliente.data_nasc} (nova data de nascimento): ") or cliente.data_nasc
         categoria = input(f"Categoria atual: {cliente.categoria} (nova categoria): ") or cliente.categoria
 
-        # Atualiza os dados do cliente mantendo os não alterados
         return Cliente(int(cpf), nome, data_nasc, int(categoria))
