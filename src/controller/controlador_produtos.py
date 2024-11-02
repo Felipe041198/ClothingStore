@@ -24,7 +24,7 @@ class ControladorProduto(AbstractControlador):
             opcao = self.__tela_produto.menu(list(lista_opcoes.keys()))
             lista_opcoes[opcao]()
 
-    def cadastrar_produto(self):
+    def cadastrar_produto(self) -> Produto | None:
         produto = self.__tela_produto.obter_dados_produto()
         produto_existente = self.buscar_produto(produto.codigo)
 
@@ -36,14 +36,14 @@ class ControladorProduto(AbstractControlador):
         self.__tela_produto.exibir_produto(produto)
         return produto
 
-    def listar_produtos(self):
+    def listar_produtos(self) -> list[Produto]:
         if not self.__produtos:
             self.__tela_produto.sem_cadastro()
         else:
             self.__tela_produto.exibir_lista_produtos(self.__produtos)
         return self.__produtos
 
-    def buscar_produto(self, codigo=None):
+    def buscar_produto(self, codigo=None) -> Produto:
         if codigo is None:
             codigo = self.__tela_produto.busca_produto()
         for produto in self.__produtos:
@@ -52,9 +52,8 @@ class ControladorProduto(AbstractControlador):
                 return produto
 
         self.__tela_produto.cadastro_nao_encontrado()
-        return None
 
-    def editar_produto(self):
+    def editar_produto(self) -> Produto:
         codigo = self.__tela_produto.busca_produto()
         produto = self.buscar_produto(codigo)
 
@@ -63,16 +62,18 @@ class ControladorProduto(AbstractControlador):
             self.__produtos[self.__produtos.index(produto)] = produto_atualizado
             self.__tela_produto.sucesso_alteracao()
             self.__tela_produto.exibir_produto(produto_atualizado)
+            return produto_atualizado
         else:
             self.__tela_produto.cadastro_nao_encontrado()
 
-    def excluir_produto(self):
+    def excluir_produto(self) -> Produto:
         codigo = self.__tela_produto.busca_produto()
         produto = self.buscar_produto(codigo)
 
         if produto:
             self.__produtos.remove(produto)
             self.__tela_produto.sucesso_exclusao(produto.nome)
+            return produto
         else:
             self.__tela_produto.cadastro_nao_encontrado()
 
