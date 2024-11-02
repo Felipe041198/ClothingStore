@@ -1,5 +1,5 @@
+from src.controller.abstract_controlador import AbstractControlador
 from src.model.vendedor import Vendedor
-from src.controller.abstract_controlador_cadastro import AbstractControlador
 from src.utils.enum_operacoes import Operacao
 from src.view.tela_vendedores import TelaVendedores
 

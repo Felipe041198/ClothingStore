@@ -1,6 +1,6 @@
+from src.controller.abstract_controlador import AbstractControlador
 from src.model.produto import Produto
 from src.view.tela_produtos import TelaProduto
-from src.controller.abstract_controlador_cadastro import AbstractControlador
 
 
 class ControladorProduto(AbstractControlador):
