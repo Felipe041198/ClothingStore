@@ -10,6 +10,10 @@ class ControladorVendedores(AbstractControlador):
         self.__tela_vendedores = TelaVendedores()
         self.__vendedores = []
 
+    @property
+    def vendedores(self) -> list[Vendedor]:
+        return self.__vendedores
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastrar_vendedor,
@@ -25,7 +29,7 @@ class ControladorVendedores(AbstractControlador):
             opcao = self.__tela_vendedores.menu(list(lista_opcoes.keys()))
             lista_opcoes[opcao]()
 
-    def cadastrar_vendedor(self):
+    def cadastrar_vendedor(self) -> Vendedor | None:
         vendedor = self.__tela_vendedores.obter_dados_vendedor()
         vendedor_existente = self.busca_vendedor(vendedor.cpf)
 
@@ -38,7 +42,7 @@ class ControladorVendedores(AbstractControlador):
         self.__tela_vendedores.exibir_vendedor(vendedor)
         return vendedor
 
-    def listar_vendedores(self):
+    def listar_vendedores(self) -> list[Vendedor]:
         if not self.__vendedores:
             self.__tela_vendedores.sem_cadastro()
         else:
@@ -57,7 +61,7 @@ class ControladorVendedores(AbstractControlador):
         self.__tela_vendedores.cadastro_nao_encontrado()
         return None
 
-    def editar_vendedor(self):
+    def editar_vendedor(self) -> Vendedor:
         cpf = self.__tela_vendedores.obter_cpf(Operacao.EDITA)
         vendedor = self.busca_vendedor(cpf)
 
@@ -66,25 +70,27 @@ class ControladorVendedores(AbstractControlador):
             self.__vendedores[self.__vendedores.index(vendedor)] = vendedor_atualizado
             self.__tela_vendedores.sucesso_alteracao()
             self.__tela_vendedores.exibir_vendedor(vendedor_atualizado)
+            return vendedor_atualizado
         else:
             self.__tela_vendedores.cadastro_nao_encontrado()
 
-    def exclui_vendedor(self):
+    def exclui_vendedor(self) -> Vendedor:
         cpf = self.__tela_vendedores.obter_cpf(Operacao.EXCLUI)
         vendedor = self.busca_vendedor(cpf)
 
         if vendedor:
             self.__vendedores.remove(vendedor)
             self.__tela_vendedores.sucesso_exclusao(vendedor.nome)
+            return vendedor
         else:
             self.__tela_vendedores.cadastro_nao_encontrado()
 
     def adicionar_mock_vendedores(self):
         vendedores = {
-            Vendedor(1146, "Iris Souza", "28/01/2002", 1, 1400),
-            Vendedor(1111, "Vendedor teste 1", "01/01/1999", 1, 1000),
-            Vendedor(1222, "Vendedor teste 2", "02/02/2002", 2, 200),
-            Vendedor(1333, "Vendedor teste 3", "03/03/2003", 2, 8145),
+            Vendedor(1146, "Iris Souza", "28/01/2002", 1, 1400.00),
+            Vendedor(1111, "Vendedor teste 1", "01/01/1999", 1, 1000.00),
+            Vendedor(1222, "Vendedor teste 2", "02/02/2002", 2, 200.00),
+            Vendedor(1333, "Vendedor teste 3", "03/03/2003", 2, 8145.00),
         }
         for vendedor in vendedores:
             self.__vendedores.append(vendedor)

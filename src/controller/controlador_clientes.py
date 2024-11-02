@@ -30,7 +30,7 @@ class ControladorClientes(AbstractControlador):
         while True:
             lista_opcoes[self.__tela_clientes.menu(list(lista_opcoes.keys()))]()
 
-    def cadastrar_cliente(self) -> Cliente:
+    def cadastrar_cliente(self) -> Cliente | None:
         cliente = self.__tela_clientes.obter_dados_cliente()
         cliente_existente = self.busca_cliente(cliente.cpf)
         if cliente_existente:
@@ -77,7 +77,7 @@ class ControladorClientes(AbstractControlador):
             self.__clientes[self.__clientes.index(cliente)] = cliente_atualizado
             self.__tela_clientes.sucesso_alteracao()
             self.__tela_clientes.exibir_cliente(cliente_atualizado)
-            return cliente
+            return cliente_atualizado
         else:
             self.__tela_clientes.cadastro_nao_encontrado()
 
