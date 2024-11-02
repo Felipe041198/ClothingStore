@@ -1,4 +1,4 @@
-from src.controller.abstract_controlador_cadastro import AbstractControlador
+from src.controller.abstract_controlador import AbstractControlador
 from src.view.tela_vendas import TelaVendas
 
 

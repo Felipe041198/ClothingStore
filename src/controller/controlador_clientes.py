@@ -1,4 +1,5 @@
-from src.controller.abstract_controlador_cadastro import AbstractControlador
+from src.controller.abstract_controlador import AbstractControlador
+from src.mocks.cliente_mock import lista_clientes_mock
 from src.model.cliente import Cliente
 from src.utils.enum_operacoes import Operacao
 from src.view.tela_clientes import TelaClientes
@@ -10,6 +11,10 @@ class ControladorClientes(AbstractControlador):
         super().__init__(controlador_sistema)
         self.__tela_clientes = TelaClientes()
         self.__clientes = []
+
+    @property
+    def clientes(self) -> list[Cliente]:
+        return self.__clientes
 
     def abre_tela(self):
         lista_opcoes = {
@@ -77,11 +82,4 @@ class ControladorClientes(AbstractControlador):
             self.__tela_clientes.cadastro_nao_encontrado()
 
     def adicionar_mock_clientes(self):
-        clientes = {
-            Cliente(1146, "Felipe Vieira", "04/11/1998", 1),
-            Cliente(1111, "Cliente teste 1", "01/01/1999", 1),
-            Cliente(2222, "Cliente teste 2", "02/02/2002", 2),
-            Cliente(3333, "Cliente teste 3", "03/03/2003", 2),
-        }
-        for cliente in clientes:
-            self.__clientes.append(cliente)
+        self.__clientes.extend(lista_clientes_mock)
