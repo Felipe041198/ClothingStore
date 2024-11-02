@@ -51,6 +51,7 @@ class ControladorSistema:
             2: self.cadastra_vendedores,
             3: self.cadastra_produtos,
             4: self.registra_venda,
+            99: self.mock_dados,
             0: self.encerra_sistema
         }
 
@@ -58,3 +59,8 @@ class ControladorSistema:
             opcao_escolhida = self.__tela_sistema.tela_opcoes(list(lista_opcoes.keys()))
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
+
+    def mock_dados(self):
+        self.__controlador_clientes.adicionar_mock_clientes()
+        self.__controlador_vendedores.adicionar_mock_vendedores()
+        self.__controlador_produtos.adicionar_mock_produtos()

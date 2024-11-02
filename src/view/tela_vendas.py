@@ -5,22 +5,13 @@ from src.model.item_venda import ItemVenda
 from src.model.produto import Produto
 from src.model.venda import Venda
 from src.model.vendedor import Vendedor
-from src.view.abstract_tela import AbstractTela
+from src.utils.enum_tipo_cadastro import TipoCadastro
+from src.view.abstract_tela_cadastro import AbstractTelaCadastro
 
 
-class TelaVendas(AbstractTela):
+class TelaVendas(AbstractTelaCadastro):
     def __init__(self):
-        pass
-
-    def menu(self, opcoes: List[int]) -> int:
-        print("\n--- Menu de vendas ---")
-        print("1. Realizar uma nova venda")
-        print("2. Listar vendas")
-        print("3. Detalhar venda")
-        print("4. Excluir venda")
-        print("0. Voltar ao menu principal")
-        opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
-        return opcao
+        super().__init__(tipo_cadastro=TipoCadastro.PEDIDO)
 
     def obter_dados_venda(
         self,
@@ -89,5 +80,26 @@ class TelaVendas(AbstractTela):
             produtos_selecionados.append(produto_pedido)
         return produtos_selecionados
 
-    def sucesso_venda(self):
-        print("\n Venda cadastrada com sucesso")
+    def exibir_vendas(self, vendas: List[Venda]):
+
+        print("\n--- Lista de Pedidos ---")
+        for venda in vendas:
+            print(f"\nCliente: {venda.cliente.nome}, "
+                  f"Vendedor: {venda.vendedor.nome}, "
+                  f"Data da venda: {venda.data_venda} ")
+            for produto in venda.produtos:
+                print(f"Código do produto: {produto.codigo_produto}, "
+                      f"qnt: {produto.quantidade}, "
+                      f"preco: {produto.preco_venda}")
+            print(f"Preço total: {venda.valor_total}")
+            print("----------------------------------")
+
+    def seleciona_vendas(self, vendas) -> Venda:
+        print("\nPedidos disponíveis:")
+        lista_opcoes = []
+        for i, venda in enumerate(vendas, 1):
+            print(f"{i}. {venda.cliente.nome} - Data: {venda.data_venda} - Preço: {venda.valor_total}")
+            lista_opcoes.append(i)
+        indice_venda = self.le_num_inteiro("Escolha o pedido (número): ", lista_opcoes)
+        venda_selecionada = vendas[indice_venda - 1]
+        return venda_selecionada
