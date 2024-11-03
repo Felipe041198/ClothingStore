@@ -20,7 +20,7 @@ class TelaVendedores(AbstractTelaCadastro):
             print(f"Código gerado: {codigo}")
             salario = input("Salário: ")
 
-            return Vendedor(int(cpf), nome, data_nasc, int(codigo), float(salario))
+            return Vendedor(cpf, nome, data_nasc, int(codigo), float(salario))
 
     def exibir_vendedor(self, vendedor: Vendedor):
         salario_formatado = f"R${vendedor.salario}".replace('.', ',')
@@ -70,4 +70,4 @@ class TelaVendedores(AbstractTelaCadastro):
         except ValueError:
             print("Salário inválido. Mantendo o valor atual.")
 
-        return Vendedor(int(cpf), nome, data_nasc, codigo, salario)
+        return Vendedor(cpf, nome, data_nasc, codigo, salario)

@@ -21,10 +21,10 @@ class AbstractTelaCadastro(AbstractTela):
         opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
         return opcao
 
-    def obter_cpf(self, tipo_busca: Operacao) -> int:
+    def obter_cpf(self, tipo_busca: Operacao) -> str:
         print(f"\n--- Qual CPF do {self.tipo_cadastro.singular} que deseja {tipo_busca.value}? ---")
         cpf = input("CPF: ")
-        return int(cpf)
+        return cpf
 
     def sucesso_cadastro(self):
         print(f"{self.tipo_cadastro.singular.capitalize()} cadastrado com sucesso!")

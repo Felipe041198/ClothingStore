@@ -87,10 +87,10 @@ class ControladorVendedores(AbstractControlador):
 
     def adicionar_mock_vendedores(self):
         vendedores = {
-            Vendedor(1146, "Iris Souza", "28/01/2002", 1, 1400.00),
-            Vendedor(1111, "Vendedor teste 1", "01/01/1999", 1, 1000.00),
-            Vendedor(1222, "Vendedor teste 2", "02/02/2002", 2, 200.00),
-            Vendedor(1333, "Vendedor teste 3", "03/03/2003", 2, 8145.00),
+            Vendedor("1146", "Iris Souza", "28/01/2002", 1, 1400.00),
+            Vendedor("1111", "Vendedor teste 1", "01/01/1999", 1, 1000.00),
+            Vendedor("1222", "Vendedor teste 2", "02/02/2002", 2, 200.00),
+            Vendedor("1333", "Vendedor teste 3", "03/03/2003", 2, 8145.00),
         }
         for vendedor in vendedores:
             self.__vendedores.append(vendedor)
