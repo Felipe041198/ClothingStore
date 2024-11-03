@@ -18,7 +18,7 @@ class TelaClientes(AbstractTelaCadastro):
         nome = Validador.validar_nome()
         data_nasc = Validador.validar_data_nascimento()
         categoria = GeradorCodigo().gerar_codigo("cliente")
-        return Cliente(int(cpf), nome, data_nasc, int(categoria))
+        return Cliente(cpf, nome, data_nasc, int(categoria))
 
     def exibir_cliente(self, cliente: Cliente):
         print(f"Nome: {cliente.nome}, "
@@ -59,6 +59,6 @@ class TelaClientes(AbstractTelaCadastro):
                 Validador.validar_data_nascimento(data_nasc_novo)
                 data_nasc = data_nasc_novo
 
-            return Cliente(int(cpf), nome, data_nasc, categoria)
+            return Cliente(cpf, nome, data_nasc, categoria)
         except ValueError as e:
             print(f"Erro ao editar os dados do cliente: {e}. Tente novamente.")

@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 class Pessoa(ABC):
 
     @abstractmethod
-    def __init__(self, cpf: int, nome: str, data_nasc: str):
+    def __init__(self, cpf: str, nome: str, data_nasc: str):
         self.__cpf = None
         self.__nome = None
         self.__data_nasc = None
-        if isinstance(cpf, int):
+        if isinstance(cpf, str):
             self.__cpf = cpf
         if isinstance(nome, str):
             self.__nome = nome
@@ -21,7 +21,7 @@ class Pessoa(ABC):
 
     @cpf.setter
     def cpf(self, cpf):
-        if isinstance(cpf, int):
+        if isinstance(cpf, str):
             self.__cpf = cpf
 
     @property
