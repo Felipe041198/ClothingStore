@@ -15,7 +15,8 @@ class AbstractTelaCadastro(AbstractTela):
         print(f"2. Listar {self.tipo_cadastro.plural}")
         print(f"3. Procurar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
         print(f"4. Excluir {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
-        print(f"5. Editar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
+        if not self.tipo_cadastro.PEDIDO:
+            print(f"5. Editar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
         print("0. Voltar ao menu principal")
         opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
         return opcao
@@ -31,7 +32,7 @@ class AbstractTelaCadastro(AbstractTela):
     def sucesso_alteracao(self):
         print(f"{self.tipo_cadastro.singular.capitalize()} alterado com sucesso!")
 
-    def sucesso_exclusao(self, nome: str):
+    def sucesso_exclusao(self, nome: str = ""):
         print(f"{self.tipo_cadastro.singular.capitalize()} {nome} excluído com sucesso!")
 
     def sem_cadastro(self):
