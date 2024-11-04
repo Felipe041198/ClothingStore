@@ -10,7 +10,7 @@ class Cliente(Pessoa):
             self.__categoria = categoria
 
     @property
-    def categoria(self):
+    def categoria(self) -> CategoriaCliente:
         return self.__categoria
 
     @categoria.setter

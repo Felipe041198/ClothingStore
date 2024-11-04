@@ -90,7 +90,6 @@ class ControladorProduto(AbstractControlador):
             Produto(5, "Blusa de Tricô", "Blusa de tricô para inverno", "M", "Cinza", 79.90)
         ]
         self.__produtos.extend(mock_produtos)
-        print("Mock de produtos adicionados com sucesso!")
 
     def gerar_proximo_codigo(self) -> int:
         if not self.__produtos:

@@ -16,7 +16,7 @@ class Produto:
         self.__preco = preco
 
     @property
-    def codigo(self):
+    def codigo(self) -> int:
         return self.__codigo
 
     @codigo.setter
@@ -26,7 +26,7 @@ class Produto:
         self.__codigo = codigo
 
     @property
-    def nome(self):
+    def nome(self) -> str:
         return self.__nome
 
     @nome.setter
@@ -36,7 +36,7 @@ class Produto:
         self.__nome = nome
 
     @property
-    def descricao(self):
+    def descricao(self) -> str:
         return self.__descricao
 
     @descricao.setter
@@ -46,7 +46,7 @@ class Produto:
         self.__descricao = descricao
 
     @property
-    def tamanho(self):
+    def tamanho(self) -> str:
         return self.__tamanho
 
     @tamanho.setter
@@ -56,7 +56,7 @@ class Produto:
         self.__tamanho = tamanho
 
     @property
-    def cor(self):
+    def cor(self) -> str:
         return self.__cor
 
     @cor.setter
@@ -66,7 +66,7 @@ class Produto:
         self.__cor = cor
 
     @property
-    def preco(self):
+    def preco(self) -> float:
         return self.__preco
 
     @preco.setter
