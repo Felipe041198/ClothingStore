@@ -79,10 +79,7 @@ class ControladorClientes(AbstractControlador):
         else:
             self.__tela_clientes.cadastro_nao_encontrado()
 
-    def adicionar_mock_clientes(self):
-        self.__clientes.extend(lista_clientes_mock)
-
-    def pesquisa_cliente(self, cpf) -> Cliente:
+    def pesquisa_cliente(self, cpf: str) -> Cliente:
         for cliente in self.__clientes:
             if cliente.cpf == cpf:
                 return cliente
@@ -92,3 +89,6 @@ class ControladorClientes(AbstractControlador):
             return 1
         max_codigo = max(cliente.codigo for cliente in self.__clientes)
         return max_codigo + 1
+
+    def adicionar_mock_clientes(self):
+        self.__clientes.extend(lista_clientes_mock)
