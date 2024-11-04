@@ -1,7 +1,7 @@
 from typing import List
 
 from src.model.cliente import Cliente
-from src.utils.enum_categoria_cliente import busca_categoria
+from src.utils.enum_categoria_cliente import CategoriaCliente
 from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.utils.validador import Validador
 from src.view.abstract_tela_cadastro import AbstractTelaCadastro
@@ -17,7 +17,12 @@ class TelaClientes(AbstractTelaCadastro):
         cpf = Validador.validar_cpf()
         nome = Validador.validar_nome()
         data_nasc = Validador.validar_data_nascimento()
-        categoria = busca_categoria(int(input("Categoria (1- Normal, 2- Premium): ")))
+        print("Categoria:")
+        for categoria in CategoriaCliente:
+            print(f"{categoria.codigo} - {categoria.nome}")
+
+        opcao_categoria = self.le_num_inteiro("Escolha uma opção: ", CategoriaCliente.opcoes())
+        categoria = CategoriaCliente.busca_categoria(opcao_categoria)
         return Cliente(cpf, nome, data_nasc, categoria, codigo)
 
     def exibir_cliente(self, cliente: Cliente):
@@ -25,7 +30,7 @@ class TelaClientes(AbstractTelaCadastro):
               f"Nome: {cliente.nome}, "
               f"CPF: {cliente.cpf}, "
               f"Data de nascimento: {cliente.data_nasc}, "
-              f"Categoria: {cliente.categoria.value}")
+              f"Categoria: {cliente.categoria.nome}")
 
     def exibir_clientes(self, clientes: List[Cliente]):
         print("\n--- Lista de Clientes ---")
@@ -34,7 +39,7 @@ class TelaClientes(AbstractTelaCadastro):
                   f"Nome: {cliente.nome}, "
                   f"CPF: {cliente.cpf}, "
                   f"Data de nascimento: {cliente.data_nasc}, "
-                  f"Categoria: {cliente.categoria.value}")
+                  f"Categoria: {cliente.categoria.nome}")
 
     def editar_dados_cliente(self, cliente: Cliente) -> Cliente:
         try:

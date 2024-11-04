@@ -1,6 +1,10 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.exceptions.cpf_ja_cadastrado_exception import CpfJahCadastradoException
+from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
+from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.mocks.vendedores_mock import lista_vendedores_mock
 from src.model.vendedor import Vendedor
+from src.utils.decorators import tratar_excecoes
 from src.utils.enum_operacoes import Operacao
 from src.view.tela_vendedores import TelaVendedores
 
@@ -30,27 +34,28 @@ class ControladorVendedores(AbstractControlador):
             opcao = self.__tela_vendedores.menu(list(lista_opcoes.keys()))
             lista_opcoes[opcao]()
 
+    @tratar_excecoes
     def cadastrar_vendedor(self) -> Vendedor | None:
         vendedor = self.__tela_vendedores.obter_dados_vendedor(self.gerar_proximo_codigo())
         vendedor_existente = self.pesquisa_vendedor(vendedor.cpf)
 
         # verifica se o vendedor já está cadastrado
         if vendedor_existente:
-            self.__tela_vendedores.cpf_ja_cadastrado()
-            return
+            raise CpfJahCadastradoException
 
         self.__vendedores.append(vendedor)
         self.__tela_vendedores.sucesso_cadastro()
         return vendedor
 
+    @tratar_excecoes
     def listar_vendedores(self) -> list[Vendedor]:
-        if not self.__vendedores:
-            self.__tela_vendedores.sem_cadastro()
-        else:
+        if self.__vendedores:
             self.__tela_vendedores.exibir_vendedores(self.__vendedores)
-        return self.__vendedores
+            return self.__vendedores
+        raise NenhumRegistroEncontradoException
 
-    def busca_vendedor(self) -> Vendedor | None:
+    @tratar_excecoes
+    def busca_vendedor(self) -> Vendedor:
         cpf = self.__tela_vendedores.obter_cpf(Operacao.BUSCA)
 
         vendedor = self.pesquisa_vendedor(cpf)
@@ -59,8 +64,9 @@ class ControladorVendedores(AbstractControlador):
             self.__tela_vendedores.exibir_vendedor(vendedor)
             return vendedor
 
-        self.__tela_vendedores.cadastro_nao_encontrado()
+        raise CpfNaoEncontradoException
 
+    @tratar_excecoes
     def editar_vendedor(self) -> Vendedor:
         cpf = self.__tela_vendedores.obter_cpf(Operacao.EDITA)
         vendedor = self.pesquisa_vendedor(cpf)
@@ -72,8 +78,9 @@ class ControladorVendedores(AbstractControlador):
             self.__tela_vendedores.exibir_vendedor(vendedor_atualizado)
             return vendedor_atualizado
 
-        self.__tela_vendedores.cadastro_nao_encontrado()
+        raise CpfNaoEncontradoException
 
+    @tratar_excecoes
     def exclui_vendedor(self) -> Vendedor:
         cpf = self.__tela_vendedores.obter_cpf(Operacao.EXCLUI)
         vendedor = self.pesquisa_vendedor(cpf)
@@ -83,7 +90,7 @@ class ControladorVendedores(AbstractControlador):
             self.__tela_vendedores.sucesso_exclusao(vendedor.nome)
             return vendedor
 
-        self.__tela_vendedores.cadastro_nao_encontrado()
+        raise CpfNaoEncontradoException
 
     def pesquisa_vendedor(self, cpf: str) -> Vendedor:
         for vendedor in self.__vendedores:
@@ -98,3 +105,6 @@ class ControladorVendedores(AbstractControlador):
 
     def adicionar_mock_vendedores(self):
         self.__vendedores.extend(lista_vendedores_mock)
+
+    def mostrar_erro(self, e: str):
+        self.__tela_vendedores.mostrar_erro(e)
