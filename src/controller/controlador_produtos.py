@@ -29,7 +29,7 @@ class ControladorProduto(AbstractControlador):
             lista_opcoes[opcao]()
 
     def cadastrar_produto(self) -> Produto | None:
-        produto = self.__tela_produto.obter_dados_produto()
+        produto = self.__tela_produto.obter_dados_produto(self.gerar_proximo_codigo())
         produto_existente = self.buscar_produto(produto.codigo)
 
         if produto_existente:
@@ -91,3 +91,9 @@ class ControladorProduto(AbstractControlador):
         ]
         self.__produtos.extend(mock_produtos)
         print("Mock de produtos adicionados com sucesso!")
+
+    def gerar_proximo_codigo(self) -> int:
+        if not self.__produtos:
+            return 1
+        max_codigo = max(produtos.codigo for produtos in self.__produtos)
+        return max_codigo + 1

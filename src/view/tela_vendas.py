@@ -53,11 +53,13 @@ class TelaVendas(AbstractTelaCadastro):
     def seleciona_vendedor(self, vendedores) -> Vendedor:
         print("\nVendedores disponíveis:")
         lista_opcoes = []
-        for i, vendedor in enumerate(vendedores, 1):
-            print(f"{i}. {vendedor.nome} - Código: {vendedor.cpf}")
-            lista_opcoes.append(i)
-        indice_vendedor = self.le_num_inteiro("Escolha o vendedor (número): ", lista_opcoes)
-        vendedor_selecionado = vendedores[indice_vendedor - 1]
+        for vendedor in vendedores:
+            print(f"{vendedor.codigo}. {vendedor.nome} - Código: {vendedor.cpf}")
+            lista_opcoes.append(vendedor.codigo)
+        codigo_vendedor = self.le_num_inteiro("Escolha o vendedor (número): ", lista_opcoes)
+        vendedor_selecionado = (
+            next((vendedor for vendedor in vendedores if vendedor.codigo == codigo_vendedor), None)
+        )
         return vendedor_selecionado
 
     def seleciona_produtos(self, produtos) -> List[ItemVenda]:

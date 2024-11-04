@@ -30,7 +30,7 @@ class ControladorVendedores(AbstractControlador):
             lista_opcoes[opcao]()
 
     def cadastrar_vendedor(self) -> Vendedor | None:
-        vendedor = self.__tela_vendedores.obter_dados_vendedor()
+        vendedor = self.__tela_vendedores.obter_dados_vendedor(self.gerar_proximo_codigo())
         vendedor_existente = self.busca_vendedor(vendedor.cpf)
 
         # verifica se o vendedor já está cadastrado
@@ -88,9 +88,15 @@ class ControladorVendedores(AbstractControlador):
     def adicionar_mock_vendedores(self):
         vendedores = {
             Vendedor("1146", "Iris Souza", "28/01/2002", 1, 1400.00),
-            Vendedor("1111", "Vendedor teste 1", "01/01/1999", 1, 1000.00),
-            Vendedor("1222", "Vendedor teste 2", "02/02/2002", 2, 200.00),
-            Vendedor("1333", "Vendedor teste 3", "03/03/2003", 2, 8145.00),
+            Vendedor("1111", "Vendedor teste 1", "01/01/1999", 2, 1000.00),
+            Vendedor("1222", "Vendedor teste 2", "02/02/2002", 3, 200.00),
+            Vendedor("1333", "Vendedor teste 3", "03/03/2003", 4, 8145.00),
         }
         for vendedor in vendedores:
             self.__vendedores.append(vendedor)
+
+    def gerar_proximo_codigo(self) -> int:
+        if not self.__vendedores:
+            return 1
+        max_codigo = max(vendedores.codigo for vendedores in self.__vendedores)
+        return max_codigo + 1
