@@ -15,7 +15,7 @@ class AbstractTelaCadastro(AbstractTela):
         print(f"2. Listar {self.tipo_cadastro.plural}")
         print(f"3. Procurar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
         print(f"4. Excluir {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
-        if not self.tipo_cadastro.PEDIDO:
+        if not self.tipo_cadastro == TipoCadastro.PEDIDO:
             print(f"5. Editar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
         print("0. Voltar ao menu principal")
         opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)

@@ -25,6 +25,10 @@ class TestControladorClientes(TestCase):
         # Verifica se o cliente foi adicionado
         self.assertEqual(len(self.controlador.clientes), 1)
         self.assertEqual(self.controlador.clientes[0].nome, cliente1.nome)
+        self.assertEqual(self.controlador.clientes[0].cpf, cliente1.cpf)
+        self.assertEqual(self.controlador.clientes[0].categoria, cliente1.categoria)
+        self.assertEqual(self.controlador.clientes[0].data_nasc, cliente1.data_nasc)
+        self.assertEqual(self.controlador.clientes[0].codigo, cliente1.codigo)
 
     # Teste para a listagem de clientes
     @patch('src.view.tela_clientes.TelaClientes.exibir_clientes')
@@ -133,6 +137,7 @@ class TestControladorClientes(TestCase):
         self.assertEqual(self.controlador.clientes[0].nome, cliente2.nome)
         self.assertEqual(self.controlador.clientes[0].data_nasc, cliente2.data_nasc)
         self.assertEqual(self.controlador.clientes[0].categoria, cliente2.categoria)
+        self.assertEqual(self.controlador.clientes[0].codigo, cliente2.codigo)
         mock_sucesso_alteracao.assert_called_once()
 
     @patch('src.view.tela_clientes.TelaClientes.cadastro_nao_encontrado')

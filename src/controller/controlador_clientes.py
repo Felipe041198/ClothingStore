@@ -31,7 +31,7 @@ class ControladorClientes(AbstractControlador):
             lista_opcoes[self.__tela_clientes.menu(list(lista_opcoes.keys()))]()
 
     def cadastrar_cliente(self) -> Cliente | None:
-        cliente = self.__tela_clientes.obter_dados_cliente()
+        cliente = self.__tela_clientes.obter_dados_cliente(self.gerar_proximo_codigo())
         cliente_existente = self.busca_cliente(cliente.cpf)
         if cliente_existente:
             self.__tela_clientes.cpf_ja_cadastrado()
@@ -83,3 +83,9 @@ class ControladorClientes(AbstractControlador):
 
     def adicionar_mock_clientes(self):
         self.__clientes.extend(lista_clientes_mock)
+
+    def gerar_proximo_codigo(self) -> int:
+        if not self.__clientes:
+            return 1
+        max_codigo = max(cliente.codigo for cliente in self.__clientes)
+        return max_codigo + 1
