@@ -64,3 +64,4 @@ class ControladorSistema:
         self.__controlador_clientes.adicionar_mock_clientes()
         self.__controlador_vendedores.adicionar_mock_vendedores()
         self.__controlador_produtos.adicionar_mock_produtos()
+        self.__controlador_vendas.adiciona_mock_vendas()
