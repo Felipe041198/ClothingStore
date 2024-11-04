@@ -164,5 +164,6 @@ class TestControladorClientes(TestCase):
         self.assertEqual(cliente1.categoria, cliente2.categoria)
         self.assertEqual(cliente1.codigo, cliente2.codigo)
 
+
 if __name__ == '__main__':
     unittest.main()
