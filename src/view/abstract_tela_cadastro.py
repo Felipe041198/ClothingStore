@@ -13,7 +13,8 @@ class AbstractTelaCadastro(AbstractTela):
         print(f"\n--- Menu de {self.tipo_cadastro.plural.capitalize()} ---")
         print(f"1. Cadastrar novo {self.tipo_cadastro.singular}")
         print(f"2. Listar {self.tipo_cadastro.plural}")
-        print(f"3. Procurar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
+        if not self.tipo_cadastro == TipoCadastro.PEDIDO:
+            print(f"3. Procurar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
         print(f"4. Excluir {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
         if not self.tipo_cadastro == TipoCadastro.PEDIDO:
             print(f"5. Editar {self.tipo_cadastro.singular} por {self.tipo_cadastro.identificador}")
