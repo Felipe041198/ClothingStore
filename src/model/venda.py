@@ -14,7 +14,7 @@ class Venda:
         self.__valor_total = self.calcular_total()
 
     def calcular_total(self) -> float:
-        return sum(produto.preco_venda for produto in self.__produtos)
+        return sum(produto.preco_venda * produto.quantidade for produto in self.__produtos)
 
     @property
     def valor_total(self) -> float:
