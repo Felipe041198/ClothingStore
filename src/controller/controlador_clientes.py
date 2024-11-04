@@ -33,6 +33,7 @@ class ControladorClientes(AbstractControlador):
     def cadastrar_cliente(self) -> Cliente | None:
         cliente = self.__tela_clientes.obter_dados_cliente(self.gerar_proximo_codigo())
         cliente_existente = self.pesquisa_cliente(cliente.cpf)
+
         if cliente_existente:
             self.__tela_clientes.cpf_ja_cadastrado()
             return
