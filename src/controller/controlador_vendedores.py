@@ -32,15 +32,15 @@ class ControladorVendedores(AbstractControlador):
 
     def cadastrar_vendedor(self) -> Vendedor | None:
         vendedor = self.__tela_vendedores.obter_dados_vendedor(self.gerar_proximo_codigo())
-        vendedor_existente = self.busca_vendedor()
+        vendedor_existente = self.pesquisa_vendedor(vendedor.cpf)
 
         # verifica se o vendedor já está cadastrado
         if vendedor_existente:
             self.__tela_vendedores.cpf_ja_cadastrado()
             return
+
         self.__vendedores.append(vendedor)
         self.__tela_vendedores.sucesso_cadastro()
-        self.__tela_vendedores.exibir_vendedor(vendedor)
         return vendedor
 
     def listar_vendedores(self) -> list[Vendedor]:
