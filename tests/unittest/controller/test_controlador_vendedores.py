@@ -4,6 +4,8 @@ from unittest.mock import patch
 
 from src.controller.controlador_sistema import ControladorSistema
 from src.controller.controlador_vendedores import ControladorVendedores
+from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
+from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.mocks.vendedores_mock import vendedor1, vendedor2
 from src.model.vendedor import Vendedor
 
@@ -37,13 +39,13 @@ class TestControladorVendedores(TestCase):
         self.assertEqual(len(resultado), 2)
 
     # Teste para listagem de vendedores vazia
-    @patch('src.view.tela_vendedores.TelaVendedores.sem_cadastro')
-    def test_listar_vendedores_vazio(self, mock_sem_cadastro):
+    @patch('src.view.tela_vendedores.TelaVendedores.mostrar_erro')
+    def test_listar_vendedores_vazio(self, mock_mostrar_erro):
         result = self.controlador.listar_vendedores()
 
-        mock_sem_cadastro.assert_called_once()
+        mock_mostrar_erro.assert_called_once_with(str(NenhumRegistroEncontradoException()))
         self.assertEqual(len(self.controlador.vendedores), 0)
-        self.assertEqual(len(result), 0)
+        self.assertIsNone(result)
 
     # Teste para a busca de vendedores
     @patch('src.view.tela_vendedores.TelaVendedores.obter_cpf')
@@ -58,14 +60,14 @@ class TestControladorVendedores(TestCase):
         self.compara_vendedores(resultado, vendedor1)
 
     # Teste para a busca de vendedor não encontrado
-    @patch('src.view.tela_vendedores.TelaVendedores.cadastro_nao_encontrado')
+    @patch('src.view.tela_vendedores.TelaVendedores.mostrar_erro')
     @patch('src.view.tela_vendedores.TelaVendedores.obter_cpf')
-    def test_busca_vendedor_nao_encontrado(self, mock_obter_cpf, mock_cadastro_nao_encontrado):
+    def test_busca_vendedor_nao_encontrado(self, mock_obter_cpf, mock_mostrar_erro):
         mock_obter_cpf.return_value = vendedor1.cpf
 
         resultado = self.controlador.busca_vendedor()
 
-        mock_cadastro_nao_encontrado.assert_called_once()
+        mock_mostrar_erro.assert_called_once_with(str(CpfNaoEncontradoException()))
         self.assertIsNone(resultado)
 
     # Teste para exclusão de vendedores
@@ -81,14 +83,14 @@ class TestControladorVendedores(TestCase):
         mock_sucesso_exclusao.assert_called_once_with(vendedor1.nome)
 
     # Teste para exclusão de vendedor não encontrado
-    @patch('src.view.tela_vendedores.TelaVendedores.cadastro_nao_encontrado')
+    @patch('src.view.tela_vendedores.TelaVendedores.mostrar_erro')
     @patch('src.view.tela_vendedores.TelaVendedores.obter_cpf')
-    def test_exclui_vendedor_nao_encontrado(self, mock_obter_cpf, mock_cadastro_nao_encontrado):
+    def test_exclui_vendedor_nao_encontrado(self, mock_obter_cpf, mock_mostrar_erro):
         mock_obter_cpf.return_value = vendedor1.cpf
 
         resultado = self.controlador.exclui_vendedor()
 
-        mock_cadastro_nao_encontrado.assert_called_once()
+        mock_mostrar_erro.assert_called_once_with(str(CpfNaoEncontradoException()))
         self.assertIsNone(resultado)
 
     # Função auxiliar para comparar vendedores
