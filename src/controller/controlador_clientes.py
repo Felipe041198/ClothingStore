@@ -32,7 +32,7 @@ class ControladorClientes(AbstractControlador):
 
     def cadastrar_cliente(self) -> Cliente | None:
         cliente = self.__tela_clientes.obter_dados_cliente(self.gerar_proximo_codigo())
-        cliente_existente = self.busca_cliente(cliente.cpf)
+        cliente_existente = self.pesquisa_cliente(cliente.cpf)
         if cliente_existente:
             self.__tela_clientes.cpf_ja_cadastrado()
             return
@@ -47,30 +47,28 @@ class ControladorClientes(AbstractControlador):
             self.__tela_clientes.exibir_clientes(self.__clientes)
         return self.__clientes
 
-    def busca_cliente(self, cpf=None):
-        if cpf is None:
-            cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
+    def busca_cliente(self) -> Cliente:
+        cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
 
-        for cliente in self.__clientes:
-            if cliente.cpf == cpf:
-                self.__tela_clientes.exibir_cliente(cliente)
-                return cliente
+        cliente = self.pesquisa_cliente(cpf)
+        if cliente:
+            self.__tela_clientes.exibir_cliente(cliente)
+            return cliente
         self.__tela_clientes.cadastro_nao_encontrado()
 
     def exclui_cliente(self) -> Cliente:
         cpf = self.__tela_clientes.obter_cpf(Operacao.EXCLUI)
-        cliente = self.busca_cliente(cpf)
+        cliente = self.pesquisa_cliente(cpf)
 
         if cliente:
             self.__clientes.remove(cliente)
             self.__tela_clientes.sucesso_exclusao(cliente.nome)
             return cliente
-        else:
-            self.__tela_clientes.cadastro_nao_encontrado()
+        self.__tela_clientes.cadastro_nao_encontrado()
 
-    def editar_cliente(self):
+    def editar_cliente(self) -> Cliente:
         cpf = self.__tela_clientes.obter_cpf(Operacao.EDITA)
-        cliente = self.busca_cliente(cpf)
+        cliente = self.pesquisa_cliente(cpf)
 
         if cliente:
             cliente_atualizado = self.__tela_clientes.editar_dados_cliente(cliente)
@@ -83,6 +81,11 @@ class ControladorClientes(AbstractControlador):
 
     def adicionar_mock_clientes(self):
         self.__clientes.extend(lista_clientes_mock)
+
+    def pesquisa_cliente(self, cpf) -> Cliente:
+        for cliente in self.__clientes:
+            if cliente.cpf == cpf:
+                return cliente
 
     def gerar_proximo_codigo(self) -> int:
         if not self.__clientes:

@@ -19,7 +19,7 @@ class Pessoa(ABC):
             self.__codigo = codigo
 
     @property
-    def cpf(self):
+    def cpf(self) -> str:
         return self.__cpf
 
     @cpf.setter
@@ -28,7 +28,7 @@ class Pessoa(ABC):
             self.__cpf = cpf
 
     @property
-    def nome(self):
+    def nome(self) -> str:
         return self.__nome
 
     @nome.setter
@@ -37,7 +37,7 @@ class Pessoa(ABC):
             self.__nome = nome
 
     @property
-    def data_nasc(self):
+    def data_nasc(self) -> str:
         return self.__data_nasc
 
     @data_nasc.setter
@@ -46,7 +46,7 @@ class Pessoa(ABC):
             self.__data_nasc = data_nasc
 
     @property
-    def codigo(self):
+    def codigo(self) -> int:
         return self.__codigo
 
     @codigo.setter

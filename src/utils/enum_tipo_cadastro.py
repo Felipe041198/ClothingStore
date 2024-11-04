@@ -5,7 +5,7 @@ class TipoCadastro(Enum):
     CLIENTE = ("cliente", "clientes", "CPF")
     VENDEDOR = ("vendedor", "vendedores", "CPF")
     PRODUTO = ("produto", "produtos", "código")
-    PEDIDO = ("pedidos", "pedido", "código")
+    PEDIDO = ("pedido", "pedidos", "código")
 
     def __init__(self, singular, plural, identificador):
         self.singular = singular

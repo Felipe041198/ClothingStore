@@ -49,7 +49,7 @@ class ControladorVendedores(AbstractControlador):
             self.__tela_vendedores.exibir_vendedores(self.__vendedores)
         return self.__vendedores
 
-    def busca_vendedor(self, cpf=None):
+    def busca_vendedor(self, cpf=None) -> Vendedor | None:
         if cpf is None:
             cpf = self.__tela_vendedores.obter_cpf(Operacao.BUSCA)
 

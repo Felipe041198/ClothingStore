@@ -13,15 +13,15 @@ class Venda:
         self.__data_venda = date.today()
         self.__valor_total = self.calcular_total()
 
-    def calcular_total(self):
+    def calcular_total(self) -> float:
         return sum(produto.preco_venda for produto in self.__produtos)
 
     @property
-    def valor_total(self):
+    def valor_total(self) -> float:
         return self.__valor_total
 
     @property
-    def cliente(self):
+    def cliente(self) -> Cliente:
         return self.__cliente
 
     @cliente.setter
@@ -31,7 +31,7 @@ class Venda:
         self.__cliente = cliente
 
     @property
-    def vendedor(self):
+    def vendedor(self) -> Vendedor:
         return self.__vendedor
 
     @vendedor.setter
@@ -41,11 +41,11 @@ class Venda:
         self.__vendedor = vendedor
 
     @property
-    def data_venda(self):
+    def data_venda(self) -> date:
         return self.__data_venda
 
     @property
-    def produtos(self):
+    def produtos(self) -> list[ItemVenda]:
         return self.__produtos
 
     @produtos.setter
