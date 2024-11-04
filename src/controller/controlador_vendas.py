@@ -1,4 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.mocks.pedidos_mock import lista_vendas_mock
 from src.model.venda import Venda
 from src.view.tela_vendas import TelaVendas
 
@@ -16,6 +17,7 @@ class ControladorVendas(AbstractControlador):
             2: self.listar_vendas,
             3: self.buscar_venda,
             4: self.excluir_venda,
+            99: self.adiciona_mock_vendas,
             0: self.retornar
         }
 
@@ -46,3 +48,6 @@ class ControladorVendas(AbstractControlador):
 
         self.__vendas.remove(venda)
         self.__tela_venda.sucesso_exclusao()
+
+    def adiciona_mock_vendas(self):
+        self.__vendas.extend(lista_vendas_mock)
