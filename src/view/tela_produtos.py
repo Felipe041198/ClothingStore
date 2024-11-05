@@ -8,10 +8,9 @@ class TelaProduto(AbstractTelaCadastro):
     def __init__(self):
         super().__init__(tipo_cadastro=TipoCadastro.PRODUTO)
 
-    def obter_dados_produto(self) -> Produto:
+    def obter_dados_produto(self, codigo: int) -> Produto:
         while True:
             print("\n--- Cadastro de Produto ---")
-            codigo = int(input("Digite o código do produto: "))
             nome = input("Digite o nome do produto: ")
             descricao = input("Digite a descrição do produto: ")
             tamanho = input("Digite o tamanho do produto (P/M/G): ")

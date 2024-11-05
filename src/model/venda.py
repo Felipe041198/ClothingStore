@@ -1,5 +1,8 @@
 from datetime import date
 
+from src.exceptions.cliente_invalido_exception import ClienteInvalidoException
+from src.exceptions.produto_invalido_exception import ProdutoInvalidoException
+from src.exceptions.vendedor_invalido_exception import VendedorInvalidoException
 from src.model.cliente import Cliente
 from src.model.item_venda import ItemVenda
 from src.model.vendedor import Vendedor
@@ -13,46 +16,46 @@ class Venda:
         self.__data_venda = date.today()
         self.__valor_total = self.calcular_total()
 
-    def calcular_total(self):
-        return sum(produto.preco_venda for produto in self.__produtos)
+    def calcular_total(self) -> float:
+        return sum(produto.preco_venda * produto.quantidade for produto in self.__produtos)
 
     @property
-    def valor_total(self):
+    def valor_total(self) -> float:
         return self.__valor_total
 
     @property
-    def cliente(self):
+    def cliente(self) -> Cliente:
         return self.__cliente
 
     @cliente.setter
     def cliente(self, cliente):
         if not isinstance(cliente, Cliente):
-            raise TypeError("Cliente inválido.")
+            raise ClienteInvalidoException
         self.__cliente = cliente
 
     @property
-    def vendedor(self):
+    def vendedor(self) -> Vendedor:
         return self.__vendedor
 
     @vendedor.setter
     def vendedor(self, vendedor):
         if not isinstance(vendedor, Vendedor):
-            raise TypeError("Vendedor inválido.")
+            raise VendedorInvalidoException
         self.__vendedor = vendedor
 
     @property
-    def data_venda(self):
+    def data_venda(self) -> date:
         return self.__data_venda
 
     @property
-    def produtos(self):
+    def produtos(self) -> list[ItemVenda]:
         return self.__produtos
 
     @produtos.setter
     def produtos(self, produtos):
         for produto in produtos:
             if not isinstance(produto, ItemVenda):
-                raise TypeError("Produto invalido.")
+                raise ProdutoInvalidoException
         self.__produtos = produtos
         # Recalcula se algo mudar
         self.__valor_total = self.calcular_total()

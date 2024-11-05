@@ -1,5 +1,8 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.mocks.pedidos_mock import lista_vendas_mock
+from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.model.venda import Venda
+from src.utils.decorators import tratar_excecoes
 from src.view.tela_vendas import TelaVendas
 from src.mocks.venda_mock import lista_vendas_mock
 
@@ -14,19 +17,16 @@ class ControladorVendas(AbstractControlador):
     def abre_tela(self):
         lista_opcoes = {
             1: self.realizar_venda,
-            2: self.lista_vendas,
-            3: self.buscar_venda,
+            2: self.listar_vendas,
             4: self.excluir_venda,
-            99: self.mock_venda,
+            99: self.adiciona_mock_vendas,
             0: self.retornar
         }
 
         while True:
             lista_opcoes[self.__tela_venda.menu(list(lista_opcoes.keys()))]()
 
-    def mock_venda(self):
-        self.__vendas.extend(lista_vendas_mock)
-
+    @tratar_excecoes
     def realizar_venda(self) -> Venda:
         clientes = self._controlador_sistema.controlador_clientes.clientes
         vendedores = self._controlador_sistema.controlador_vendedores.vendedores
@@ -36,20 +36,21 @@ class ControladorVendas(AbstractControlador):
         self.__tela_venda.sucesso_cadastro()
         return venda
 
+    @tratar_excecoes
     def listar_vendas(self) -> list[Venda]:
-        return self.__vendas
-
-    def lista_vendas(self):
-        if not self.__vendas:
-            self.__tela_venda.sem_cadastro()
-        else:
+        if self.__vendas:
             self.__tela_venda.exibir_vendas(self.__vendas)
-
-    def buscar_venda(self):
-        pass
+            return self.__vendas
+        raise NenhumRegistroEncontradoException
 
     def excluir_venda(self):
         venda = self.__tela_venda.seleciona_vendas(self.__vendas)
 
         self.__vendas.remove(venda)
         self.__tela_venda.sucesso_exclusao()
+
+    def mostrar_erro(self, e: str):
+        self.__tela_venda.mostrar_erro(e)
+
+    def adiciona_mock_vendas(self):
+        self.__vendas.extend(lista_vendas_mock)

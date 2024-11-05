@@ -41,22 +41,27 @@ class TelaVendas(AbstractTelaCadastro):
     def seleciona_cliente(self, clientes) -> Cliente:
         print("\nClientes disponíveis:")
         lista_opcoes = []
-        for i, cliente in enumerate(clientes, 1):
-            print(f"{i}. {cliente.nome} - CPF: {cliente.cpf}")
-            lista_opcoes.append(i)
+        for cliente in clientes:
+            print(f"{cliente.codigo}. {cliente.nome} - CPF: {cliente.cpf}")
+            lista_opcoes.append(cliente.codigo)
 
-        indice_cliente = self.le_num_inteiro("Escolha o cliente (número): ", lista_opcoes)
-        cliente_selecionado = clientes[indice_cliente - 1]
+        codigo_cliente = self.le_num_inteiro("Escolha o cliente (número): ", lista_opcoes)
+
+        cliente_selecionado = (
+            next((cliente for cliente in clientes if cliente.codigo == codigo_cliente), None)
+        )
         return cliente_selecionado
 
     def seleciona_vendedor(self, vendedores) -> Vendedor:
         print("\nVendedores disponíveis:")
         lista_opcoes = []
-        for i, vendedor in enumerate(vendedores, 1):
-            print(f"{i}. {vendedor.nome} - Código: {vendedor.cpf}")
-            lista_opcoes.append(i)
-        indice_vendedor = self.le_num_inteiro("Escolha o vendedor (número): ", lista_opcoes)
-        vendedor_selecionado = vendedores[indice_vendedor - 1]
+        for vendedor in vendedores:
+            print(f"{vendedor.codigo}. {vendedor.nome} - Código: {vendedor.cpf}")
+            lista_opcoes.append(vendedor.codigo)
+        codigo_vendedor = self.le_num_inteiro("Escolha o vendedor (número): ", lista_opcoes)
+        vendedor_selecionado = (
+            next((vendedor for vendedor in vendedores if vendedor.codigo == codigo_vendedor), None)
+        )
         return vendedor_selecionado
 
     def seleciona_produtos(self, produtos) -> List[ItemVenda]:
