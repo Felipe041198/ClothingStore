@@ -5,7 +5,6 @@ from typing import List, Optional, Tuple
 from src.view.tela_relatorio import TelaRelatorio
 from src.model.cliente import Cliente
 from src.model.vendedor import Vendedor
-from src.controller.controlador_vendas import ControladorVendas
 
 
 class ControladorRelatorio(AbstractControlador):
@@ -65,8 +64,8 @@ class ControladorRelatorio(AbstractControlador):
         # Filtra vendas por data
         relatorio_vendas = [
             venda for venda in vendas
-            if (data_inicial is None or venda.data_venda >= data_inicial) and
-               (data_final is None or venda.data_venda <= data_final)
+            if (data_inicial is None or venda.data_venda >= data_inicial)
+            and (data_final is None or venda.data_venda <= data_final)
         ]
 
         # Filtra por cliente, se um cliente foi encontrado
@@ -144,7 +143,8 @@ class ControladorRelatorio(AbstractControlador):
                                  reverse=True)
         return vendas_vendedor[0].produtos if vendas_vendedor else []
 
-    def gerar_relatorio_completo(self, cliente: Optional[Cliente] = None, vendedor: Optional[Vendedor] = None) -> List[Venda]:
+    def gerar_relatorio_completo(self, cliente: Optional[Cliente] = None,
+                                 vendedor: Optional[Vendedor] = None) -> List[Venda]:
         vendas = self.controlador_vendas.listar_vendas()
         if cliente:
             return [venda for venda in vendas if venda.cliente.cpf == cliente.cpf]

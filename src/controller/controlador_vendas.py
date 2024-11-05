@@ -3,6 +3,7 @@ from src.model.venda import Venda
 from src.view.tela_vendas import TelaVendas
 from src.mocks.venda_mock import lista_vendas_mock
 
+
 class ControladorVendas(AbstractControlador):
 
     def __init__(self, controlador_sistema):

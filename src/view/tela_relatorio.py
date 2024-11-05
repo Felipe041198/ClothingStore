@@ -13,15 +13,15 @@ class TelaRelatorio(AbstractTelaRelatorio):
     def exibir_ultima_compra(self, venda):
         """Exibe os detalhes da última compra."""
         cliente = venda.cliente
-        print(f"--- Última Compra ---")
+        print("--- Última Compra ---")
         print(f"Cliente: {cliente.nome}")
         print(f"CPF: {cliente.cpf}")
         print(f"Data da Venda: {venda.data_venda.strftime('%d/%m/%Y %H:%M:%S')}")
-        print(f"Produtos Comprados:")
+        print("Produtos Comprados:")
 
         for produto in venda.produtos:
-            print(
-                f"- (Código: {produto.codigo_produto}, Quantidade: {produto.quantidade}, Valor: R$ {produto.valor_total:.2f})")
+            print(f"- (Código: {produto.codigo_produto}")
+            print(f" Quantidade: {produto.quantidade}, Valor: R$ {produto.valor_total:.2f})")
 
         print(f"Valor Total: R$ {venda.valor_total:.2f}")
 

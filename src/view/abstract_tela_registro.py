@@ -9,15 +9,15 @@ class AbstractTelaRelatorio(AbstractTela):
         self.tipo_cadastro = tipo_cadastro
 
     def menu_principal(self, opcoes: List[int]) -> int:
-        print(f"\n--- Menu de Relatórios---")
-        print(f"1. Ultima compra de cliente")
-        print(f"2. Ultima venda de vendedor")
-        print(f"3. Relatórios sobre pedidos(s)")
+        print("--- Menu de Relatórios---")
+        print("1. Ultima compra de cliente")
+        print("2. Ultima venda de vendedor")
+        print("3. Relatórios sobre pedidos(s)")
         print("0. Voltar ao menu principal")
         opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
         return opcao
 
-    def menu_periodo(self,  opcoes: List[int]) -> int:
+    def menu_periodo(self, opcoes: List[int]) -> int:
         print("Selecione o período para o relatório:")
         print("1 - Últimas 24 horas")
         print("2 - Últimos 7 dias")
@@ -36,6 +36,5 @@ class AbstractTelaRelatorio(AbstractTela):
             except ValueError:
                 print("Entrada inválida. Digite um número.")
 
-
     def sem_historico(self):
-        print(f"Histórico não encontrado.")
+        print("Histórico não encontrado.")
