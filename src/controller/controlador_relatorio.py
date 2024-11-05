@@ -123,7 +123,7 @@ class ControladorRelatorio(AbstractControlador):
             self.__tela_relatorio.exibir_mensagem("Cliente não encontrado.")
             return []
 
-        vendas = self.controlador_vendas.listar_vendas()
+        vendas = self.controlador_vendas.vendas
         vendas_cliente = [venda for venda in vendas if venda.cliente.cpf == cliente_relatorio.cpf]
 
         if not vendas_cliente:
@@ -138,10 +138,24 @@ class ControladorRelatorio(AbstractControlador):
         return ultima_compra.produtos
 
     def ultima_venda_vendedor(self):
-        vendedor = self.controlador_vendedores.busca_vendedor()
-        vendas_vendedor = sorted(self.gerar_relatorio_completo(vendedor=vendedor), key=lambda x: x.data_venda,
-                                 reverse=True)
-        return vendas_vendedor[0].produtos if vendas_vendedor else []
+        vendedor_relatorio = self.controlador_vendedores.busca_vendedor()
+        if not vendedor_relatorio:
+            self.__tela_relatorio.exibir_mensagem("Vendedor não encontrado.")
+            return []
+
+        vendas = self.controlador_vendas.vendas
+        vendas_vendedor = [venda for venda in vendas if venda.vendedor.cpf == vendedor_relatorio.cpf]
+
+        if not vendas_vendedor:
+            self.__tela_relatorio.exibir_mensagem("Nenhuma venda encontrada para este vendedor.")
+            return []
+
+        vendas_vendedor.sort(key=lambda venda: venda.data_venda, reverse=True)
+        ultima_venda = vendas_vendedor[0]
+
+        # Exibir detalhes da última compra
+        self.__tela_relatorio.exibir_ultima_compra(ultima_venda)
+        return ultima_venda.produtos
 
     def gerar_relatorio_completo(self, cliente: Optional[Cliente] = None,
                                  vendedor: Optional[Vendedor] = None) -> List[Venda]:

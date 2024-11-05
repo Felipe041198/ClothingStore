@@ -9,11 +9,14 @@ from src.model.vendedor import Vendedor
 
 
 class Venda:
-    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[ItemVenda], data_venda):
+    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[ItemVenda], data: date = None):
         self.__cliente = cliente
         self.__vendedor = vendedor
         self.__produtos = produtos
-        self.__data_venda = date.today()
+        if data is None:
+            self.__data_venda = date.today()
+        else:
+            self.__data_venda = data
         self.__valor_total = self.calcular_total()
 
     def calcular_total(self) -> float:

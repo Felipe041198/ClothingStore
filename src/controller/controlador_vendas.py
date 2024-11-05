@@ -4,7 +4,6 @@ from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEn
 from src.model.venda import Venda
 from src.utils.decorators import tratar_excecoes
 from src.view.tela_vendas import TelaVendas
-from src.mocks.venda_mock import lista_vendas_mock
 
 
 class ControladorVendas(AbstractControlador):
@@ -13,6 +12,10 @@ class ControladorVendas(AbstractControlador):
         super().__init__(controlador_sistema)
         self.__tela_venda = TelaVendas()
         self.__vendas = []
+
+    @property
+    def vendas(self) -> list[Venda]:
+        return self.__vendas
 
     def abre_tela(self):
         lista_opcoes = {
