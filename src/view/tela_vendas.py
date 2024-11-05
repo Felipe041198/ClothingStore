@@ -1,5 +1,4 @@
 from typing import List
-from datetime import date
 
 from src.model.cliente import Cliente
 from src.model.item_venda import ItemVenda
