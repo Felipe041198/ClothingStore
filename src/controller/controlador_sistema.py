@@ -3,6 +3,7 @@ from src.controller.controlador_vendas import ControladorVendas
 from src.controller.controlador_produtos import ControladorProduto
 from src.view.tela_sistema import TelaSistema
 from src.controller.controlador_vendedores import ControladorVendedores
+from src.controller.controlador_relatorio import ControladorRelatorio
 
 
 class ControladorSistema:
@@ -12,6 +13,7 @@ class ControladorSistema:
         self.__controlador_vendedores = ControladorVendedores(self)
         self.__controlador_produtos = ControladorProduto(self)
         self.__controlador_vendas = ControladorVendas(self)
+        self.__controlador_relatorio = ControladorRelatorio(self)
         self.__tela_sistema = TelaSistema()
 
     @property
@@ -25,6 +27,14 @@ class ControladorSistema:
     @property
     def controlador_produtos(self) -> ControladorProduto:
         return self.__controlador_produtos
+
+    @property
+    def controlador_vendas(self) -> ControladorVendas:
+        return self.__controlador_vendas
+
+    @property
+    def controlador_relatorio(self) -> ControladorRelatorio:
+        return self.__controlador_relatorio
 
     def inicializa_sistema(self):
         self.abre_tela()
@@ -41,6 +51,9 @@ class ControladorSistema:
     def registra_venda(self):
         self.__controlador_vendas.abre_tela()
 
+    def exibe_relatorio(self):
+        self.__controlador_relatorio.abre_tela()
+
     @staticmethod
     def encerra_sistema():
         exit(0)
@@ -51,6 +64,7 @@ class ControladorSistema:
             2: self.cadastra_vendedores,
             3: self.cadastra_produtos,
             4: self.registra_venda,
+            5: self.exibe_relatorio,
             99: self.mock_dados,
             0: self.encerra_sistema
         }

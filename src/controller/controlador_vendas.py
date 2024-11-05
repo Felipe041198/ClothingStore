@@ -13,6 +13,10 @@ class ControladorVendas(AbstractControlador):
         self.__tela_venda = TelaVendas()
         self.__vendas = []
 
+    @property
+    def vendas(self) -> list[Venda]:
+        return self.__vendas
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.realizar_venda,
