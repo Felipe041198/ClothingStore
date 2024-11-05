@@ -22,8 +22,8 @@ class ControladorRelatorio(AbstractControlador):
         lista_opcoes = {
             1: self.ultima_compra_cliente,
             2: self.ultima_venda_vendedor,
-            4: self.exibir_relatorio_por_tipo_cliente,
-            5: self.exibir_relatorio_por_dia,
+            3: self.exibir_relatorio_por_tipo_cliente,
+            4: self.exibir_relatorio_por_dia,
             0: self.retornar,
         }
 
