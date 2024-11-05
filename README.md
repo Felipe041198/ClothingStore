@@ -63,4 +63,4 @@ Este é um sistema desenvolvido em Python para o gerenciamento de uma loja de ro
 
 ## Estrutura do projeto
 
-//TODO
+![image](https://github.com/user-attachments/assets/0ac0bc8e-877a-483a-a44c-76767278de80)
