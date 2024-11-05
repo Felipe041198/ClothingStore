@@ -2,6 +2,8 @@ from src.controller.abstract_controlador import AbstractControlador
 from src.model.venda import Venda
 from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
+
+from src.utils.enum_categoria_cliente import CategoriaCliente
 from src.view.tela_relatorio import TelaRelatorio
 from src.model.cliente import Cliente
 from src.model.vendedor import Vendedor
@@ -10,7 +12,7 @@ from src.model.vendedor import Vendedor
 class ControladorRelatorio(AbstractControlador):
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
-        self.__tela_relatorio = TelaRelatorio(controlador_relatorio=self)
+        self.__tela_relatorio = TelaRelatorio()
         self.controlador_clientes = controlador_sistema.controlador_clientes
         self.controlador_vendedores = controlador_sistema.controlador_vendedores
         self.controlador_produtos = controlador_sistema.controlador_produtos
@@ -20,7 +22,8 @@ class ControladorRelatorio(AbstractControlador):
         lista_opcoes = {
             1: self.ultima_compra_cliente,
             2: self.ultima_venda_vendedor,
-            3: self.gerar_relatorio_vendas,
+            4: self.exibir_relatorio_por_tipo_cliente,
+            5: self.exibir_relatorio_por_dia,
             0: self.retornar,
         }
 
@@ -52,6 +55,7 @@ class ControladorRelatorio(AbstractControlador):
 
         return data_inicial, data_final
 
+    # Temporariamente desativada
     def gerar_relatorio_vendas(self):
         # Busca cliente e vendedor
         cliente = self.controlador_clientes.busca_cliente()
@@ -165,3 +169,23 @@ class ControladorRelatorio(AbstractControlador):
         elif vendedor:
             return [venda for venda in vendas if venda.vendedor.cpf == vendedor.cpf]
         return vendas
+
+    def exibir_relatorio_por_tipo_cliente(self):
+        relatorio = {categoria: [] for categoria in CategoriaCliente}
+        for venda in self._controlador_sistema.controlador_vendas.vendas:
+            cliente_categoria = venda.cliente.categoria
+            relatorio[cliente_categoria].append(venda)
+
+        self.__tela_relatorio.mostrar_relatorio_por_tipo_cliente(relatorio)
+
+    def exibir_relatorio_por_dia(self):
+        vendas_por_dia = {}
+        for venda in self._controlador_sistema.controlador_vendas.vendas:
+            if venda.data_venda not in vendas_por_dia:
+                vendas_por_dia[venda.data_venda] = []
+            vendas_por_dia[venda.data_venda].append(venda)
+
+        dias = list(vendas_por_dia.keys())
+        opcao_dia = self.__tela_relatorio.selecionar_dia_relatorio(dias)
+        vendas_no_dia = vendas_por_dia.get(opcao_dia, [])
+        self.__tela_relatorio.mostrar_relatorio_por_dia(opcao_dia, vendas_no_dia)

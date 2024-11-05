@@ -9,10 +9,11 @@ class AbstractTelaRelatorio(AbstractTela):
         self.tipo_cadastro = tipo_cadastro
 
     def menu_principal(self, opcoes: List[int]) -> int:
-        print("--- Menu de Relatórios---")
+        print("\n--- Menu de Relatórios---")
         print("1. Ultima compra de cliente")
         print("2. Ultima venda de vendedor")
-        print("3. Relatórios sobre pedidos(s)")
+        print("3. Relatório por tipo de clientes")
+        print("4. Relatório por dia")
         print("0. Voltar ao menu principal")
         opcao = self.le_num_inteiro("Escolha a opção: ", opcoes)
         return opcao

@@ -3,9 +3,8 @@ from src.utils.enum_tipo_cadastro import TipoCadastro
 
 
 class TelaRelatorio(AbstractTelaRelatorio):
-    def __init__(self, controlador_relatorio):
+    def __init__(self):
         super().__init__(tipo_cadastro=TipoCadastro.PEDIDO)
-        self.controlador_relatorio = controlador_relatorio
 
     def exibir_mensagem(self, mensagem: str):
         print(mensagem)
@@ -43,8 +42,7 @@ class TelaRelatorio(AbstractTelaRelatorio):
 
         print(f"Valor Total: R$ {venda.valor_total:.2f}\n")
 
-    def mostrar_relatorio_vendas(self, periodo="total", data_inicial=None, data_final=None):
-        relatorio = self.controlador_relatorio.gerar_relatorio_vendas(periodo, data_inicial, data_final)
+    def mostrar_relatorio_vendas(self, relatorio):
 
         print("Relatório de Vendas:")
         print(f"Total de Vendas no Período: R${relatorio['total_vendas_periodo']:.2f}\n")
@@ -62,3 +60,32 @@ class TelaRelatorio(AbstractTelaRelatorio):
                 print(f"    - Código: {produto['codigo']}, Nome: {produto['nome']}, "
                       f"Quantidade: {produto['quantidade']}, Valor: R${produto['valor']:.2f}")
             print(f"Total da Venda: R${venda['valor_total']:.2f}\n")
+
+    def mostrar_relatorio_por_tipo_cliente(self, relatorio_por_tipo):
+        print("\n--- Relatório de Vendas por Tipo de Cliente ---")
+        for tipo, vendas in relatorio_por_tipo.items():
+            print(f"\nCategoria: {tipo.value}")
+            if not vendas:
+                print("Nenhuma venda registrada para esta categoria.")
+            for venda in vendas:
+                print(f"Cliente: {venda.cliente.nome}, "
+                      f"Vendedor: {venda.vendedor.nome} "
+                      f"Total: {venda.valor_total:.2f}")
+
+    def selecionar_dia_relatorio(self, dias_disponiveis):
+        print("\n--- Relatório por Dia ---")
+        print("Selecione um dia para ver as vendas:")
+        for idx, dia in enumerate(dias_disponiveis, start=1):
+            print(f"{idx}. {dia.strftime('%d/%m/%Y')}")
+
+        opcao = self.le_num_inteiro("Escolha o dia: ", range(1, len(dias_disponiveis) + 1))
+        return dias_disponiveis[opcao - 1]
+
+    def mostrar_relatorio_por_dia(self, dia, vendas_no_dia):
+        print(f"\n--- Vendas no Dia {dia.strftime('%d/%m/%Y')} ---")
+        if not vendas_no_dia:
+            print("Não há vendas registradas neste dia.")
+        for venda in vendas_no_dia:
+            print(f"Cliente: {venda.cliente.nome}, "
+                  f"Vendedor: {venda.vendedor.nome} "
+                  f"Total: {venda.valor_total:.2f}")
