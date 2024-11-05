@@ -34,8 +34,7 @@ class TelaVendas(AbstractTelaCadastro):
         return Venda(
             cliente=cliente_selecionado,
             vendedor=vendedor_selecionado,
-            produtos=produtos_selecionados,
-            data_venda=date.today()
+            produtos=produtos_selecionados
         )
 
     def seleciona_cliente(self, clientes) -> Cliente:
