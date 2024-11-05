@@ -1,7 +1,7 @@
 from src.controller.abstract_controlador import AbstractControlador
 from src.model.venda import Venda
 from src.view.tela_vendas import TelaVendas
-
+from src.mocks.venda_mock import lista_vendas_mock
 
 class ControladorVendas(AbstractControlador):
 
@@ -13,14 +13,18 @@ class ControladorVendas(AbstractControlador):
     def abre_tela(self):
         lista_opcoes = {
             1: self.realizar_venda,
-            2: self.listar_vendas,
+            2: self.lista_vendas,
             3: self.buscar_venda,
             4: self.excluir_venda,
+            99: self.mock_venda,
             0: self.retornar
         }
 
         while True:
             lista_opcoes[self.__tela_venda.menu(list(lista_opcoes.keys()))]()
+
+    def mock_venda(self):
+        self.__vendas.extend(lista_vendas_mock)
 
     def realizar_venda(self) -> Venda:
         clientes = self._controlador_sistema.controlador_clientes.clientes
@@ -32,11 +36,13 @@ class ControladorVendas(AbstractControlador):
         return venda
 
     def listar_vendas(self) -> list[Venda]:
+        return self.__vendas
+
+    def lista_vendas(self):
         if not self.__vendas:
             self.__tela_venda.sem_cadastro()
         else:
             self.__tela_venda.exibir_vendas(self.__vendas)
-        return self.__vendas
 
     def buscar_venda(self):
         pass

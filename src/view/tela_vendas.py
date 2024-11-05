@@ -1,4 +1,5 @@
 from typing import List
+from datetime import date
 
 from src.model.cliente import Cliente
 from src.model.item_venda import ItemVenda
@@ -33,7 +34,8 @@ class TelaVendas(AbstractTelaCadastro):
         return Venda(
             cliente=cliente_selecionado,
             vendedor=vendedor_selecionado,
-            produtos=produtos_selecionados
+            produtos=produtos_selecionados,
+            data_venda =  date.today()
         )
 
     def seleciona_cliente(self, clientes) -> Cliente:

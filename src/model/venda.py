@@ -6,7 +6,7 @@ from src.model.vendedor import Vendedor
 
 
 class Venda:
-    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[ItemVenda]):
+    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[ItemVenda], data_venda):
         self.__cliente = cliente
         self.__vendedor = vendedor
         self.__produtos = produtos
