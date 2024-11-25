@@ -3,6 +3,7 @@ from src.model.venda import Venda
 from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
 
+from src.utils.decorators import tratar_excecoes
 from src.utils.enum_categoria_cliente import CategoriaCliente
 from src.view.tela_relatorio import TelaRelatorio
 from src.model.cliente import Cliente
@@ -18,6 +19,7 @@ class ControladorRelatorio(AbstractControlador):
         self.controlador_produtos = controlador_sistema.controlador_produtos
         self.controlador_vendas = controlador_sistema.controlador_vendas
 
+    @tratar_excecoes
     def abre_tela(self):
         lista_opcoes = {
             1: self.ultima_compra_cliente,
@@ -121,6 +123,7 @@ class ControladorRelatorio(AbstractControlador):
         # Mostra o relatório final
         self.__tela_relatorio.mostrar_relatorio_vendas(relatorio)
 
+    @tratar_excecoes
     def ultima_compra_cliente(self):
         cliente_relatorio = self.controlador_clientes.busca_cliente()
         if not cliente_relatorio:
@@ -141,6 +144,7 @@ class ControladorRelatorio(AbstractControlador):
         self.__tela_relatorio.exibir_ultima_compra(ultima_compra)
         return ultima_compra.produtos
 
+    @tratar_excecoes
     def ultima_venda_vendedor(self):
         vendedor_relatorio = self.controlador_vendedores.busca_vendedor()
         if not vendedor_relatorio:
@@ -170,6 +174,7 @@ class ControladorRelatorio(AbstractControlador):
             return [venda for venda in vendas if venda.vendedor.cpf == vendedor.cpf]
         return vendas
 
+    @tratar_excecoes
     def exibir_relatorio_por_tipo_cliente(self):
         relatorio = {categoria: [] for categoria in CategoriaCliente}
         for venda in self._controlador_sistema.controlador_vendas.vendas:
@@ -178,6 +183,7 @@ class ControladorRelatorio(AbstractControlador):
 
         self.__tela_relatorio.mostrar_relatorio_por_tipo_cliente(relatorio)
 
+    @tratar_excecoes
     def exibir_relatorio_por_dia(self):
         vendas_por_dia = {}
         for venda in self._controlador_sistema.controlador_vendas.vendas:
