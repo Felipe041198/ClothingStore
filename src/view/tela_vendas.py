@@ -1,7 +1,6 @@
-from typing import List, Dict, Any
+from typing import List
 
 from src.model.cliente import Cliente
-from src.model.item_venda import ItemVenda
 from src.model.produto import Produto
 from src.model.venda import Venda
 from src.model.vendedor import Vendedor
