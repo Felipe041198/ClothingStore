@@ -5,11 +5,11 @@ from src.mocks.produtos_mock import produto1, produto2, produto3, produto4, prod
 from src.mocks.vendedores_mock import vendedor1, vendedor3, vendedor2
 from src.model.venda import Venda
 
-item_camiseta = {"codigo" : produto1.codigo, "quantidade" : 2, "preco" : produto1.preco }
-item_calca_jeans = {"codigo" : produto2.codigo, "quantidade" : 3, "preco" : produto2.preco }
-item_jaqueta = {"codigo" : produto3.codigo, "quantidade" : 1, "preco" : produto3.preco }
-item_vestido = {"codigo" : produto4.codigo, "quantidade" : 2, "preco" : produto4.preco }
-item_blusa_trico = {"codigo" : produto5.codigo, "quantidade" : 2, "preco" : produto5.preco }
+item_camiseta = {"codigo" : produto1.codigo, "quantidade" : 2, "preco" : produto1.preco}
+item_calca_jeans = {"codigo" : produto2.codigo, "quantidade" : 3, "preco" : produto2.preco}
+item_jaqueta = {"codigo" : produto3.codigo, "quantidade" : 1, "preco" : produto3.preco}
+item_vestido = {"codigo" : produto4.codigo, "quantidade" : 2, "preco" : produto4.preco}
+item_blusa_trico = {"codigo" : produto5.codigo, "quantidade" : 2, "preco" : produto5.preco}
 
 venda1 = Venda(cliente1, vendedor1, date(2024, 11, 3))
 venda1.adiciona_items([item_camiseta, item_jaqueta])
