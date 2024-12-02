@@ -1,6 +1,5 @@
 from typing import List
 
-from src.model.cliente import Cliente
 from src.utils.enum_categoria_cliente import CategoriaCliente
 from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.utils.validador import Validador
@@ -12,7 +11,7 @@ class TelaClientes(AbstractTelaCadastro):
     def __init__(self):
         super().__init__(tipo_cadastro=TipoCadastro.CLIENTE)
 
-    def obter_dados_cliente(self, codigo: int) -> Cliente:
+    def obter_dados_cliente(self, codigo: int):
         print("\n--- Cadastro de Cliente ---")
         cpf = Validador.validar_cpf()
         nome = Validador.validar_nome()
@@ -23,33 +22,40 @@ class TelaClientes(AbstractTelaCadastro):
 
         opcao_categoria = self.le_num_inteiro("Escolha uma opção: ", CategoriaCliente.opcoes())
         categoria = CategoriaCliente.busca_categoria(opcao_categoria)
-        return Cliente(cpf, nome, data_nasc, categoria, codigo)
+        dados_cliente = {
+            "cpf": cpf,
+            "nome": nome,
+            "data_nascimento": data_nasc,
+            "categoria": categoria,
+            "codigo": codigo,
+        }
+        return dados_cliente
 
-    def exibir_cliente(self, cliente: Cliente):
-        print(f"Código: {cliente.codigo}, "
-              f"Nome: {cliente.nome}, "
-              f"CPF: {cliente.cpf}, "
-              f"Data de nascimento: {cliente.data_nasc}, "
-              f"Categoria: {cliente.categoria.nome}")
+    def exibir_cliente(self, dados_cliente: dict):
+        print(f"Código: {dados_cliente['codigo']}, "
+              f"Nome: {dados_cliente['nome']}, "
+              f"CPF: {dados_cliente['cpf']}, "
+              f"Data de nascimento: {dados_cliente['data_nasc']}, "
+              f"Categoria: {dados_cliente['categoria'].nome}")
 
-    def exibir_clientes(self, clientes: List[Cliente]):
+    def exibir_clientes(self, clientes: List[dict]):
         print("\n--- Lista de Clientes ---")
         for cliente in clientes:
-            print(f"Código: {cliente.codigo}, "
-                  f"Nome: {cliente.nome}, "
-                  f"CPF: {cliente.cpf}, "
-                  f"Data de nascimento: {cliente.data_nasc}, "
-                  f"Categoria: {cliente.categoria.nome}")
+            print(f"Código: {cliente['codigo']}, "
+                  f"Nome: {cliente['nome']}, "
+                  f"CPF: {cliente['cpf']}, "
+                  f"Data de nascimento: {cliente['data_nasc']}, "
+                  f"Categoria: {cliente['categoria'].nome}")
 
-    def editar_dados_cliente(self, cliente: Cliente) -> Cliente:
+    def editar_dados_cliente(self, dados_cliente: dict) -> dict:
         try:
             print("\n--- Editar Cliente ---")
             print("Deixe em branco para manter os dados atuais.")
 
-            nome = cliente.nome
-            cpf = cliente.cpf
-            data_nasc = cliente.data_nasc
-            categoria = cliente.categoria
+            nome = dados_cliente['nome']
+            cpf = dados_cliente['cpf']
+            data_nasc = dados_cliente['data_nasc']
+            categoria = dados_cliente['categoria']
 
             nome_novo = input(f"Nome atual ({nome}): ") or nome
             if nome_novo != nome:
@@ -66,6 +72,6 @@ class TelaClientes(AbstractTelaCadastro):
                 Validador.validar_data_nascimento(data_nasc_novo)
                 data_nasc = data_nasc_novo
 
-            return Cliente(cpf, nome, data_nasc, categoria, cliente.codigo)
+            return {"nome": nome, "cpf": cpf, "data_nasc": data_nasc, "categoria": categoria, "codigo": dados_cliente['codigo']}
         except ValueError as e:
             print(f"Erro ao editar os dados do cliente: {e}. Tente novamente.")

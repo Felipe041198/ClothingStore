@@ -17,3 +17,12 @@ class Cliente(Pessoa):
     def categoria(self, categoria):
         if isinstance(categoria, CategoriaCliente):
             self.__categoria = categoria
+
+    def to_dict(self) -> dict:
+        return {
+            'cpf': self.__cpf,
+            'nome': self.__nome,
+            'data_nasc': self.__data_nasc,
+            'codigo': self.__codigo,
+            'categoria': self.__categoria
+        }

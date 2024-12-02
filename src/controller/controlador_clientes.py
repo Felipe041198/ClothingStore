@@ -36,10 +36,18 @@ class ControladorClientes(AbstractControlador):
 
     @tratar_excecoes
     def cadastrar_cliente(self) -> Cliente | None:
-        cliente = self.__tela_clientes.obter_dados_cliente(self.gerar_proximo_codigo())
+        dados_cliente = self.__tela_clientes.obter_dados_cliente(self.gerar_proximo_codigo())
 
-        if self.pesquisa_cliente(cliente.cpf):
+        if self.pesquisa_cliente(dados_cliente["cpf"]):
             raise CpfJahCadastradoException
+
+        cliente = Cliente(
+            cpf=dados_cliente["cpf"],
+            nome=dados_cliente["nome"],
+            data_nasc=dados_cliente["data_nasc"],
+            categoria=dados_cliente["categoria"],
+            codigo=dados_cliente["codigo"],
+        )
         self.__clientes.append(cliente)
         self.__tela_clientes.sucesso_cadastro()
         return cliente
@@ -57,7 +65,7 @@ class ControladorClientes(AbstractControlador):
 
         cliente = self.pesquisa_cliente(cpf)
         if cliente:
-            self.__tela_clientes.exibir_cliente(cliente)
+            self.__tela_clientes.exibir_cliente(cliente.to_dict())
             return cliente
         raise CpfNaoEncontradoException
 
@@ -78,10 +86,17 @@ class ControladorClientes(AbstractControlador):
         cliente = self.pesquisa_cliente(cpf)
 
         if cliente:
-            cliente_atualizado = self.__tela_clientes.editar_dados_cliente(cliente)
+            dados_cliente = self.__tela_clientes.editar_dados_cliente(cliente.to_dict())
+            cliente_atualizado = Cliente(
+                nome=dados_cliente["nome"],
+                cpf=dados_cliente["cpf"],
+                data_nasc=dados_cliente["data_nasc"],
+                categoria=dados_cliente["categoria"],
+                codigo=dados_cliente["codigo"],
+            )
             self.__clientes[self.__clientes.index(cliente)] = cliente_atualizado
             self.__tela_clientes.sucesso_alteracao()
-            self.__tela_clientes.exibir_cliente(cliente_atualizado)
+            self.__tela_clientes.exibir_cliente(cliente_atualizado.to_dict())
             return cliente_atualizado
         raise CpfNaoEncontradoException
 
