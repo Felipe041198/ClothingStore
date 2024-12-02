@@ -9,15 +9,16 @@ from src.model.vendedor import Vendedor
 
 
 class Venda:
-    def __init__(self, cliente: Cliente, vendedor: Vendedor, produtos: list[ItemVenda], data: date = None):
+    def __init__(self, cliente: Cliente, vendedor: Vendedor, data: date = None):
         self.__cliente = cliente
         self.__vendedor = vendedor
-        self.__produtos = produtos
+        # Renomear para item vendas
+        self.__produtos = []
         if data is None:
             self.__data_venda = date.today()
         else:
             self.__data_venda = data
-        self.__valor_total = self.calcular_total()
+        self.__valor_total = 0
 
     def calcular_total(self) -> float:
         return sum(produto.preco_venda * produto.quantidade for produto in self.__produtos)
@@ -61,4 +62,15 @@ class Venda:
                 raise ProdutoInvalidoException
         self.__produtos = produtos
         # Recalcula se algo mudar
+        self.__valor_total = self.calcular_total()
+
+    def adiciona_items(self, lista_items: list[dict]):
+        for item in lista_items:
+            self.__produtos.append(
+                ItemVenda(
+                    codigo_produto=item["codigo"],
+                    quantidade=item["quantidade"],
+                    preco_venda=item["preco"],
+                )
+            )
         self.__valor_total = self.calcular_total()

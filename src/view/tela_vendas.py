@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 
 from src.model.cliente import Cliente
 from src.model.item_venda import ItemVenda
@@ -30,11 +30,13 @@ class TelaVendas(AbstractTelaCadastro):
         # Selecionando produtos:
         produtos_selecionados = self.seleciona_produtos(produtos)
 
-        return Venda(
+        venda = Venda(
             cliente=cliente_selecionado,
-            vendedor=vendedor_selecionado,
-            produtos=produtos_selecionados
+            vendedor=vendedor_selecionado
         )
+
+        venda.adiciona_items(produtos_selecionados)
+        return venda
 
     def seleciona_cliente(self, clientes) -> Cliente:
         print("\nClientes disponíveis:")
@@ -62,7 +64,7 @@ class TelaVendas(AbstractTelaCadastro):
         )
         return vendedor_selecionado
 
-    def seleciona_produtos(self, produtos) -> List[ItemVenda]:
+    def seleciona_produtos(self, produtos) -> list[dict]:
         produtos_selecionados = []
         while True:
             print("\nProdutos disponíveis:")
@@ -77,11 +79,11 @@ class TelaVendas(AbstractTelaCadastro):
             # Solicitar quantidade do produto selecionado
             quantidade = self.le_num_inteiro(f"Digite a quantidade para {produto_selecionado.nome}: ",
                                              list(range(1, 101)))
-            produto_pedido = ItemVenda(
-                produto_selecionado.codigo,
-                quantidade,
-                produto_selecionado.preco
-            )
+            produto_pedido = {
+                "codigo": produto_selecionado.codigo,
+                "quantidade": quantidade,
+                "preco": produto_selecionado.preco
+            }
             produtos_selecionados.append(produto_pedido)
         return produtos_selecionados
 
