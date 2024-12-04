@@ -19,7 +19,7 @@ class TestControladorVendedores(TestCase):
     @patch('src.view.tela_vendedores.TelaVendedores.sucesso_cadastro')
     @patch('src.view.tela_vendedores.TelaVendedores.obter_dados_vendedor')
     def test_cadastrar_vendedor(self, mock_obter_dados_vendedor, mock_sucesso_cadastro):
-        mock_obter_dados_vendedor.return_value = vendedor1
+        mock_obter_dados_vendedor.return_value = vendedor1.to_dict()
 
         resultado = self.controlador.cadastrar_vendedor()
 
@@ -56,7 +56,7 @@ class TestControladorVendedores(TestCase):
 
         resultado = self.controlador.busca_vendedor()
 
-        mock_exibir_vendedor.assert_called_once_with(vendedor1)
+        mock_exibir_vendedor.assert_called_once_with(vendedor1.to_dict())
         self.compara_vendedores(resultado, vendedor1)
 
     # Teste para a busca de vendedor não encontrado
