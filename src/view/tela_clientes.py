@@ -25,7 +25,7 @@ class TelaClientes(AbstractTelaCadastro):
         dados_cliente = {
             "cpf": cpf,
             "nome": nome,
-            "data_nascimento": data_nasc,
+            "data_nasc": data_nasc,
             "categoria": categoria,
             "codigo": codigo,
         }

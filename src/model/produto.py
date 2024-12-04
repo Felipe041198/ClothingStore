@@ -91,3 +91,13 @@ class Produto:
         if self.__estoque >= quantidade:
             raise ProdutoSemEstoqueException
         self.__estoque -= quantidade
+
+    def to_dict(self):
+        return {
+            "codigo": self.__codigo,
+            "nome": self.__nome,
+            "descricao": self.__descricao,
+            "tamanho": self.__tamanho,
+            "cor": self.__cor,
+            "preco": self.__preco
+        }

@@ -17,7 +17,7 @@ class TestControladorProduto(TestCase):
     @patch('src.view.tela_produtos.TelaProduto.obter_dados_produto')
     def test_cadastrar_produto(self, mock_obter_dados_produto, mock_sucesso_cadastro):
         # Mockando a função obter_dados_produto para retornar um produto
-        mock_obter_dados_produto.return_value = produto1
+        mock_obter_dados_produto.return_value = produto1.to_dict()
 
         resultado = self.controlador.cadastrar_produto()
 
@@ -51,7 +51,7 @@ class TestControladorProduto(TestCase):
 
         resultado = self.controlador.buscar_produto()
 
-        mock_exibir_produto.assert_called_once_with(produto1)
+        mock_exibir_produto.assert_called_once_with(produto1.to_dict())
         self.assertEqual(resultado, produto1)
 
     @patch('src.view.tela_produtos.TelaProduto.busca_produto')
