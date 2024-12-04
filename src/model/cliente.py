@@ -20,9 +20,9 @@ class Cliente(Pessoa):
 
     def to_dict(self) -> dict:
         return {
-            'cpf': self.__cpf,
-            'nome': self.__nome,
-            'data_nasc': self.__data_nasc,
-            'codigo': self.__codigo,
-            'categoria': self.__categoria
+            'cpf': self.cpf,
+            'nome': self.nome,
+            'data_nasc': self.data_nasc,
+            'codigo': self.codigo,
+            'categoria': self.categoria
         }
