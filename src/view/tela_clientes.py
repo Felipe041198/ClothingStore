@@ -72,6 +72,12 @@ class TelaClientes(AbstractTelaCadastro):
                 Validador.validar_data_nascimento(data_nasc_novo)
                 data_nasc = data_nasc_novo
 
-            return {"nome": nome, "cpf": cpf, "data_nasc": data_nasc, "categoria": categoria, "codigo": dados_cliente['codigo']}
+            return {
+                "nome": nome,
+                "cpf": cpf,
+                "data_nasc": data_nasc,
+                "categoria": categoria,
+                "codigo": dados_cliente['codigo']
+            }
         except ValueError as e:
             print(f"Erro ao editar os dados do cliente: {e}. Tente novamente.")
