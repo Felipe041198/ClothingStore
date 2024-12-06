@@ -73,7 +73,7 @@ class ControladorVendedores(AbstractControlador):
         vendedor = self.pesquisa_vendedor(cpf)
 
         if vendedor:
-            dados_vendedor_atualizado = self.__tela_vendedores.editar_dados_vendedor(vendedor)
+            dados_vendedor_atualizado = self.__tela_vendedores.editar_dados_vendedor(vendedor.to_dict())
             vendedor_atualizado = Vendedor(**dados_vendedor_atualizado)
             self.__vendedores[self.__vendedores.index(vendedor)] = vendedor_atualizado
             self.__tela_vendedores.sucesso_alteracao()
