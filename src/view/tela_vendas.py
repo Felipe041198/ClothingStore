@@ -98,7 +98,9 @@ class TelaVendas(AbstractTelaCadastro):
         print("\nPedidos disponíveis:")
         lista_opcoes = []
         for i, venda in enumerate(vendas, 1):
-            print(f"{i}. {venda['cliente']['nome']} - Data: {venda['data_venda']} - Preço: {venda['valor_total']}")
+            print(f"{i}. {venda['cliente']['nome']} - "
+                  f"Data: {venda['data_venda']} - "
+                  f"Preço: {venda['valor_total']}")
             lista_opcoes.append(i)
         indice_venda = self.le_num_inteiro("Escolha o pedido (número): ", lista_opcoes)
         return indice_venda - 1
