@@ -45,8 +45,8 @@ class ControladorVendas(AbstractControlador):
         produtos = self._controlador_sistema.controlador_produtos.produtos_dict
         dados_venda = self.__tela_venda.obter_dados_venda(clientes, vendedores, produtos)
         venda = Venda(
-            cliente = Cliente(**dados_venda['cliente']),
-            vendedor = Vendedor(**dados_venda['vendedor']),
+            cliente=Cliente(**dados_venda['cliente']),
+            vendedor=Vendedor(**dados_venda['vendedor']),
         )
         venda.adiciona_items(dados_venda["produtos"])
         self.__vendas.append(venda)
@@ -61,9 +61,9 @@ class ControladorVendas(AbstractControlador):
         raise NenhumRegistroEncontradoException
 
     def excluir_venda(self):
-        venda = self.__tela_venda.seleciona_vendas(self.__vendas)
+        indice_venda = self.__tela_venda.seleciona_vendas(self.vendas_dict)
 
-        self.__vendas.remove(venda)
+        self.__vendas.pop(indice_venda)
         self.__tela_venda.sucesso_exclusao()
 
     def mostrar_erro(self, e: str):
