@@ -1,0 +1,4 @@
+   pip install PySimpleGUI
+
+   sudo apt-get install python3-tk
+se precisar python3 -m venv venv

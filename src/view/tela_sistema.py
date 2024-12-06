@@ -1,52 +1,39 @@
-import tkinter as tk
+import PySimpleGUI as sg
 from src.view.abstract_tela import AbstractTela
 
 
 class TelaSistema(AbstractTela):
     def __init__(self) -> None:
-        self.janela = tk.Tk()
-        self.janela.title("Sistema de Gerenciamento de Loja de Roupas")
-        self.janela.geometry("500x600")
-        self.janela.config(bg="#2C2F36")
         self.option = None
-
-    def tela_opcoes(self, opcoes):
-        titulo = tk.Label(self.janela, text="MENU PRINCIPAL", font=("Arial", 20), fg="white", bg="#2C2F36")
-        titulo.pack(pady=30)
-
-        # Função para cada botão
-        def cria_botao(label, opcao):
-            botao = tk.Button(self.janela, text=label, width=20, height=2,
-                              command=lambda opcao=opcao: self.set_option(opcao),
-                              bg="#3E4349", fg="white", font=("Arial", 12),
-                              relief="solid", bd=1)
-            botao.bind("<Enter>", lambda e, b=botao: b.config(bg="#4B5359"))
-            botao.bind("<Leave>", lambda e, b=botao: b.config(bg="#3E4349"))
-
-            if label == "Sair":
-                botao.bind("<Enter>", lambda e, b=botao: b.config(bg="red"))
-                botao.bind("<Leave>", lambda e, b=botao: b.config(bg="#3E4349"))
-
-            botao.pack(pady=10)
-            return botao
-
-        botoes = [
-            ("Cadastrar Clientes", 1),
-            ("Cadastrar Vendedores", 2),
-            ("Cadastrar Produtos", 3),
-            ("Registrar Vendas", 4),
-            ("Consultar Histórico", 5),
-            ("Mock Dados", 99),
-            ("Sair", 0)
+        self.layout = [
+            [sg.Text("MENU PRINCIPAL", font=("Arial", 20), text_color="white", background_color="#2C2F36")],
+            [sg.Button("Cadastrar Clientes", key=1, size=(20, 2), font=("Arial", 12),
+                       button_color=("#FFFFFF", "#3E4349"))],
+            [sg.Button("Cadastrar Vendedores", key=2, size=(20, 2), font=("Arial", 12),
+                       button_color=("#FFFFFF", "#3E4349"))],
+            [sg.Button("Cadastrar Produtos", key=3, size=(20, 2), font=("Arial", 12),
+                       button_color=("#FFFFFF", "#3E4349"))],
+            [sg.Button("Registrar Vendas", key=4, size=(20, 2), font=("Arial", 12),
+                       button_color=("#FFFFFF", "#3E4349"))],
+            [sg.Button("Consultar Histórico", key=5, size=(20, 2), font=("Arial", 12),
+                       button_color=("#FFFFFF", "#3E4349"))],
+            [sg.Button("Mock Dados", key=99, size=(20, 2), font=("Arial", 12), button_color=("#FFFFFF", "#3E4349"))],
+            [sg.Button("Sair", key=0, size=(20, 2), font=("Arial", 12), button_color=("#FFFFFF", "red"))]
         ]
 
-        for label, opcao in botoes:
-            cria_botao(label, opcao)
+    def tela_opcoes(self, opcoes):
+        sg.theme_background_color("#2C2F36")
+        window = sg.Window("Sistema de Gerenciamento de Loja de Roupas", self.layout)
 
-        self.janela.mainloop()
+        while True:
+            event, values = window.read()
 
+            if event in opcoes:
+                self.set_option(event)
+                break
+
+        window.close()
         return self.option
 
     def set_option(self, opcao):
         self.option = opcao
-        self.janela.quit()
