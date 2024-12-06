@@ -1,6 +1,8 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.mocks.produtos_mock import lista_produtos_mock
 from src.model.produto import Produto
+from src.utils.decorators import tratar_excecoes
 from src.view.tela_produtos import TelaProduto
 
 
@@ -29,49 +31,57 @@ class ControladorProduto(AbstractControlador):
             opcao = self.__tela_produto.menu(list(lista_opcoes.keys()))
             lista_opcoes[opcao]()
 
+    @tratar_excecoes
     def cadastrar_produto(self) -> Produto | None:
-        produto = self.__tela_produto.obter_dados_produto(self.gerar_proximo_codigo())
-        produto_existente = self.pesquisa_produto(produto.codigo)
+        dados_produto = self.__tela_produto.obter_dados_produto(self.gerar_proximo_codigo())
+        produto_existente = self.pesquisa_produto(dados_produto['codigo'])
 
         if produto_existente:
             print("Produto já cadastrado")
             return
+
+        produto = Produto(**dados_produto)
         self.__produtos.append(produto)
         self.__tela_produto.sucesso_cadastro()
-        self.__tela_produto.exibir_produto(produto)
+        self.__tela_produto.exibir_produto(dados_produto)
         return produto
 
+    @tratar_excecoes
     def listar_produtos(self) -> list[Produto]:
         if not self.__produtos:
             self.__tela_produto.sem_cadastro()
         else:
-            self.__tela_produto.exibir_lista_produtos(self.__produtos)
+            self.__tela_produto.exibir_lista_produtos(self.lista_produtos_dict())
         return self.__produtos
 
+    @tratar_excecoes
     def buscar_produto(self) -> Produto:
         codigo = self.__tela_produto.busca_produto()
 
         produto = self.pesquisa_produto(codigo)
 
         if produto:
-            self.__tela_produto.exibir_produto(produto)
+            self.__tela_produto.exibir_produto(produto.to_dict())
             return produto
 
         self.__tela_produto.cadastro_nao_encontrado()
 
+    @tratar_excecoes
     def editar_produto(self) -> Produto:
         codigo = self.__tela_produto.busca_produto()
         produto = self.pesquisa_produto(codigo)
 
         if produto:
-            produto_atualizado = self.__tela_produto.editar_dados_produto(produto)
+            dados_produto_atualizado = self.__tela_produto.editar_dados_produto(produto.to_dict())
+            produto_atualizado = Produto(**dados_produto_atualizado)
             self.__produtos[self.__produtos.index(produto)] = produto_atualizado
             self.__tela_produto.sucesso_alteracao()
-            self.__tela_produto.exibir_produto(produto_atualizado)
+            self.__tela_produto.exibir_produto(dados_produto_atualizado)
             return produto_atualizado
 
         self.__tela_produto.cadastro_nao_encontrado()
 
+    @tratar_excecoes
     def excluir_produto(self) -> Produto:
         codigo = self.__tela_produto.busca_produto()
         produto = self.pesquisa_produto(codigo)
@@ -96,3 +106,11 @@ class ControladorProduto(AbstractControlador):
 
     def adicionar_mock_produtos(self):
         self.__produtos.extend(lista_produtos_mock)
+
+    def lista_produtos_dict(self) -> list[dict]:
+        if self.__produtos:
+            lista_dados_produtos = []
+            for produto in self.__produtos:
+                lista_dados_produtos.append(produto.to_dict())
+            return lista_dados_produtos
+        raise NenhumRegistroEncontradoException
