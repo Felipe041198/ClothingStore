@@ -19,6 +19,13 @@ class ControladorVendedores(AbstractControlador):
     def vendedores(self) -> list[Vendedor]:
         return self.__vendedores
 
+    @property
+    def vendedores_dict(self) -> list[dict]:
+        lista_vendedores = []
+        for vendedor in self.__vendedores:
+            lista_vendedores.append(vendedor.to_dict())
+        return lista_vendedores
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastrar_vendedor,

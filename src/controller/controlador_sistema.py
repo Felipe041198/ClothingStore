@@ -79,3 +79,17 @@ class ControladorSistema:
         self.__controlador_vendedores.adicionar_mock_vendedores()
         self.__controlador_produtos.adicionar_mock_produtos()
         self.__controlador_vendas.adiciona_mock_vendas()
+
+    @property
+    def clientes_dict(self) -> list[dict]:
+        lista_clientes = []
+        for cliente in self.__clientes:
+            lista_clientes.append(cliente.to_dict())
+        return lista_clientes
+
+    @property
+    def produtos_dict(self) -> list[dict]:
+        lista_produtos = []
+        for produto in self.__produtos:
+            lista_produtos.append(produto.to_dict())
+        return lista_produtos

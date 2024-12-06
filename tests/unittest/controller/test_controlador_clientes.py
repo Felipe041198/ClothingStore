@@ -20,7 +20,7 @@ class TestControladorClientes(TestCase):
     @patch('src.view.tela_clientes.TelaClientes.obter_dados_cliente')
     def test_cadastrar_cliente(self, mock_obter_dados_cliente, mock_sucesso_cadastro):
         # Mockando a função obter_dados_cliente para retornar um cliente
-        mock_obter_dados_cliente.return_value = cliente1
+        mock_obter_dados_cliente.return_value = cliente1.to_dict()
 
         resultado = self.controlador.cadastrar_cliente()
         mock_sucesso_cadastro.assert_called_once()
@@ -67,7 +67,7 @@ class TestControladorClientes(TestCase):
         resultado = self.controlador.busca_cliente()
 
         # Verifica se a função exibir_cliente foi chamada
-        mock_exibir_cliente.assert_called_once_with(cliente1)
+        mock_exibir_cliente.assert_called_once_with(cliente1.to_dict())
         self.compara_clientes(resultado, cliente1)
 
     #  Teste para a busca de cliente quando não encontrado
@@ -133,7 +133,7 @@ class TestControladorClientes(TestCase):
 
         # Mockando CPF e os novos dados
         mock_obter_cpf.return_value = cliente1.cpf
-        mock_editar_dados_cliente.return_value = cliente2
+        mock_editar_dados_cliente.return_value = cliente2.to_dict()
 
         self.controlador.editar_cliente()
 

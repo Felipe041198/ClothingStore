@@ -1,7 +1,9 @@
 from src.controller.abstract_controlador import AbstractControlador
 from src.mocks.pedidos_mock import lista_vendas_mock
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
+from src.model.cliente import Cliente
 from src.model.venda import Venda
+from src.model.vendedor import Vendedor
 from src.utils.decorators import tratar_excecoes
 from src.view.tela_vendas import TelaVendas
 
@@ -17,6 +19,13 @@ class ControladorVendas(AbstractControlador):
     def vendas(self) -> list[Venda]:
         return self.__vendas
 
+    @property
+    def vendas_dict(self) -> list[dict]:
+        lista_vendas = []
+        for venda in self.__vendas:
+            lista_vendas.append(venda.to_dict())
+        return lista_vendas
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.realizar_venda,
@@ -31,10 +40,15 @@ class ControladorVendas(AbstractControlador):
 
     @tratar_excecoes
     def realizar_venda(self) -> Venda:
-        clientes = self._controlador_sistema.controlador_clientes.clientes
-        vendedores = self._controlador_sistema.controlador_vendedores.vendedores
-        produtos = self._controlador_sistema.controlador_produtos.produtos
-        venda = self.__tela_venda.obter_dados_venda(clientes, vendedores, produtos)
+        clientes = self._controlador_sistema.controlador_clientes.clientes_dict
+        vendedores = self._controlador_sistema.controlador_vendedores.vendedores_dict
+        produtos = self._controlador_sistema.controlador_produtos.produtos_dict
+        dados_venda = self.__tela_venda.obter_dados_venda(clientes, vendedores, produtos)
+        venda = Venda(
+            cliente = Cliente(**dados_venda['cliente']),
+            vendedor = Vendedor(**dados_venda['vendedor']),
+        )
+        venda.adiciona_items(dados_venda["produtos"])
         self.__vendas.append(venda)
         self.__tela_venda.sucesso_cadastro()
         return venda
@@ -42,7 +56,7 @@ class ControladorVendas(AbstractControlador):
     @tratar_excecoes
     def listar_vendas(self) -> list[Venda]:
         if self.__vendas:
-            self.__tela_venda.exibir_vendas(self.__vendas)
+            self.__tela_venda.exibir_vendas(self.vendas_dict)
             return self.__vendas
         raise NenhumRegistroEncontradoException
 
