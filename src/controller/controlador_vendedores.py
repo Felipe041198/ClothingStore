@@ -21,10 +21,12 @@ class ControladorVendedores(AbstractControlador):
 
     @property
     def vendedores_dict(self) -> list[dict]:
-        lista_vendedores = []
-        for vendedor in self.__vendedores:
-            lista_vendedores.append(vendedor.to_dict())
-        return lista_vendedores
+        if self.__vendedores:
+            lista_vendedores = []
+            for vendedor in self.__vendedores:
+                lista_vendedores.append(vendedor.to_dict())
+            return lista_vendedores
+        raise NenhumRegistroEncontradoException
 
     def abre_tela(self):
         lista_opcoes = {

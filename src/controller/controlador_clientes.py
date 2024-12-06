@@ -1,5 +1,3 @@
-from typing import List
-
 from src.controller.abstract_controlador import AbstractControlador
 from src.exceptions.cpf_ja_cadastrado_exception import CpfJahCadastradoException
 from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
@@ -24,10 +22,12 @@ class ControladorClientes(AbstractControlador):
 
     @property
     def clientes_dict(self) -> list[dict]:
-        lista_clientes = []
-        for cliente in self.__clientes:
-            lista_clientes.append(cliente.to_dict())
-        return lista_clientes
+        if self.__clientes:
+            lista_dados_clientes = []
+            for cliente in self.__clientes:
+                lista_dados_clientes.append(cliente.to_dict())
+            return lista_dados_clientes
+        raise NenhumRegistroEncontradoException
 
     def abre_tela(self):
         lista_opcoes = {
@@ -57,7 +57,7 @@ class ControladorClientes(AbstractControlador):
 
     @tratar_excecoes
     def listar_clientes(self) -> list[Cliente]:
-        self.__tela_clientes.exibir_clientes(self.lista_clientes_dict())
+        self.__tela_clientes.exibir_clientes(self.clientes_dict)
         return self.__clientes
 
     @tratar_excecoes
@@ -117,11 +117,3 @@ class ControladorClientes(AbstractControlador):
 
     def mostrar_erro(self, e: str):
         self.__tela_clientes.mostrar_erro(e)
-
-    def lista_clientes_dict(self) -> List[dict]:
-        if self.__clientes:
-            lista_dados_clientes = []
-            for cliente in self.__clientes:
-                lista_dados_clientes.append(cliente.to_dict())
-            return lista_dados_clientes
-        raise NenhumRegistroEncontradoException
