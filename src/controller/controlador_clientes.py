@@ -22,6 +22,13 @@ class ControladorClientes(AbstractControlador):
     def clientes(self) -> list[Cliente]:
         return self.__clientes
 
+    @property
+    def clientes_dict(self) -> list[dict]:
+        lista_clientes = []
+        for cliente in self.__clientes:
+            lista_clientes.append(cliente.to_dict())
+        return lista_clientes
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastrar_cliente,

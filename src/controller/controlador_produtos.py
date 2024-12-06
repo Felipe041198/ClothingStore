@@ -16,6 +16,13 @@ class ControladorProduto(AbstractControlador):
     def produtos(self) -> list[Produto]:
         return self.__produtos
 
+    @property
+    def produtos_dict(self) -> list[dict]:
+        lista_produtos = []
+        for produto in self.__produtos:
+            lista_produtos.append(produto.to_dict())
+        return lista_produtos
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastrar_produto,
