@@ -5,8 +5,6 @@ class Vendedor(Pessoa):
 
     def __init__(self, cpf: str, nome: str, data_nasc: str, codigo: int, salario: float):
         super().__init__(cpf, nome, data_nasc, codigo)
-        if isinstance(codigo, int):
-            self.__codigo = codigo
         if isinstance(salario, float):
             self.__salario = salario
 
@@ -22,3 +20,12 @@ class Vendedor(Pessoa):
             raise ValueError("Salário deve ser maior que zero.")
         else:
             raise ValueError("Salário inválido")
+
+    def to_dict(self):
+        return {
+            "cpf": self.cpf,
+            "nome": self.nome,
+            "data_nasc": self.data_nasc,
+            "codigo": self.codigo,
+            "salario": self.__salario
+        }

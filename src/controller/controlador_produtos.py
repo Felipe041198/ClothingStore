@@ -16,6 +16,15 @@ class ControladorProduto(AbstractControlador):
     def produtos(self) -> list[Produto]:
         return self.__produtos
 
+    @property
+    def produtos_dict(self) -> list[dict]:
+        if self.__produtos:
+            lista_dados_produtos = []
+            for produto in self.__produtos:
+                lista_dados_produtos.append(produto.to_dict())
+            return lista_dados_produtos
+        raise NenhumRegistroEncontradoException
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastrar_produto,
@@ -51,7 +60,7 @@ class ControladorProduto(AbstractControlador):
         if not self.__produtos:
             self.__tela_produto.sem_cadastro()
         else:
-            self.__tela_produto.exibir_lista_produtos(self.lista_produtos_dict())
+            self.__tela_produto.exibir_lista_produtos(self.produtos_dict)
         return self.__produtos
 
     @tratar_excecoes
@@ -106,11 +115,3 @@ class ControladorProduto(AbstractControlador):
 
     def adicionar_mock_produtos(self):
         self.__produtos.extend(lista_produtos_mock)
-
-    def lista_produtos_dict(self) -> list[dict]:
-        if self.__produtos:
-            lista_dados_produtos = []
-            for produto in self.__produtos:
-                lista_dados_produtos.append(produto.to_dict())
-            return lista_dados_produtos
-        raise NenhumRegistroEncontradoException

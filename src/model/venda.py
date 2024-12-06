@@ -55,6 +55,13 @@ class Venda:
     def produtos(self) -> list[ItemVenda]:
         return self.__produtos
 
+    @property
+    def produtos_dict(self) -> list[dict]:
+        lista_produtos = []
+        for produto in self.__produtos:
+            lista_produtos.append(produto.to_dict())
+        return lista_produtos
+
     @produtos.setter
     def produtos(self, produtos):
         for produto in produtos:
@@ -74,3 +81,12 @@ class Venda:
                 )
             )
         self.__valor_total = self.calcular_total()
+
+    def to_dict(self):
+        return {
+            "cliente": self.cliente.to_dict(),
+            "vendedor": self.vendedor.to_dict(),
+            "produtos": self.produtos_dict,
+            "data_venda": self.data_venda,
+            "valor_total": self.valor_total,
+        }
