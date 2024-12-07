@@ -40,3 +40,10 @@ class ItemVenda:
         if preco_venda < 0:
             raise ValueError("O preço do produto não pode ser negativo.")
         self.__preco_venda = preco_venda
+
+    def to_dict(self):
+        return {
+            "codigo_produto": self.codigo_produto,
+            "quantidade": self.quantidade,
+            "preco_venda": self.preco_venda,
+        }

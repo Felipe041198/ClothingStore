@@ -19,6 +19,15 @@ class ControladorVendedores(AbstractControlador):
     def vendedores(self) -> list[Vendedor]:
         return self.__vendedores
 
+    @property
+    def vendedores_dict(self) -> list[dict]:
+        if self.__vendedores:
+            lista_vendedores = []
+            for vendedor in self.__vendedores:
+                lista_vendedores.append(vendedor.to_dict())
+            return lista_vendedores
+        raise NenhumRegistroEncontradoException
+
     def abre_tela(self):
         lista_opcoes = {
             1: self.cadastrar_vendedor,
@@ -36,13 +45,14 @@ class ControladorVendedores(AbstractControlador):
 
     @tratar_excecoes
     def cadastrar_vendedor(self) -> Vendedor | None:
-        vendedor = self.__tela_vendedores.obter_dados_vendedor(self.gerar_proximo_codigo())
-        vendedor_existente = self.pesquisa_vendedor(vendedor.cpf)
+        dados_vendedor = self.__tela_vendedores.obter_dados_vendedor(self.gerar_proximo_codigo())
+        vendedor_existente = self.pesquisa_vendedor(dados_vendedor["cpf"])
 
         # verifica se o vendedor já está cadastrado
         if vendedor_existente:
             raise CpfJahCadastradoException
 
+        vendedor = Vendedor(**dados_vendedor)
         self.__vendedores.append(vendedor)
         self.__tela_vendedores.sucesso_cadastro()
         return vendedor
@@ -50,7 +60,7 @@ class ControladorVendedores(AbstractControlador):
     @tratar_excecoes
     def listar_vendedores(self) -> list[Vendedor]:
         if self.__vendedores:
-            self.__tela_vendedores.exibir_vendedores(self.__vendedores)
+            self.__tela_vendedores.exibir_vendedores(self.vendedores_dict)
             return self.__vendedores
         raise NenhumRegistroEncontradoException
 
@@ -61,7 +71,7 @@ class ControladorVendedores(AbstractControlador):
         vendedor = self.pesquisa_vendedor(cpf)
 
         if vendedor:
-            self.__tela_vendedores.exibir_vendedor(vendedor)
+            self.__tela_vendedores.exibir_vendedor(vendedor.to_dict())
             return vendedor
 
         raise CpfNaoEncontradoException
@@ -72,10 +82,11 @@ class ControladorVendedores(AbstractControlador):
         vendedor = self.pesquisa_vendedor(cpf)
 
         if vendedor:
-            vendedor_atualizado = self.__tela_vendedores.editar_dados_vendedor(vendedor)
+            dados_vendedor_atualizado = self.__tela_vendedores.editar_dados_vendedor(vendedor.to_dict())
+            vendedor_atualizado = Vendedor(**dados_vendedor_atualizado)
             self.__vendedores[self.__vendedores.index(vendedor)] = vendedor_atualizado
             self.__tela_vendedores.sucesso_alteracao()
-            self.__tela_vendedores.exibir_vendedor(vendedor_atualizado)
+            self.__tela_vendedores.exibir_vendedor(dados_vendedor_atualizado)
             return vendedor_atualizado
 
         raise CpfNaoEncontradoException
