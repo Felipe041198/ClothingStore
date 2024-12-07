@@ -4,7 +4,6 @@ import PySimpleGUI as sg
 from src.model.vendedor import Vendedor
 from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.utils.validador import Validador
-from src.view.abstract_tela_cadastro import AbstractTelaCadastro
 
 
 class TelaVendedores(AbstractTelaCadastro):
