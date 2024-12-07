@@ -1,167 +1,91 @@
-import tkinter as tk
-from tkinter import ttk
-from typing import List
+from src.view.abstract_tela_registro import AbstractTelaRelatorio
+from src.utils.enum_tipo_cadastro import TipoCadastro
 
 
-class TelaRelatorioTkinter:
+class TelaRelatorio(AbstractTelaRelatorio):
     def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("Menu de Relatórios")
-        self.root.geometry("800x600")
-        self.root.config(bg="#2C2F36")
+        super().__init__(tipo_cadastro=TipoCadastro.PEDIDO)
 
-        self.clientes_var = {}
-        self.vendedores_var = {}
-        self.periodo_var = tk.StringVar()
+    def exibir_mensagem(self, mensagem: str):
+        print(mensagem)
 
-        # Frame principal
-        main_frame = tk.Frame(self.root, bg="#2C2F36")
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+    def exibir_ultima_compra(self, venda):
+        """Exibe os detalhes da última compra."""
+        cliente = venda.cliente
+        print("--- Última Compra ---")
+        print(f"Cliente: {cliente.nome}")
+        print(f"CPF: {cliente.cpf}")
+        print(f"Data da Venda: {venda.data_venda.strftime('%d/%m/%Y %H:%M:%S')}")
+        print("Produtos Comprados:")
 
-        # Título do menu
-        titulo = tk.Label(main_frame, text="MENU DE RELATÓRIOS", font=("Arial", 24), fg="white", bg="#2C2F36")
-        titulo.pack(pady=20)
+        for produto in venda.produtos:
+            print(f"- (Código: {produto.codigo_produto}")
+            print(f" Quantidade: {produto.quantidade}, "
+                  f"Valor: R$ {produto.quantidade * produto.preco_venda:.2f})")
 
-        # Frame para os filtros
-        filtros_frame = tk.Frame(main_frame, bg="#2C2F36")
-        filtros_frame.pack(padx=5, pady=5)
+        print(f"Valor Total: R$ {venda.valor_total:.2f}\n")
 
-        # Cor de fundo e dimensões reduzidas
-        cor_fundo = "#696969"  # Cinza escuro
-        frame_width = 150
-        frame_height = 250
+    def exibir_ultima_venda(self, venda):
+        """Exibe os detalhes da última venda."""
+        vendedor = venda.vendedor
+        print("--- Última Venda ---")
+        print(f"Vendedor: {vendedor.nome}")
+        print(f"CPF: {vendedor.cpf}")
+        print(f"Para o cliente: {venda.cliente.nome}")
+        print(f"Data da Venda: {venda.data_venda.strftime('%d/%m/%Y %H:%M:%S')}")
+        print("Produtos Vendidos:")
 
-        # Frames laterais para Clientes, Vendedores e Período
-        clientes_frame = tk.LabelFrame(filtros_frame, text="Clientes", width=frame_width, height=frame_height,
-                                       padx=10, pady=10, font=("Arial", 12), bg=cor_fundo)
-        vendedores_frame = tk.LabelFrame(filtros_frame, text="Vendedores", width=frame_width, height=frame_height,
-                                         padx=10, pady=10, font=("Arial", 12), bg=cor_fundo)
-        periodo_frame = tk.LabelFrame(filtros_frame, text="Período", width=frame_width, height=frame_height,
-                                      padx=10, pady=10, font=("Arial", 12), bg=cor_fundo)
+        for produto in venda.produtos:
+            print(f"- (Código: {produto.codigo_produto}")
+            print(f" Quantidade: {produto.quantidade}, "
+                  f"Valor: R$ {produto.quantidade * produto.preco_venda:.2f})")
 
-        # Ajustar altura fixa
-        clientes_frame.pack_propagate(False)
-        vendedores_frame.pack_propagate(False)
-        periodo_frame.pack_propagate(False)
+        print(f"Valor Total: R$ {venda.valor_total:.2f}\n")
 
-        clientes_frame.pack(side=tk.LEFT, fill=tk.Y, expand=False, padx=5)
-        vendedores_frame.pack(side=tk.LEFT, fill=tk.Y, expand=False, padx=5)
-        periodo_frame.pack(side=tk.LEFT, fill=tk.Y, expand=False, padx=5)
+    def mostrar_relatorio_vendas(self, relatorio):
 
-        # Configuração de scroll
-        self.add_scrollable_list(clientes_frame, "clientes", 20)
-        self.add_scrollable_list(vendedores_frame, "vendedores", 10)
+        print("Relatório de Vendas:")
+        print(f"Total de Vendas no Período: R${relatorio['total_vendas_periodo']:.2f}\n")
 
-        # Opções de período
-        periodo_opcoes = [
-            ("Últimas 24 horas", "1"),
-            ("Últimos 7 dias", "2"),
-            ("Últimos 15 dias", "3"),
-            ("Último mês", "4"),
-            ("Todos os registros", "5"),
-        ]
-        for texto, valor in periodo_opcoes:
-            ttk.Radiobutton(
-                periodo_frame, text=texto, variable=self.periodo_var, value=valor,
-                style="TRadiobutton"
-            ).pack(anchor=tk.W)
+        if not relatorio['vendas']:
+            print("Nenhuma venda encontrada para o período especificado.")
+            return
 
-        # Alinhando os botões lado a lado, abaixo dos frames de filtros
-        botoes_frame = tk.Frame(main_frame, pady=10, bg="#2C2F36")
-        botoes_frame.pack(pady=10)
+        for venda in relatorio['vendas']:
+            print(f"Data: {venda['data_venda'].strftime('%d/%m/%Y')}")
+            print(f"Cliente: {venda['cliente_nome']} (CPF: {venda['cliente_cpf']})")
+            print(f"Vendedor: {venda['vendedor_nome']} (CPF: {venda['vendedor_cpf']})")
+            print("Produtos:")
+            for produto in venda['produtos']:
+                print(f"    - Código: {produto['codigo']}, Nome: {produto['nome']}, "
+                      f"Quantidade: {produto['quantidade']}, Valor: R${produto['valor']:.2f}")
+            print(f"Total da Venda: R${venda['valor_total']:.2f}\n")
 
-        ttk.Button(botoes_frame, text="Última Venda", command=self.ultima_venda, style="TButton").pack(side=tk.LEFT,
-                                                                                                       padx=10)
-        ttk.Button(botoes_frame, text="Última Compra", command=self.ultima_compra, style="TButton").pack(side=tk.LEFT,
-                                                                                                         padx=10)
-        ttk.Button(botoes_frame, text="Pesquisar", command=self.pesquisar, style="TButton").pack(side=tk.LEFT, padx=10)
-        ttk.Button(botoes_frame, text="Limpar Filtros", command=self.limpar_filtros, style="TButton").pack(side=tk.LEFT,
-                                                                                                           padx=10)
+    def mostrar_relatorio_por_tipo_cliente(self, relatorio_por_tipo):
+        print("\n--- Relatório de Vendas por Tipo de Cliente ---")
+        for tipo, vendas in relatorio_por_tipo.items():
+            print(f"\nCategoria: {tipo.value}")
+            if not vendas:
+                print("Nenhuma venda registrada para esta categoria.")
+            for venda in vendas:
+                print(f"Cliente: {venda.cliente.nome}, "
+                      f"Vendedor: {venda.vendedor.nome} "
+                      f"Total: {venda.valor_total:.2f}")
 
-        self.resultado_label = None
+    def selecionar_dia_relatorio(self, dias_disponiveis):
+        print("\n--- Relatório por Dia ---")
+        print("Selecione um dia para ver as vendas:")
+        for idx, dia in enumerate(dias_disponiveis, start=1):
+            print(f"{idx}. {dia.strftime('%d/%m/%Y')}")
 
-    def add_scrollable_list(self, parent_frame, tipo: str, count: int):
-        """Adiciona uma lista com rolagem ao frame pai."""
-        canvas = tk.Canvas(parent_frame, height=150, bg=parent_frame['bg'])
-        scrollbar = ttk.Scrollbar(parent_frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, bg=parent_frame['bg'])
+        opcao = self.le_num_inteiro("Escolha o dia: ", range(1, len(dias_disponiveis) + 1))
+        return dias_disponiveis[opcao - 1]
 
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
-
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-
-        # Limitando a exibição inicial a cinco itens
-        items = [f"{tipo.capitalize()} {i + 1}" for i in range(count)]
-        display_limit = 5
-        visible_items = items[:display_limit]
-
-        if tipo == "clientes":
-            for item in visible_items:
-                self.clientes_var[item] = tk.BooleanVar()
-                tk.Checkbutton(scrollable_frame, text=item, variable=self.clientes_var[item], font=("Arial", 10),
-                               bg=parent_frame['bg'], fg="black").pack(anchor=tk.W)
-        elif tipo == "vendedores":
-            for item in visible_items:
-                self.vendedores_var[item] = tk.BooleanVar()
-                tk.Checkbutton(scrollable_frame, text=item, variable=self.vendedores_var[item], font=("Arial", 10),
-                               bg=parent_frame['bg'], fg="black").pack(anchor=tk.W)
-
-    def obter_selecionados(self, variaveis: dict) -> List[str]:
-        """Obtém os itens selecionados de um dicionário de variáveis."""
-        return [item for item, var in variaveis.items() if var.get()]
-
-    def ultima_venda(self):
-        """Exibe o relatório da última venda."""
-        mensagem = "Exibindo a última venda realizada..."
-        self.exibir_resultado(mensagem)
-
-    def ultima_compra(self):
-        """Exibe o relatório da última compra."""
-        mensagem = "Exibindo a última compra realizada..."
-        self.exibir_resultado(mensagem)
-
-    def pesquisar(self):
-        """Exibe o relatório com os filtros selecionados."""
-        clientes_selecionados = self.obter_selecionados(self.clientes_var)
-        vendedores_selecionados = self.obter_selecionados(self.vendedores_var)
-        periodo = self.periodo_var.get()
-
-        mensagem = (
-            f"Relatório Aplicando Filtros:\n"
-            f"Clientes: {', '.join(clientes_selecionados) if clientes_selecionados else 'Nenhum'}\n"
-            f"Vendedores: {', '.join(vendedores_selecionados) if vendedores_selecionados else 'Nenhum'}\n"
-            f"Período: {periodo if periodo else 'Nenhum selecionado'}"
-        )
-        self.exibir_resultado(mensagem)
-
-    def limpar_filtros(self):
-        """Reseta todos os filtros e limpa a exibição de resultado."""
-        for var in self.clientes_var.values():
-            var.set(False)
-        for var in self.vendedores_var.values():
-            var.set(False)
-        self.periodo_var.set("")
-
-        if self.resultado_label:
-            self.resultado_label.destroy()
-
-    def exibir_resultado(self, mensagem: str):
-        """Exibe o resultado do relatório na tela."""
-        if self.resultado_label:
-            self.resultado_label.destroy()
-
-        self.resultado_label = tk.Label(self.root, text=mensagem, font=("Arial", 12), justify=tk.LEFT, bg="#2C2F36",
-                                        fg="white")
-        self.resultado_label.pack(pady=10)
-
-
-if __name__ == "__main__":
-    tela = TelaRelatorioTkinter()
-    tela.root.mainloop()
+    def mostrar_relatorio_por_dia(self, dia, vendas_no_dia):
+        print(f"\n--- Vendas no Dia {dia.strftime('%d/%m/%Y')} ---")
+        if not vendas_no_dia:
+            print("Não há vendas registradas neste dia.")
+        for venda in vendas_no_dia:
+            print(f"Cliente: {venda.cliente.nome}, "
+                  f"Vendedor: {venda.vendedor.nome} "
+                  f"Total: {venda.valor_total:.2f}")

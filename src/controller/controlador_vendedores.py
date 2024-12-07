@@ -6,7 +6,7 @@ from src.mocks.vendedores_mock import lista_vendedores_mock
 from src.model.vendedor import Vendedor
 from src.utils.decorators import tratar_excecoes
 from src.utils.enum_operacoes import Operacao
-from src.view.tela_vendedores import TelaVendedores
+from src.view.tela_gui_vendedores import TelaVendedores
 
 
 class ControladorVendedores(AbstractControlador):
@@ -45,10 +45,14 @@ class ControladorVendedores(AbstractControlador):
 
     @tratar_excecoes
     def cadastrar_vendedor(self) -> Vendedor | None:
-        dados_vendedor = self.__tela_vendedores.obter_dados_vendedor(self.gerar_proximo_codigo())
+        dados_vendedor, should_exit_to_menu = self.__tela_vendedores.obter_dados_vendedor(self.gerar_proximo_codigo())
+
+        if should_exit_to_menu:
+            return None
+
         vendedor_existente = self.pesquisa_vendedor(dados_vendedor["cpf"])
 
-        # verifica se o vendedor já está cadastrado
+        # Verifica se o vendedor já está cadastrado
         if vendedor_existente:
             raise CpfJahCadastradoException
 
