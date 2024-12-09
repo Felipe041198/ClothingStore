@@ -1,7 +1,7 @@
 from src.controller.controlador_clientes import ControladorClientes
 from src.controller.controlador_vendas import ControladorVendas
 from src.controller.controlador_produtos import ControladorProduto
-from src.view.tela_sistema import TelaSistema
+from src.view.tela_gui_sistema import TelaSistema
 from src.controller.controlador_vendedores import ControladorVendedores
 from src.controller.controlador_relatorio import ControladorRelatorio
 
