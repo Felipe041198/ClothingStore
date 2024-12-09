@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from typing import List, Any
+from typing import List
 from src.utils.enum_tipo_cadastro import TipoCadastro
 from src.view.abstract_gui_tela_cadastro import AbstractTelaCadastro
 
@@ -8,7 +8,7 @@ class TelaVendedores(AbstractTelaCadastro):
     def __init__(self):
         super().__init__(tipo_cadastro=TipoCadastro.VENDEDOR)
 
-    def obter_dados_vendedor(self, codigo: int, pesquisa_vendedor_callback) -> (dict[str, int | float | Any], bool):
+    def obter_dados_vendedor(self, codigo: int, pesquisa_vendedor_callback) -> (dict, bool):
         layout = [
             [sg.Text('CADASTRO DE VENDEDOR',
                      font=("Courier", 24, "bold"),
@@ -50,7 +50,8 @@ class TelaVendedores(AbstractTelaCadastro):
                     break
                 else:
                     if self.confirmar_acoes(
-                            "Há informações preenchidas. Tem certeza que deseja voltar? As informações serão perdidas."):
+                            "Há informações preenchidas."
+                            "Tem certeza que deseja voltar? As informações serão perdidas."):
                         should_exit_to_menu = True
                         break
 
@@ -66,7 +67,8 @@ class TelaVendedores(AbstractTelaCadastro):
                 vendedor_existente = pesquisa_vendedor_callback(validacao_cpf)
                 if vendedor_existente:
                     if self.confirmar_acoes(
-                            "CPF já cadastrado. Deseja visualizar o cadastro existente ou alterar o CPF para continuar?"
+                            "CPF já cadastrado."
+                            "Deseja visualizar o cadastro existente ou alterar o CPF para continuar?"
                     ):
                         self.exibir_vendedor(vendedor_existente.to_dict())
                         continue
@@ -93,17 +95,22 @@ class TelaVendedores(AbstractTelaCadastro):
         layout = [
             [sg.Text("Detalhes do vendedor", font=("Courier", 18, "bold"), text_color="white",
                      background_color="#2C2F36", justification='center', expand_x=True, pad=(0, 10))],
-            [sg.Text(f"Nome:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
-             sg.Text(f"{vendedor['nome']}", font=("Arial", 12), background_color="#2C2F36", text_color="white")],
-            [sg.Text(f"Código:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
-             sg.Text(f"{vendedor['codigo']}", font=("Arial", 12), background_color="#2C2F36", text_color="white")],
-            [sg.Text(f"CPF:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
-             sg.Text(f"{vendedor['cpf']}", font=("Arial", 12), background_color="#2C2F36", text_color="white")],
-            [sg.Text(f"Data de nascimento:", font=("Arial", 12, "bold"), background_color="#2C2F36",
+            [sg.Text("Nome:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
+             sg.Text(f"{vendedor['nome']}", font=("Arial", 12),
+                     background_color="#2C2F36", text_color="white")],
+            [sg.Text("Código:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
+             sg.Text(f"{vendedor['codigo']}", font=("Arial", 12),
+                     background_color="#2C2F36", text_color="white")],
+            [sg.Text("CPF:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
+             sg.Text(f"{vendedor['cpf']}", font=("Arial", 12),
+                     background_color="#2C2F36", text_color="white")],
+            [sg.Text("Data de nascimento:", font=("Arial", 12, "bold"), background_color="#2C2F36",
                      text_color="white"),
-             sg.Text(f"{vendedor['data_nasc']}", font=("Arial", 12), background_color="#2C2F36", text_color="white")],
-            [sg.Text(f"Salário:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
-             sg.Text(f"{salario_formatado}", font=("Arial", 12), background_color="#2C2F36", text_color="white")],
+             sg.Text(f"{vendedor['data_nasc']}", font=("Arial", 12),
+                     background_color="#2C2F36", text_color="white")],
+            [sg.Text("Salário:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
+             sg.Text(f"{salario_formatado}", font=("Arial", 12),
+                     background_color="#2C2F36", text_color="white")],
             [sg.Text('', size=(1, 1), background_color="#2C2F36")],  # Espaçamento extra
             [sg.Button('Voltar', button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#FF0000"),
                        size=(10, 1))]
@@ -165,12 +172,15 @@ class TelaVendedores(AbstractTelaCadastro):
                      text_color="white"), sg.InputText(key='nome', default_text=vendedor['nome'])],
             [sg.Text('CPF:', font=("Arial", 12, "bold"), size=(15, 1), background_color="#2C2F36",
                      text_color="white"), sg.InputText(key='cpf', default_text=vendedor['cpf'])],
-            [sg.Text('Data de nascimento:', font=("Arial", 12, "bold"), size=(15, 1), background_color="#2C2F36",
+            [sg.Text('Data de nascimento:', font=("Arial", 12, "bold"),
+                     size=(15, 1), background_color="#2C2F36",
                      text_color="white"), sg.InputText(key='data_nasc', default_text=vendedor['data_nasc'])],
             [sg.Text('Salário:', font=("Arial", 12, "bold"), size=(15, 1), background_color="#2C2F36",
-                     text_color="white"), sg.InputText(key='salario', default_text=f"{vendedor['salario']:.2f}")],
+                     text_color="white"), sg.InputText(key='salario',
+                                                       default_text=f"{vendedor['salario']:.2f}")],
             [sg.Text('', size=(1, 1), background_color="#2C2F36")],
-            [sg.Button('OK', font=("Arial", 12), size=(10, 1), button_color=("#FFFFFF", "#3E4349"), disabled=True),
+            [sg.Button('OK', font=("Arial", 12), size=(10, 1),
+                       button_color=("#FFFFFF", "#3E4349"), disabled=True),
              sg.Button('Cancelar', font=("Arial", 12), button_color=("#FFFFFF", "#3E4349"),
                        mouseover_colors=("#FFFFFF", "#FF0000"), size=(10, 1))]
         ]
@@ -183,12 +193,10 @@ class TelaVendedores(AbstractTelaCadastro):
 
         def has_changes(values):
             validacao_cpf, validacao_nome, validacao_data_nasc = self.validar_campos(values, window)
-            return (
-                    validacao_cpf != vendedor['cpf'] or
-                    validacao_nome != vendedor['nome'] or
-                    validacao_data_nasc != vendedor['data_nasc'] or
-                    (values['salario'] and float(values['salario']) != vendedor['salario'])
-            )
+            return (validacao_cpf != vendedor['cpf']
+                    or validacao_nome != vendedor['nome'] or validacao_data_nasc != vendedor[
+                        'data_nasc'] or (values['salario']
+                                         and float(values['salario']) != vendedor['salario']))
 
         while True:
             event, values = window.read()

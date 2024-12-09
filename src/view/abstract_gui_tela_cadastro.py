@@ -131,7 +131,8 @@ class AbstractTelaCadastro:
     def confirmar_alteracoes_editar(self):
         return sg.popup_yes_no(
             "Há informações preenchidas diferentes do original. Tem certeza que deseja voltar? "
-            "As informações serão perdidas.", title="Confirmação", background_color="#2C2F36", text_color="white",
+            "As informações serão perdidas.", title="Confirmação",
+            background_color="#2C2F36", text_color="white",
             button_color=("#FFFFFF", "#3E4349")) == "Yes"
 
     def sucesso_cadastro(self):
