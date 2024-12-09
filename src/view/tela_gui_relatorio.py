@@ -68,12 +68,11 @@ class TelaRelatorio:
         valor_total = f"Valor Total: R$ {venda.valor_total:.2f}"
 
         sg.popup(
-            f"--- Última Compra ---\n{cliente_info}\n{data_info}\nProdutos Comprados:\n{produtos_info}\n{valor_total}")
+            f"--- Última Compra ---\n{cliente_info}\n{data_info}\n"
+            f"Produtos Comprados:\n{produtos_info}\n{valor_total}"
+        )
 
-    # Continue com os outros métodos para exibir informações de maneira semelhante usando sg.popup() ou outras funções adequadas do PySimpleGUI.
 
-
-# Exemplo de uso da classe para abrir um menu
 if __name__ == "__main__":
     tela = TelaRelatorio()
     tela.menu_principal(opcoes=[0, 1, 2, 3, 4])

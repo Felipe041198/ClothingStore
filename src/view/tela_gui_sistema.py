@@ -8,14 +8,15 @@ class TelaSistema(AbstractTela):
 
     def criar_layout(self):
         return [
-            [sg.Text("MENU PRINCIPAL", font=("Courier", 24, "bold"), text_color="white", background_color="#2C2F36",
+            [sg.Text("MENU PRINCIPAL", font=("Courier", 24, "bold"),
+                     text_color="white", background_color="#2C2F36",
                      justification='center', expand_x=True)],
             [sg.Text("", size=(1, 2), background_color="#2C2F36")],  # Espaçamento vertical de 40 pixels
-            [sg.Button("Cadastrar Clientes", key=1, size=(20, 2), font=("Arial", 12),
+            [sg.Button("Cadastro de Clientes", key=1, size=(20, 2), font=("Arial", 12),
                        button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#1F2225"))],
-            [sg.Button("Cadastrar Vendedores", key=2, size=(20, 2), font=("Arial", 12),
+            [sg.Button("Cadastro de Vendedores", key=2, size=(20, 2), font=("Arial", 12),
                        button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#1F2225"))],
-            [sg.Button("Cadastrar Produtos", key=3, size=(20, 2), font=("Arial", 12),
+            [sg.Button("Cadastro de Produtos", key=3, size=(20, 2), font=("Arial", 12),
                        button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#1F2225"))],
             [sg.Button("Registrar Vendas", key=4, size=(20, 2), font=("Arial", 12),
                        button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#1F2225"))],
