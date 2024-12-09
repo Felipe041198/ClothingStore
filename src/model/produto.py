@@ -1,7 +1,3 @@
-from src.exceptions.atributo_invalido_produto_exception import AtributoInvalidoProdutoException
-from src.exceptions.produto_sem_estoque_exception import ProdutoSemEstoqueException
-
-
 class Produto:
     def __init__(
             self,
@@ -18,7 +14,6 @@ class Produto:
         self.__tamanho = tamanho
         self.__cor = cor
         self.__preco = preco
-        self.__estoque = 0
 
     @property
     def codigo(self) -> int:
@@ -81,16 +76,6 @@ class Produto:
         if preco < 0:
             raise ValueError("O preço do produto não pode ser negativo.")
         self.__preco = preco
-
-    def adiciona_estoque(self, quantidade: int):
-        self.__estoque += quantidade
-
-    def retirar_estoque(self, quantidade: int):
-        if not isinstance(quantidade, int):
-            raise AtributoInvalidoProdutoException("quantidade")
-        if self.__estoque >= quantidade:
-            raise ProdutoSemEstoqueException
-        self.__estoque -= quantidade
 
     def to_dict(self):
         return {
