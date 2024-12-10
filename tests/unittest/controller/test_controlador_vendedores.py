@@ -41,8 +41,7 @@ class TestControladorVendedores(TestCase):
         self.assertEqual(len(resultado), 2)
 
     # Teste para listagem de vendedores vazia
-    @patch('src.view.tela_gui_vendedores.TelaVendedores.mostrar_erro')
-    def test_listar_vendedores_vazio(self, mock_mostrar_erro):
+    def test_listar_vendedores_vazio(self):
         result = self.controlador.listar_vendedores()
 
         self.controlador._ControladorVendedores__tela_vendedores.mostrar_erro.assert_called_once_with(
@@ -52,9 +51,7 @@ class TestControladorVendedores(TestCase):
         self.assertIsNone(result)
 
     # Teste para a busca de vendedores
-    @patch('src.view.tela_gui_vendedores.TelaVendedores.obter_cpf')
-    @patch('src.view.tela_gui_vendedores.TelaVendedores.exibir_vendedor')
-    def test_busca_vendedor(self, mock_exibir_vendedor, mock_obter_cpf):
+    def test_busca_vendedor(self):
         self.controlador.vendedores.append(vendedor1)
         self.controlador._ControladorVendedores__tela_vendedores.obter_cpf.return_value = vendedor1.cpf
 
