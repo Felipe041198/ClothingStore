@@ -8,17 +8,21 @@ class Produto:
             codigo: int,
             nome: str,
             descricao: str,
-            tamanho: str,
+            tamanhos: list,
             cor: str,
             preco: float
     ):
+        if not isinstance(tamanhos, list):
+            raise TypeError("Os tamanhos devem ser fornecidos como uma lista.")
+        if not set(tamanhos).issubset({'P', 'M', 'G'}):
+            raise ValueError("Os tamanhos permitidos são apenas 'P', 'M' ou 'G'.")
+
         self.__codigo = codigo
         self.__nome = nome
         self.__descricao = descricao
-        self.__tamanho = tamanho
+        self.__tamanhos = tamanhos
         self.__cor = cor
         self.__preco = preco
-        self.__estoque = 0
 
     @property
     def codigo(self) -> int:
@@ -51,14 +55,16 @@ class Produto:
         self.__descricao = descricao
 
     @property
-    def tamanho(self) -> str:
-        return self.__tamanho
+    def tamanhos(self) -> list:
+        return self.__tamanhos
 
-    @tamanho.setter
-    def tamanho(self, tamanho):
-        if not isinstance(tamanho, str):
-            raise TypeError("Tamanho do produto inválido.")
-        self.__tamanho = tamanho
+    @tamanhos.setter
+    def tamanhos(self, tamanhos):
+        if not all(isinstance(t, str) for t in tamanhos):
+            raise TypeError("Todos os tamanhos devem ser strings.")
+        if not set(tamanhos).issubset({'P', 'M', 'G'}):
+            raise ValueError("Os tamanhos permitidos são apenas 'P', 'M' ou 'G'.")
+        self.__tamanhos = tamanhos
 
     @property
     def cor(self) -> str:
@@ -82,22 +88,13 @@ class Produto:
             raise ValueError("O preço do produto não pode ser negativo.")
         self.__preco = preco
 
-    def adiciona_estoque(self, quantidade: int):
-        self.__estoque += quantidade
-
-    def retirar_estoque(self, quantidade: int):
-        if not isinstance(quantidade, int):
-            raise AtributoInvalidoProdutoException("quantidade")
-        if self.__estoque >= quantidade:
-            raise ProdutoSemEstoqueException
-        self.__estoque -= quantidade
 
     def to_dict(self):
         return {
             "codigo": self.__codigo,
             "nome": self.__nome,
             "descricao": self.__descricao,
-            "tamanho": self.__tamanho,
+            "tamanhos": self.__tamanhos,
             "cor": self.__cor,
             "preco": self.__preco
         }
