@@ -1,7 +1,6 @@
 # Sistema de Gerenciamento de Loja de Roupas
 
-Este é um sistema desenvolvido em Python para o gerenciamento de uma loja de roupas, com funcionalidades de cadastro de clientes, vendedores, produtos e vendas. O sistema também permite a geração de relatórios de vendas por cliente, período e vendedor.
-
+Este é um sistema desenvolvido em Python para o gerenciamento de uma loja de roupas, oferecendo funcionalidades completas de cadastro e controle de clientes, vendedores, produtos, e vendas. Também é possível gerar relatórios detalhados para análise das atividades.
 ## Funcionalidades
 
 - **Cadastro de Clientes:** Inclui informações como CPF, nome, data de nascimento, categoria do cliente e endereço.
@@ -17,6 +16,8 @@ Este é um sistema desenvolvido em Python para o gerenciamento de uma loja de ro
 - **Arquitetura:** MVC
 
 ## Como Executar
+Antes de executar o sistema, é necessário configurar o ambiente e instalar as dependências necessárias.
+Siga os passos abaixo:
 
 1. **Clone o repositório:**
 
@@ -26,7 +27,28 @@ Este é um sistema desenvolvido em Python para o gerenciamento de uma loja de ro
 
 2. Instale o Python.
 
-3. Execute o sistema:
+3. Configure o ambiente virtual:
+    Crie um ambiente virtual para o projeto para isolar suas dependências:
+
+   ```bash
+    python3 -m venv venv
+   ```
+
+4. Instale as dependências:
+    Com o ambiente virtual ativado, instale as dependências necessárias. 
+    Primeiro, instale o PySimpleGUI, que é utilizado para criar a interface gráfica do sistema:
+    
+   ```bash
+   pip install PySimpleGUI
+   ```
+   
+    Caso esteja usando Linux, instale `python3-tk` para garantir o funcionamento do PySimpleGUI:
+    
+   ```bash
+   sudo apt-get install python3-tk
+   ```
+
+5. Execute o sistema:
 
     Navegue até o diretório principal e execute o arquivo principal do sistema.
     ```bash
