@@ -26,6 +26,10 @@ jobs:
         run: |
           pip install PySimpleGUI
 
+      - name: configure tk
+        run: |
+          sudo apt-get install python3-tk
+
       - name: Run tests
         run: |
           python -m unittest discover
