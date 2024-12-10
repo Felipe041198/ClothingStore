@@ -14,7 +14,7 @@ class ControladorSistema:
         self.__controlador_produtos = ControladorProduto(self)
         self.__controlador_vendas = ControladorVendas(self)
         self.__controlador_relatorio = ControladorRelatorio(self)
-        self.__tela_sistema = None
+        self.__tela_sistema = TelaSistema()
 
     @property
     def controlador_clientes(self) -> ControladorClientes:
@@ -37,7 +37,6 @@ class ControladorSistema:
         return self.__controlador_relatorio
 
     def inicializa_sistema(self):
-        self.__tela_sistema = TelaSistema()
         self.abre_tela()
 
     def cadastra_clientes(self):
