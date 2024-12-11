@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from src.exceptions.valor_invalido_exception import ValorInvalidoException
 
 
 class AbstractControlador(ABC):

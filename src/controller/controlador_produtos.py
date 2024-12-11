@@ -1,6 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
-from src.exceptions.valor_invalido_exception import ValorInvalidoException
 from src.mocks.produtos_mock import lista_produtos_mock
 from src.model.produto import Produto
 from src.utils.decorators import tratar_excecoes
