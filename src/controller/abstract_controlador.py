@@ -13,10 +13,3 @@ class AbstractControlador(ABC):
     @abstractmethod
     def abre_tela(self):
         pass
-
-    def validar_preco(self, preco: str) -> float:
-        try:
-            return float(preco)
-        except ValueError:
-            raise ValorInvalidoException("O valor fornecido para o preço é inválido. "
-                                         "Por favor, insira um número.")

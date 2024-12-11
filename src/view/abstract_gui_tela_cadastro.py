@@ -134,8 +134,7 @@ class AbstractTelaCadastro:
             campos_obrigatorios = ['nome', 'descricao', 'tamanho', 'cor', 'preco']
             validacoes_personalizadas = {
                 'nome': Validador.validar_nome,
-                'preco': lambda preco: 'inválido'
-                if not isinstance(preco, (int, float)) or preco <= 0 else 'válido',
+                'preco': Validador.validar_preco
             }
         elif contexto == 'cliente':
             campos_obrigatorios = ['nome', 'cpf', 'data_nasc', 'categoria']
@@ -150,20 +149,17 @@ class AbstractTelaCadastro:
                 'cpf': Validador.validar_cpf,
                 'nome': Validador.validar_nome,
                 'data_nasc': Validador.validar_data_nascimento,
-                'salario': lambda salario: 'inválido'
-                if not isinstance(salario, float) or salario <= 0 else 'válido',
+                'salario': Validador.validar_preco,
             }
         elif contexto == 'item_venda':
             campos_obrigatorios = ['codigo_produto', 'quantidade', 'preco_venda']
             validacoes_personalizadas = {
-                'codigo_produto': lambda codigo: 'inválido'
-                if not isinstance(codigo, int) or codigo <= 0 else 'válido',
+                'codigo_produto': Validador.validar_codigo,
                 'quantidade': lambda quantidade: 'inválido' if not isinstance(quantidade, int
                                                                               ) or quantidade <= 0
                 else 'válido',
 
-                'preco_venda': lambda preco: 'inválido' if not isinstance(preco, (int, float)
-                                                                          ) or preco < 0 else 'válido',
+                'preco_venda': Validador.validar_preco
 
             }
         elif contexto == 'venda':
@@ -187,6 +183,8 @@ class AbstractTelaCadastro:
                     resultado = validacao(values[campo])
                     if "inválido" in str(resultado).lower():
                         campos_invalidos.append(campo)
+                    else:
+                        values[campo] = resultado
 
         return campos_invalidos
 

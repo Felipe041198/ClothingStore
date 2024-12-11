@@ -1,7 +1,6 @@
 import PySimpleGUI as sg
 from typing import List
 from src.utils.enum_tipo_cadastro import TipoCadastro
-from src.utils.validador import Validador
 from src.view.abstract_gui_tela_cadastro import AbstractTelaCadastro
 
 
@@ -43,16 +42,7 @@ class TelaVendedores(AbstractTelaCadastro):
                 break
 
             if event == 'Cadastrar':
-                validadores = {
-                    "nome": Validador.validar_nome,
-                    "cpf": Validador.validar_cpf,
-                    "data_nasc": Validador.validar_data_nascimento,
-                    "salario": lambda salario: "inválido"
-                    if not salario.replace('.', '', 1).isdigit() or float(
-                        salario) <= 0 else "válido"
-                }
-
-                campos_invalidos = self.validar_campos(values, list(validadores.keys()), validadores)
+                campos_invalidos = self.obter_campos_invalidos(values, contexto='vendedor')
 
                 if campos_invalidos:
                     sg.popup(
@@ -67,7 +57,7 @@ class TelaVendedores(AbstractTelaCadastro):
                 dados_vendedor = {
                     "nome": values["nome"].strip(),
                     "cpf": values["cpf"].strip(),
-                    "data_nasc": values["data_nasc"].strip(),
+                    "data_nasc": values["data_nasc"],
                     "codigo": codigo,
                     "salario": float(values["salario"])
                 }
@@ -175,16 +165,7 @@ class TelaVendedores(AbstractTelaCadastro):
                 break
 
             if event == 'Salvar':
-                validadores = {
-                    "nome": Validador.validar_nome,
-                    "cpf": Validador.validar_cpf,
-                    "data_nasc": Validador.validar_data_nascimento,
-                    "salario": lambda salario: "inválido"
-                    if not salario.replace('.', '', 1).isdigit() or float(
-                        salario) <= 0 else "válido"
-                }
-
-                campos_invalidos = self.validar_campos(values, list(validadores.keys()), validadores)
+                campos_invalidos = self.obter_campos_invalidos(values, contexto='vendedor')
 
                 if campos_invalidos:
                     sg.popup(
@@ -194,15 +175,6 @@ class TelaVendedores(AbstractTelaCadastro):
                         background_color="#2C2F36",
                         text_color="white"
                     )
-                    continue
-
-                try:
-                    salario = float(values['salario'])
-                    if salario <= 0:
-                        raise ValueError("O salário deve ser maior que zero.")
-                except ValueError:
-                    sg.popup("Erro no Salário: Insira um valor válido maior que zero.",
-                             background_color="#2C2F36", text_color="white")
                     continue
 
                 dados_vendedor = {
