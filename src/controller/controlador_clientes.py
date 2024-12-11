@@ -1,4 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.dao.dao_generic import DAOGeneric
 from src.exceptions.cpf_ja_cadastrado_exception import CpfJahCadastradoException
 from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
@@ -14,7 +15,8 @@ class ControladorClientes(AbstractControlador):
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
         self.__tela_clientes = TelaClientes()
-        self.__clientes = []
+        self.__cliente_dao = DAOGeneric("clientes")
+        self.__clientes = self.__cliente_dao.carregar()
 
     @property
     def clientes(self) -> list[Cliente]:
@@ -117,3 +119,6 @@ class ControladorClientes(AbstractControlador):
 
     def mostrar_erro(self, e: str):
         self.__tela_clientes.mostrar_erro(e)
+
+    def salvar_clientes(self):
+        self.__cliente_dao.salvar(self.__clientes)
