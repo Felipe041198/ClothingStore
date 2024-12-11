@@ -1,5 +1,6 @@
 from src.controller.abstract_controlador import AbstractControlador
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
+from src.exceptions.valor_invalido_exception import ValorInvalidoException
 from src.mocks.produtos_mock import lista_produtos_mock
 from src.model.produto import Produto
 from src.utils.decorators import tratar_excecoes
@@ -39,22 +40,32 @@ class ControladorProduto(AbstractControlador):
 
     @tratar_excecoes
     def cadastrar_produto(self) -> Produto | None:
-        dados_produto, should_exit_to_menu = self.__tela_produto.obter_dados_produto(self.gerar_proximo_codigo())
+        dados_produto, should_exit_to_menu = self.__tela_produto.obter_dados_produto(
+            self.gerar_proximo_codigo())
 
-        if not dados_produto:
+        if should_exit_to_menu or not dados_produto:
             return None
 
-        produto_existente = self.pesquisa_produto(dados_produto['codigo'])
+        try:
+            preco = self.validar_preco(dados_produto["preco"])
+            dados_produto["preco"] = preco
 
-        if produto_existente:
-            print("Produto já cadastrado")
-            return
+            produto_existente = self.pesquisa_produto(dados_produto["codigo"])
+            if produto_existente:
+                self.__tela_produto.mostrar_erro("Produto já cadastrado com esse código.")
+                return None
 
-        produto = Produto(**dados_produto)
-        self.__produtos.append(produto)
-        self.__tela_produto.sucesso_cadastro()
-        self.__tela_produto.exibir_produto(dados_produto)
-        return produto
+            produto = Produto(**dados_produto)
+            self.__produtos.append(produto)
+
+            self.__tela_produto.sucesso_cadastro()
+            self.__tela_produto.exibir_produto(dados_produto)
+            return produto
+
+        except ValorInvalidoException as e:
+            self.__tela_produto.mostrar_erro(str(e))
+
+        return None
 
     @tratar_excecoes
     def listar_produtos(self) -> list[Produto]:
@@ -66,38 +77,78 @@ class ControladorProduto(AbstractControlador):
 
     @tratar_excecoes
     def buscar_produto(self) -> Produto | None:
-        codigo = self.__tela_produto.busca_produto()
+        try:
+            codigo = self.__tela_produto.busca_produto()
 
-        produto = self.pesquisa_produto(codigo)
+            if codigo is None:
+                return None
 
-        if produto:
-            self.__tela_produto.exibir_produto(produto.to_dict())
-            return produto
+            produto = self.pesquisa_produto(codigo)
 
-        self.__tela_produto.cadastro_nao_encontrado()
+            if produto:
+                self.__tela_produto.exibir_produto(produto.to_dict())
+                return produto
+
+            self.__tela_produto.cadastro_nao_encontrado()
+        except ValorInvalidoException as e:
+            self.__tela_produto.mostrar_erro(str(e))
+
+        return None
+
+    def validar_codigo(self, codigo: str) -> int:
+        try:
+            return int(codigo)
+        except ValueError:
+            raise ValorInvalidoException("O código fornecido é inválido. "
+                                         "Por favor, insira um número inteiro.")
 
     @tratar_excecoes
     def editar_produto(self) -> Produto | None:
         codigo = self.__tela_produto.busca_produto()
+        if codigo is None:
+            return None
         produto = self.pesquisa_produto(codigo)
 
         if produto:
-            dados_produto_atualizado, should_exit_to_menu = self.__tela_produto.editar_dados_produto(produto.to_dict())
+            dados_produto = produto.to_dict()
+            dados_normalizados = {
+                'nome': str(dados_produto.get('nome', '')).strip(),
+                'descricao': str(dados_produto.get('descricao', '')).strip(),
+                'preco': float(dados_produto.get('preco', 0.0)),
+                'tamanho': str(dados_produto.get('tamanho', '')).strip(),
+                'cor': str(dados_produto.get('cor', '')).strip(),
+                'codigo': dados_produto.get('codigo', 0),
+            }
+
+            dados_produto_atualizado, should_exit_to_menu = self.__tela_produto.editar_dados_produto(
+                dados_normalizados)
 
             if should_exit_to_menu or not dados_produto_atualizado:
                 return None
 
-            produto_atualizado = Produto(**dados_produto_atualizado)
-            self.__produtos[self.__produtos.index(produto)] = produto_atualizado
-            self.__tela_produto.sucesso_alteracao()
-            self.__tela_produto.exibir_produto(dados_produto_atualizado)
-            return produto_atualizado
+            try:
+                preco = self.validar_preco(dados_produto_atualizado["preco"])
+                dados_produto_atualizado["preco"] = preco
+
+                produto_atualizado = Produto(**dados_produto_atualizado)
+                self.__produtos[self.__produtos.index(produto)] = produto_atualizado
+
+                self.__tela_produto.sucesso_alteracao()
+                self.__tela_produto.exibir_produto(dados_produto_atualizado)
+                return produto_atualizado
+
+            except ValorInvalidoException as e:
+                self.__tela_produto.mostrar_erro(str(e))
+
+            return None
 
         self.__tela_produto.cadastro_nao_encontrado()
 
     @tratar_excecoes
     def excluir_produto(self) -> Produto | None:
         codigo = self.__tela_produto.busca_produto()
+        if codigo is None:
+            return None
         produto = self.pesquisa_produto(codigo)
 
         if produto:

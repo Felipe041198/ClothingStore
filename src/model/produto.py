@@ -1,26 +1,17 @@
-from src.exceptions.atributo_invalido_produto_exception import AtributoInvalidoProdutoException
-from src.exceptions.produto_sem_estoque_exception import ProdutoSemEstoqueException
-
-
 class Produto:
     def __init__(
             self,
             codigo: int,
             nome: str,
             descricao: str,
-            tamanhos: list,
+            tamanho: str,
             cor: str,
             preco: float
     ):
-        if not isinstance(tamanhos, list):
-            raise TypeError("Os tamanhos devem ser fornecidos como uma lista.")
-        if not set(tamanhos).issubset({'P', 'M', 'G'}):
-            raise ValueError("Os tamanhos permitidos são apenas 'P', 'M' ou 'G'.")
-
         self.__codigo = codigo
         self.__nome = nome
         self.__descricao = descricao
-        self.__tamanhos = tamanhos
+        self.__tamanho = tamanho
         self.__cor = cor
         self.__preco = preco
 
@@ -55,16 +46,14 @@ class Produto:
         self.__descricao = descricao
 
     @property
-    def tamanhos(self) -> list:
-        return self.__tamanhos
+    def tamanho(self) -> str:
+        return self.__tamanho
 
-    @tamanhos.setter
-    def tamanhos(self, tamanhos):
-        if not all(isinstance(t, str) for t in tamanhos):
-            raise TypeError("Todos os tamanhos devem ser strings.")
-        if not set(tamanhos).issubset({'P', 'M', 'G'}):
-            raise ValueError("Os tamanhos permitidos são apenas 'P', 'M' ou 'G'.")
-        self.__tamanhos = tamanhos
+    @tamanho.setter
+    def tamanho(self, tamanho):
+        if not isinstance(tamanho, str):
+            raise TypeError("Tamanho do produto inválido.")
+        self.__tamanho = tamanho
 
     @property
     def cor(self) -> str:
@@ -86,15 +75,14 @@ class Produto:
             raise TypeError("Preço do produto inválido.")
         if preco < 0:
             raise ValueError("O preço do produto não pode ser negativo.")
-        self.__preco = preco
-
+        self.__preco = round(float(preco), 2)
 
     def to_dict(self):
         return {
             "codigo": self.__codigo,
             "nome": self.__nome,
             "descricao": self.__descricao,
-            "tamanhos": self.__tamanhos,
+            "tamanho": self.__tamanho,
             "cor": self.__cor,
             "preco": self.__preco
         }

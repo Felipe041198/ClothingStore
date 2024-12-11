@@ -9,6 +9,7 @@ class AbstractTelaCadastro:
     def __init__(self, tipo_cadastro: TipoCadastro) -> None:
         self.option = None
         self.tipo_cadastro = tipo_cadastro
+        self.validador = Validador()
         sg.theme_background_color("#2C2F36")
 
     def criar_layout(self):
@@ -63,6 +64,39 @@ class AbstractTelaCadastro:
         window.close()
         return self.option
 
+    def busca_produto(self) -> int | None:
+        layout = [
+            [sg.Text('Digite o código do produto que deseja buscar:',
+                     background_color="#2C2F36",
+                     text_color="#FFFFFF")],
+            [sg.InputText(key='codigo')],
+            [sg.Button('Pesquisar', size=(10, 1), button_color=("#FFFFFF", "#3E4349"),
+                       mouseover_colors=("#FFFFFF", "#1F2225")),
+             sg.Button('Voltar', size=(10, 1), button_color=("#FFFFFF", "#FF0000"),
+                       mouseover_colors=("#FFFFFF", "#8B0000"))]
+        ]
+
+        window = sg.Window('Procurar Produto', layout, background_color="#2C2F36")
+
+        while True:
+            event, values = window.read()
+
+            if event in (sg.WIN_CLOSED, 'Voltar'):
+                window.close()
+                return None
+
+            elif event == 'Pesquisar':
+                codigo_str = values['codigo']
+
+                try:
+                    codigo = int(codigo_str.strip())
+                    window.close()
+                    return codigo
+                except ValueError:
+                    sg.popup('Código inválido! Por favor, insira um número inteiro.',
+                             background_color='#2C2F36',
+                             text_color='#FFFFFF')
+
     def obter_cpf(self, tipo_busca: Operacao) -> str:
         layout = [
             [sg.Text(f'Qual CPF do {self.tipo_cadastro.singular} que deseja {tipo_busca.value}?',
@@ -93,31 +127,68 @@ class AbstractTelaCadastro:
                 else:
                     sg.popup('CPF inválido!', background_color='#2C2F36', text_color='#FFFFFF')
 
-    def validar_campos(self, values, window):
-        validacao_cpf = Validador.validar_cpf(values['cpf'])
-        validacao_nome = Validador.validar_nome(values.get('nome', ''))
-        validacao_data_nasc = Validador.validar_data_nascimento(values.get('data_nasc', ''))
+    def obter_campos_invalidos(self, values, contexto: str) -> list:
+        campos_obrigatorios = []
+        validacoes_personalizadas = {}
+        if contexto == 'produto':
+            campos_obrigatorios = ['nome', 'descricao', 'tamanho', 'cor', 'preco']
+            validacoes_personalizadas = {
+                'nome': Validador.validar_nome,
+                'preco': lambda preco: 'inválido'
+                if not isinstance(preco, (int, float)) or preco <= 0 else 'válido',
+            }
+        elif contexto == 'cliente':
+            campos_obrigatorios = ['nome', 'cpf', 'data_nasc', 'categoria']
+            validacoes_personalizadas = {
+                'cpf': Validador.validar_cpf,
+                'nome': Validador.validar_nome,
+                'data_nasc': Validador.validar_data_nascimento,
+            }
+        elif contexto == 'vendedor':
+            campos_obrigatorios = ['nome', 'cpf', 'data_nasc', 'salario']
+            validacoes_personalizadas = {
+                'cpf': Validador.validar_cpf,
+                'nome': Validador.validar_nome,
+                'data_nasc': Validador.validar_data_nascimento,
+                'salario': lambda salario: 'inválido'
+                if not isinstance(salario, float) or salario <= 0 else 'válido',
+            }
+        elif contexto == 'item_venda':
+            campos_obrigatorios = ['codigo_produto', 'quantidade', 'preco_venda']
+            validacoes_personalizadas = {
+                'codigo_produto': lambda codigo: 'inválido'
+                if not isinstance(codigo, int) or codigo <= 0 else 'válido',
+                'quantidade': lambda quantidade: 'inválido' if not isinstance(quantidade, int
+                                                                              ) or quantidade <= 0
+                else 'válido',
 
-        # Verifica se os valores são válidos e não contém erros
-        is_cpf_valido = values['cpf'] and "inválido" not in validacao_cpf.lower()
-        is_nome_valido = 'nome' in values and values['nome'] and "inválido" not in validacao_nome.lower()
-        is_data_nasc_valida = 'data_nasc' in values and values[
-            'data_nasc'] and "inválido" not in validacao_data_nasc.lower()
+                'preco_venda': lambda preco: 'inválido' if not isinstance(preco, (int, float)
+                                                                          ) or preco < 0 else 'válido',
 
-        # Atualiza a cor dos campos para indicar erro
-        window['cpf'].update(background_color='red' if not is_cpf_valido else 'white')
-        window['nome'].update(background_color='red' if not is_nome_valido else 'white')
-        window['data_nasc'].update(background_color='red' if not is_data_nasc_valida else 'white')
+            }
+        elif contexto == 'venda':
+            campos_obrigatorios = ['cliente', 'vendedor', 'produtos', 'data_venda']
+        else:
+            raise ValueError(f"Contexto desconhecido: {contexto}")
 
-        all_valid = is_cpf_valido and is_nome_valido and is_data_nasc_valida
+        return self.validar_campos(values, campos_obrigatorios, validacoes_personalizadas)
 
-        # Verifica se todos os campos são válidos para habilitar o botão "Cadastrar" ou "OK"
-        if 'Cadastrar' in window.AllKeysDict:
-            window['Cadastrar'].update(disabled=not all_valid and any(values.values()))
-        elif 'OK' in window.AllKeysDict:
-            window['OK'].update(disabled=not all_valid and any(values.values()))
+    def validar_campos(self, values: dict, campos_obrigatorios: list,
+                       validacoes_personalizadas: dict = None) -> list:
+        campos_invalidos = []
 
-        return validacao_cpf, validacao_nome, validacao_data_nasc
+        for campo in campos_obrigatorios:
+            if not values.get(campo):
+                campos_invalidos.append(campo)
+
+        if validacoes_personalizadas:
+            for campo, validacao in validacoes_personalizadas.items():
+                if campo in values:
+                    resultado = validacao(values[campo])
+                    if "inválido" in str(resultado).lower():
+                        campos_invalidos.append(campo)
+
+        return campos_invalidos
 
     def confirmar_acoes(self, mensagem: str) -> bool:
         return sg.popup_yes_no(
