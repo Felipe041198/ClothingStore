@@ -159,7 +159,7 @@ class ControladorProduto(AbstractControlador):
         self.__tela_produto.cadastro_nao_encontrado()
 
     def mostrar_erro(self, mensagem: str):
-        print(f"Erro: {mensagem}")
+        self.__tela_produto.mostrar_erro(mensagem)
 
     def pesquisa_produto(self, codigo: int) -> Produto | None:
         for produto in self.__produtos:
