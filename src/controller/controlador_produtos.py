@@ -1,4 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.dao.dao_generic import DAOGeneric
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.mocks.produtos_mock import lista_produtos_mock
 from src.model.produto import Produto
@@ -9,8 +10,9 @@ from src.view.tela_gui_produtos import TelaProdutos
 class ControladorProduto(AbstractControlador):
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
-        self.__produtos = []
         self.__tela_produto = TelaProdutos()
+        self.__produtos_dao = DAOGeneric("produtos")
+        self.__produtos = self.__produtos_dao.carregar()
 
     @property
     def produtos(self) -> list[Produto]:
@@ -144,3 +146,6 @@ class ControladorProduto(AbstractControlador):
 
     def adicionar_mock_produtos(self):
         self.__produtos.extend(lista_produtos_mock)
+
+    def salvar_produtos(self):
+        self.__produtos_dao.salvar(self.__produtos)

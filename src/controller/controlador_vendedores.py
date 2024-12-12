@@ -1,4 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.dao.dao_generic import DAOGeneric
 from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.exceptions.valor_invalido_exception import ValorInvalidoException
@@ -13,7 +14,8 @@ class ControladorVendedores(AbstractControlador):
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
         self.__tela_vendedores = TelaVendedores()
-        self.__vendedores = []
+        self.__vendedores_dao = DAOGeneric("vendedores")
+        self.__vendedores = self.__vendedores_dao.carregar()
 
     @property
     def vendedores(self) -> list[Vendedor]:
@@ -162,3 +164,6 @@ class ControladorVendedores(AbstractControlador):
 
     def mostrar_erro(self, e: str):
         self.__tela_vendedores.mostrar_erro(e)
+
+    def salvar_vendedores(self):
+        self.__vendedores_dao.salvar(self.__vendedores)
