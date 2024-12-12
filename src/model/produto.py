@@ -75,7 +75,7 @@ class Produto:
             raise TypeError("Preço do produto inválido.")
         if preco < 0:
             raise ValueError("O preço do produto não pode ser negativo.")
-        self.__preco = preco
+        self.__preco = round(float(preco), 2)
 
     def to_dict(self):
         return {
