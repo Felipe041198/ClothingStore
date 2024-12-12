@@ -5,7 +5,7 @@ from src.model.cliente import Cliente
 from src.model.venda import Venda
 from src.model.vendedor import Vendedor
 from src.utils.decorators import tratar_excecoes
-from src.view.tela_vendas import TelaVendas
+from src.view.tela_gui_vendas import TelaVendas
 
 
 class ControladorVendas(AbstractControlador):
@@ -61,7 +61,12 @@ class ControladorVendas(AbstractControlador):
         raise NenhumRegistroEncontradoException
 
     def excluir_venda(self):
+        if not self.__vendas:
+            self.__tela_venda.sem_cadastro()
+            return
         indice_venda = self.__tela_venda.seleciona_vendas(self.vendas_dict)
+        if indice_venda is None:
+            return
 
         self.__vendas.pop(indice_venda)
         self.__tela_venda.sucesso_exclusao()
