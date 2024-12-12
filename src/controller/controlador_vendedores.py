@@ -1,6 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
 from src.dao.dao_generic import DAOGeneric
-from src.exceptions.cpf_ja_cadastrado_exception import CpfJahCadastradoException
 from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.exceptions.valor_invalido_exception import ValorInvalidoException
