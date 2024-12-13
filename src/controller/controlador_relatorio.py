@@ -53,12 +53,7 @@ class ControladorRelatorio(AbstractControlador):
         vendas_cliente.sort(key=lambda venda: venda.data_venda, reverse=True)
         ultima_compra = vendas_cliente[0].to_dict()
 
-        for produto in ultima_compra['produtos']:
-            produto_detalhado = self.controlador_produtos.pesquisa_produto(produto['codigo_produto'])
-            if produto_detalhado:
-                produto["nome"] = produto_detalhado.nome
-            else:
-                produto["nome"] = "Produto não encontrado"
+        ultima_compra = self.busca_dados_produtos(ultima_compra)
 
         # Exibir detalhes da última compra
         self.__tela_relatorio.exibir_ultima_compra(ultima_compra)
@@ -79,18 +74,29 @@ class ControladorRelatorio(AbstractControlador):
             return []
 
         vendas_vendedor.sort(key=lambda venda: venda.data_venda, reverse=True)
-        ultima_venda = vendas_vendedor[0]
+        ultima_venda = vendas_vendedor[0].to_dict()
+
+        ultima_venda = self.busca_dados_produtos(ultima_venda)
 
         # Exibir detalhes da última compra
-        self.__tela_relatorio.exibir_ultima_compra(ultima_venda)
-        return ultima_venda.produtos
+        self.__tela_relatorio.exibir_ultima_venda(ultima_venda)
+        return ultima_venda['produtos']
+
+    def busca_dados_produtos(self, venda) -> dict:
+        for produto in venda['produtos']:
+            produto_detalhado = self.controlador_produtos.pesquisa_produto(produto['codigo_produto'])
+            if produto_detalhado:
+                produto["nome"] = produto_detalhado.nome
+            else:
+                produto["nome"] = "Produto não encontrado"
+        return venda
 
     @tratar_excecoes
     def exibir_relatorio_por_tipo_cliente(self):
         relatorio = {categoria: [] for categoria in CategoriaCliente}
         for venda in self._controlador_sistema.controlador_vendas.vendas:
             cliente_categoria = venda.cliente.categoria
-            relatorio[cliente_categoria].append(venda)
+            relatorio[cliente_categoria].append(venda.to_dict())
 
         self.__tela_relatorio.mostrar_relatorio_por_tipo_cliente(relatorio)
 
@@ -100,7 +106,7 @@ class ControladorRelatorio(AbstractControlador):
         for venda in self._controlador_sistema.controlador_vendas.vendas:
             if venda.data_venda not in vendas_por_dia:
                 vendas_por_dia[venda.data_venda] = []
-            vendas_por_dia[venda.data_venda].append(venda)
+            vendas_por_dia[venda.data_venda].append(venda.to_dict())
 
         dias = list(vendas_por_dia.keys())
         opcao_dia = self.__tela_relatorio.selecionar_dia_relatorio(dias)

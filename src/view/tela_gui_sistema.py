@@ -22,8 +22,6 @@ class TelaSistema(AbstractTela):
                        button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#1F2225"))],
             [sg.Button("Consultar Histórico", key=5, size=(20, 2), font=("Arial", 12),
                        button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#1F2225"))],
-            [sg.Button("Mock Dados", key=99, size=(20, 2), font=("Arial", 12),
-                       button_color=("#FFFFFF", "#3E4349"), mouseover_colors=("#FFFFFF", "#1F2225"))],
             [sg.Button("Sair", key=0, size=(20, 2), font=("Arial", 12), button_color=("#FFFFFF", "red"),
                        mouseover_colors=("#FFFFFF", "#500000"))]
         ]

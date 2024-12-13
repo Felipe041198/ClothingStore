@@ -72,16 +72,23 @@ class TelaRelatorio:
         window.close()
 
     def exibir_ultima_venda(self, venda):
-        produtos = [[produto.codigo_produto, produto.nome, produto.quantidade, f"R${produto.preco_venda:.2f}"]
-                    for produto in venda.produtos]
+        produtos = [[produto['codigo_produto'], produto['nome'], produto['quantidade'], f"R${produto['preco_venda']:.2f}"]
+            for produto in venda['produtos']]
 
         layout = [
-            [sg.Text(f"Última Venda por {venda.vendedor.nome}", font=("Courier", 18),
+            [sg.Text(f"Última Venda de {venda['vendedor']['nome']}", font=("Courier", 18),
                      text_color=self.__text_color, background_color=self.__background_color)],
+            [sg.Text("Cliente:", font=("Arial", 12), background_color=self.__background_color, text_color="white"),
+             sg.Text(venda['cliente']['nome'], font=("Arial", 12), background_color=self.__background_color,
+                     text_color="white")],
+            [sg.Text("Data da venda:", font=("Arial", 12), background_color=self.__background_color,
+                     text_color="white"),
+             sg.Text(venda['data_venda'], font=("Arial", 12), background_color=self.__background_color,
+                     text_color="white")],
             [sg.Table(values=produtos, headings=["Código", "Nome", "Quantidade", "Preço"],
                       auto_size_columns=False, justification='center', num_rows=10,
                       background_color="#3E4349", text_color="white")],
-            [sg.Text(f"Valor Total: R${venda.valor_total:.2f}", font=("Arial", 14),
+            [sg.Text(f"Valor Total: R${venda['valor_total']:.2f}", font=("Arial", 14),
                      background_color=self.__background_color, text_color=self.__text_color)],
             [sg.Button("OK", size=(10, 1), button_color=("#FFFFFF", "#3E4349"))]
         ]
@@ -97,12 +104,12 @@ class TelaRelatorio:
         data = []
         for tipo, vendas in relatorio_por_tipo.items():
             for venda in vendas:
-                data.append([tipo.value, venda.cliente.nome, venda.vendedor.nome, f"R${venda.valor_total:.2f}"])
+                data.append([tipo.value, venda['cliente']['nome'], venda['vendedor']['nome'], f"R${venda['valor_total']:.2f}", venda['data_venda']])
 
         layout = [
             [sg.Text("Relatório por Tipo de Cliente", font=("Courier", 18),
                      text_color=self.__text_color, background_color=self.__background_color)],
-            [sg.Table(values=data, headings=["Tipo", "Cliente", "Vendedor", "Valor Total"],
+            [sg.Table(values=data, headings=["Tipo", "Cliente", "Vendedor", "Valor Total", "data_venda"],
                       auto_size_columns=False, justification='center', num_rows=10,
                       background_color="#3E4349", text_color="white")],
             [sg.Button("OK", size=(10, 1), button_color=("#FFFFFF", "#3E4349"))]
@@ -115,11 +122,11 @@ class TelaRelatorio:
                 break
         window.close()
 
-    def selecionar_dia_relatorio(self, dias_disponiveis: List[datetime]) -> Optional[datetime]:
+    def selecionar_dia_relatorio(self, dias_disponiveis: List[str]) -> Optional[datetime]:
         layout = [
             [sg.Text("Selecione um Dia para o Relatório", font=("Courier", 18),
                      text_color=self.__text_color, background_color=self.__background_color)],
-            [sg.Listbox(values=[dia.strftime('%d/%m/%Y') for dia in dias_disponiveis], size=(30, 10), key="-DIA-")],
+            [sg.Listbox(values=[dia for dia in dias_disponiveis], size=(30, 10), key="-DIA-")],
             [sg.Button("Selecionar", size=(10, 1), button_color=("#FFFFFF", "#3E4349")),
              sg.Button("Voltar", size=(10, 1), button_color=("#FFFFFF", "red"))]
         ]
@@ -131,16 +138,16 @@ class TelaRelatorio:
             if event in [sg.WINDOW_CLOSED, "Voltar"]:
                 break
             if event == "Selecionar" and values["-DIA-"]:
-                dia_selecionado = datetime.strptime(values["-DIA-"][0], '%d/%m/%Y')
+                dia_selecionado = values["-DIA-"][0]
                 break
         window.close()
         return dia_selecionado
 
     def mostrar_relatorio_por_dia(self, dia: datetime, vendas_no_dia: List):
-        data = [[venda.cliente.nome, venda.vendedor.nome, f"R${venda.valor_total:.2f}"] for venda in vendas_no_dia]
+        data = [[venda['cliente']['nome'], venda['vendedor']['nome'], f"R${venda['valor_total']:.2f}"] for venda in vendas_no_dia]
 
         layout = [
-            [sg.Text(f"Relatório do Dia {dia.strftime('%d/%m/%Y')}", font=("Courier", 18),
+            [sg.Text(f"Relatório do Dia {dia}", font=("Courier", 18),
                      text_color=self.__text_color, background_color=self.__background_color)],
             [sg.Table(values=data, headings=["Cliente", "Vendedor", "Valor Total"],
                       auto_size_columns=False, justification='center', num_rows=10,
