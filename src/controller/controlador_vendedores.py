@@ -34,7 +34,7 @@ class ControladorVendedores(AbstractControlador):
         lista_opcoes = {
             1: self.cadastrar_vendedor,
             2: self.listar_vendedores,
-            3: self.busca_vendedor,
+            3: self.busca_vendedor_cpf,
             4: self.exclui_vendedor,
             5: self.editar_vendedor,
             99: self.adicionar_mock_vendedores,
@@ -87,10 +87,17 @@ class ControladorVendedores(AbstractControlador):
         vendedor = self.pesquisa_vendedor(cpf)
 
         if vendedor:
-            self.__tela_vendedores.exibir_vendedor(vendedor.to_dict())
             return vendedor
 
         raise CpfNaoEncontradoException
+
+    @tratar_excecoes
+    def busca_vendedor_cpf(self) -> Vendedor | None:
+        vendedor = self.busca_vendedor()
+
+        if vendedor:
+            self.__tela_vendedores.exibir_vendedor(vendedor.to_dict())
+            return vendedor
 
     @tratar_excecoes
     def editar_vendedor(self) -> Vendedor | None:
