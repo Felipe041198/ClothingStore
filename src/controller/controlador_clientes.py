@@ -33,7 +33,7 @@ class ControladorClientes(AbstractControlador):
         lista_opcoes = {
             1: self.cadastrar_cliente,
             2: self.listar_clientes,
-            3: self.busca_cliente,
+            3: self.busca_cliente_cpf,
             4: self.exclui_cliente,
             5: self.editar_cliente,
             99: self.adicionar_mock_clientes,
@@ -75,6 +75,20 @@ class ControladorClientes(AbstractControlador):
 
     @tratar_excecoes
     def busca_cliente(self) -> Cliente | None:
+        cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
+
+        if not cpf:
+            return None
+
+        cliente = self.pesquisa_cliente(cpf)
+
+        if cliente:
+            return cliente
+
+        raise CpfNaoEncontradoException
+
+    @tratar_excecoes
+    def busca_cliente_cpf(self) -> Cliente | None:
         cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
 
         if not cpf:
