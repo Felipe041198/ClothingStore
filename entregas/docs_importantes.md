@@ -12,3 +12,8 @@ Link para o draw.io : [Diagrama UML](https://app.diagrams.net/#G1esEGVWLkYnOPsmp
 ## Diagrama UML da entidade cliente com MVC ###
 
 Link para o draw.io : [Diagrama Cliente](https://app.diagrams.net/#G1dFVnam3CPMuROci99t9Kg2CuUfuPURxe#%7B%22pageId%22%3A%222_pD4oEgYHyubxefa4L1%22%7D)
+
+
+## Entrega T2 ###
+
+Link para o draw.io do diagrama UM2 : [Diagrama UML 2](https://app.diagrams.net/#G1esEGVWLkYnOPsmp5Q-oUBenDprcVqT-9#%7B%22pageId%22%3A%22LDZeezV3CWmm1dyNQRqv%22%7D)
