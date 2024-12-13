@@ -60,9 +60,19 @@ class ControladorVendas(AbstractControlador):
     @tratar_excecoes
     def listar_vendas(self) -> list[Venda]:
         if self.__vendas:
-            self.__tela_venda.exibir_vendas(self.vendas_dict)
+            self.__tela_venda.exibir_vendas(self.vendas_dados_produtos())
             return self.__vendas
         raise NenhumRegistroEncontradoException
+
+    def vendas_dados_produtos(self) -> list[dict]:
+        lista_vendas = self.vendas_dict
+        for i, venda in enumerate(lista_vendas):
+            for j, produto in enumerate(venda["produtos"]):
+                dados_produto = (
+                    self._controlador_sistema.controlador_produtos.pesquisa_produto(produto['codigo_produto'])
+                )
+                lista_vendas[i]["produtos"][j]["nome"] = dados_produto.nome
+        return lista_vendas
 
     def excluir_venda(self):
         if not self.__vendas:

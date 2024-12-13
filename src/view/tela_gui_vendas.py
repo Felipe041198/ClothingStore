@@ -219,7 +219,7 @@ class TelaVendas(AbstractTelaCadastro):
                     nome_produto = produto.get("nome", "Produto Desconhecido")
                     quantidade = produto.get("quantidade", 0)
                     preco = produto.get("preco_venda", 0.0)
-                    texto_formatado += (f"    - {nome_produto}| Quantidade: {quantidade} | "
+                    texto_formatado += (f"    - {nome_produto} | Quantidade: {quantidade} | "
                                         f"Preço: R${preco:.2f}\n")
 
                 texto_formatado += f"Valor Total: R${valor_total:.2f}\n"
