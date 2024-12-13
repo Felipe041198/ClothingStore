@@ -1,12 +1,7 @@
 from src.controller.abstract_controlador import AbstractControlador
-from src.model.venda import Venda
-from datetime import datetime, timedelta
-from typing import List, Optional, Tuple
 
 from src.utils.decorators import tratar_excecoes
 from src.utils.enum_categoria_cliente import CategoriaCliente
-from src.model.cliente import Cliente
-from src.model.vendedor import Vendedor
 from src.view.tela_gui_relatorio import TelaRelatorio
 
 
