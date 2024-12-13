@@ -15,9 +15,9 @@ class Venda:
         # Renomear para item vendas
         self.__produtos = []
         if data is None:
-            self.__data_venda = date.today()
+            self.__data_venda = date.today().strftime("%d/%m/%Y")
         else:
-            self.__data_venda = data
+            self.__data_venda = data.strftime("%d/%m/%Y") if isinstance(data, date) else data
         self.__valor_total = 0
 
     def calcular_total(self) -> float:

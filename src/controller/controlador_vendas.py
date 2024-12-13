@@ -6,7 +6,7 @@ from src.model.cliente import Cliente
 from src.model.venda import Venda
 from src.model.vendedor import Vendedor
 from src.utils.decorators import tratar_excecoes
-from src.view.tela_vendas import TelaVendas
+from src.view.tela_gui_vendas import TelaVendas
 
 
 class ControladorVendas(AbstractControlador):
@@ -46,6 +46,8 @@ class ControladorVendas(AbstractControlador):
         vendedores = self._controlador_sistema.controlador_vendedores.vendedores_dict
         produtos = self._controlador_sistema.controlador_produtos.produtos_dict
         dados_venda = self.__tela_venda.obter_dados_venda(clientes, vendedores, produtos)
+        if not dados_venda:
+            return None
         venda = Venda(
             cliente=Cliente(**dados_venda['cliente']),
             vendedor=Vendedor(**dados_venda['vendedor']),
@@ -58,12 +60,27 @@ class ControladorVendas(AbstractControlador):
     @tratar_excecoes
     def listar_vendas(self) -> list[Venda]:
         if self.__vendas:
-            self.__tela_venda.exibir_vendas(self.vendas_dict)
+            self.__tela_venda.exibir_vendas(self.vendas_dados_produtos())
             return self.__vendas
         raise NenhumRegistroEncontradoException
 
+    def vendas_dados_produtos(self) -> list[dict]:
+        lista_vendas = self.vendas_dict
+        for i, venda in enumerate(lista_vendas):
+            for j, produto in enumerate(venda["produtos"]):
+                dados_produto = (
+                    self._controlador_sistema.controlador_produtos.pesquisa_produto(produto['codigo_produto'])
+                )
+                lista_vendas[i]["produtos"][j]["nome"] = dados_produto.nome
+        return lista_vendas
+
     def excluir_venda(self):
+        if not self.__vendas:
+            self.__tela_venda.sem_cadastro()
+            return
         indice_venda = self.__tela_venda.seleciona_vendas(self.vendas_dict)
+        if indice_venda is None:
+            return
 
         self.__vendas.pop(indice_venda)
         self.__tela_venda.sucesso_exclusao()
