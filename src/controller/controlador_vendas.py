@@ -46,6 +46,8 @@ class ControladorVendas(AbstractControlador):
         vendedores = self._controlador_sistema.controlador_vendedores.vendedores_dict
         produtos = self._controlador_sistema.controlador_produtos.produtos_dict
         dados_venda = self.__tela_venda.obter_dados_venda(clientes, vendedores, produtos)
+        if not dados_venda:
+            return None
         venda = Venda(
             cliente=Cliente(**dados_venda['cliente']),
             vendedor=Vendedor(**dados_venda['vendedor']),
