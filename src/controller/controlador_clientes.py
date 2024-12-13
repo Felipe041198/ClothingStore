@@ -1,22 +1,20 @@
 from src.controller.abstract_controlador import AbstractControlador
 from src.dao.dao_generic import DAOGeneric
-from src.exceptions.cpf_ja_cadastrado_exception import CpfJahCadastradoException
 from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.mocks.cliente_mock import lista_clientes_mock
 from src.model.cliente import Cliente
 from src.utils.decorators import tratar_excecoes
 from src.utils.enum_operacoes import Operacao
-from src.view.tela_clientes import TelaClientes
+from src.view.tela_gui_clientes import TelaClientes
 
 
 class ControladorClientes(AbstractControlador):
-
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
         self.__tela_clientes = TelaClientes()
-        self.__cliente_dao = DAOGeneric("clientes")
-        self.__clientes = self.__cliente_dao.carregar()
+        self.__clientes_dao = DAOGeneric("clientes")
+        self.__clientes = self.__clientes_dao.carregar()
 
     @property
     def clientes(self) -> list[Cliente]:
@@ -25,10 +23,10 @@ class ControladorClientes(AbstractControlador):
     @property
     def clientes_dict(self) -> list[dict]:
         if self.__clientes:
-            lista_dados_clientes = []
+            lista_clientes = []
             for cliente in self.__clientes:
-                lista_dados_clientes.append(cliente.to_dict())
-            return lista_dados_clientes
+                lista_clientes.append(cliente.to_dict())
+            return lista_clientes
         raise NenhumRegistroEncontradoException
 
     def abre_tela(self):
@@ -43,70 +41,100 @@ class ControladorClientes(AbstractControlador):
         }
 
         while True:
-            lista_opcoes[self.__tela_clientes.menu(list(lista_opcoes.keys()))]()
+            opcao = self.__tela_clientes.menu(list(lista_opcoes.keys()))
+            lista_opcoes[opcao]()
 
     @tratar_excecoes
     def cadastrar_cliente(self) -> Cliente | None:
-        dados_cliente = self.__tela_clientes.obter_dados_cliente(self.gerar_proximo_codigo())
+        dados_cliente, should_exit_to_menu = self.__tela_clientes.obter_dados_cliente(
+            self.gerar_proximo_codigo(),
+        )
 
-        if self.pesquisa_cliente(dados_cliente["cpf"]):
-            raise CpfJahCadastradoException
+        if should_exit_to_menu or not dados_cliente:
+            return None
+
+        cpf_existente = self.pesquisa_cliente(dados_cliente["cpf"])
+        if cpf_existente:
+            self.__tela_clientes.mostrar_erro("CPF já cadastrado. Insira um CPF diferente.")
+            return None
 
         cliente = Cliente(**dados_cliente)
         self.__clientes.append(cliente)
+
         self.__tela_clientes.sucesso_cadastro()
+        self.__tela_clientes.exibir_cliente(dados_cliente)
         return cliente
 
     @tratar_excecoes
     def listar_clientes(self) -> list[Cliente]:
-        self.__tela_clientes.exibir_clientes(self.clientes_dict)
+        if not self.__clientes:
+            self.__tela_clientes.sem_cadastro()
+        else:
+            self.__tela_clientes.exibir_clientes(self.clientes_dict)
         return self.__clientes
 
     @tratar_excecoes
-    def busca_cliente(self) -> Cliente:
+    def busca_cliente(self) -> Cliente | None:
         cpf = self.__tela_clientes.obter_cpf(Operacao.BUSCA)
 
+        if not cpf:
+            return None
+
         cliente = self.pesquisa_cliente(cpf)
+
         if cliente:
             self.__tela_clientes.exibir_cliente(cliente.to_dict())
             return cliente
+
         raise CpfNaoEncontradoException
 
     @tratar_excecoes
-    def exclui_cliente(self) -> Cliente:
+    def editar_cliente(self) -> Cliente | None:
+        cpf = self.__tela_clientes.obter_cpf(Operacao.EDITA)
+        if not cpf:
+            return None
+
+        cliente = self.pesquisa_cliente(cpf)
+
+        if cliente:
+            dados_cliente_original = cliente.to_dict()
+            dados_cliente_atualizado, should_exit_to_menu = self.__tela_clientes.editar_dados_cliente(
+                dados_cliente_original)
+
+            if should_exit_to_menu or not dados_cliente_atualizado:
+                return None
+
+            if dados_cliente_original == dados_cliente_atualizado:
+                return None
+
+            cliente_atualizado = Cliente(**dados_cliente_atualizado)
+            self.__clientes[self.__clientes.index(cliente)] = cliente_atualizado
+
+            self.__tela_clientes.sucesso_alteracao()
+            self.__tela_clientes.exibir_cliente(dados_cliente_atualizado)
+            return cliente_atualizado
+
+        self.__tela_clientes.cadastro_nao_encontrado()
+
+    @tratar_excecoes
+    def exclui_cliente(self) -> Cliente | None:
         cpf = self.__tela_clientes.obter_cpf(Operacao.EXCLUI)
+        if not cpf:
+            return None
         cliente = self.pesquisa_cliente(cpf)
 
         if cliente:
             self.__clientes.remove(cliente)
             self.__tela_clientes.sucesso_exclusao(cliente.nome)
             return cliente
-        raise CpfNaoEncontradoException
 
-    @tratar_excecoes
-    def editar_cliente(self) -> Cliente:
-        cpf = self.__tela_clientes.obter_cpf(Operacao.EDITA)
-        cliente = self.pesquisa_cliente(cpf)
+        self.__tela_clientes.cadastro_nao_encontrado()
 
-        if cliente:
-            dados_cliente = self.__tela_clientes.editar_dados_cliente(cliente.to_dict())
-            cliente_atualizado = Cliente(
-                nome=dados_cliente["nome"],
-                cpf=dados_cliente["cpf"],
-                data_nasc=dados_cliente["data_nasc"],
-                categoria=dados_cliente["categoria"],
-                codigo=dados_cliente["codigo"],
-            )
-            self.__clientes[self.__clientes.index(cliente)] = cliente_atualizado
-            self.__tela_clientes.sucesso_alteracao()
-            self.__tela_clientes.exibir_cliente(cliente_atualizado.to_dict())
-            return cliente_atualizado
-        raise CpfNaoEncontradoException
-
-    def pesquisa_cliente(self, cpf: str) -> Cliente:
+    def pesquisa_cliente(self, cpf: str) -> Cliente | None:
         for cliente in self.__clientes:
             if cliente.cpf == cpf:
                 return cliente
+        return None
 
     def gerar_proximo_codigo(self) -> int:
         if not self.__clientes:
@@ -121,4 +149,4 @@ class ControladorClientes(AbstractControlador):
         self.__tela_clientes.mostrar_erro(e)
 
     def salvar_clientes(self):
-        self.__cliente_dao.salvar(self.__clientes)
+        self.__clientes_dao.salvar(self.__clientes)
