@@ -1,3 +1,5 @@
+import atexit
+
 from src.controller.controlador_clientes import ControladorClientes
 from src.controller.controlador_vendas import ControladorVendas
 from src.controller.controlador_produtos import ControladorProduto
@@ -15,6 +17,8 @@ class ControladorSistema:
         self.__controlador_vendas = ControladorVendas(self)
         self.__controlador_relatorio = ControladorRelatorio(self)
         self.__tela_sistema = TelaSistema()
+        # Registra uma função para toda vez que fechar o sistema, salvar todos os dados
+        atexit.register(self.salvar_todos_os_dados)
 
     @property
     def controlador_clientes(self) -> ControladorClientes:
@@ -79,3 +83,9 @@ class ControladorSistema:
         self.__controlador_vendedores.adicionar_mock_vendedores()
         self.__controlador_produtos.adicionar_mock_produtos()
         self.__controlador_vendas.adiciona_mock_vendas()
+
+    def salvar_todos_os_dados(self):
+        self.__controlador_clientes.salvar_clientes()
+        self.__controlador_vendedores.salvar_vendedores()
+        self.__controlador_produtos.salvar_produtos()
+        self.__controlador_vendas.salvar_vendas()

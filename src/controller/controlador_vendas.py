@@ -1,4 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.dao.dao_generic import DAOGeneric
 from src.mocks.pedidos_mock import lista_vendas_mock
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.model.cliente import Cliente
@@ -13,7 +14,8 @@ class ControladorVendas(AbstractControlador):
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
         self.__tela_venda = TelaVendas()
-        self.__vendas = []
+        self.__vendas_dao = DAOGeneric("vendas")
+        self.__vendas = self.__vendas_dao.carregar()
 
     @property
     def vendas(self) -> list[Venda]:
@@ -76,3 +78,6 @@ class ControladorVendas(AbstractControlador):
 
     def adiciona_mock_vendas(self):
         self.__vendas.extend(lista_vendas_mock)
+
+    def salvar_vendas(self):
+        self.__vendas_dao.salvar(self.__vendas)

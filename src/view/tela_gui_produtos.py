@@ -43,8 +43,7 @@ class TelaProdutos(AbstractTelaCadastro):
                 break
 
             if event == 'Cadastrar':
-                campos_invalidos = self.validar_campos(values, ['nome', 'descricao',
-                                                                'tamanho', 'cor', 'preco'])
+                campos_invalidos = self.obter_campos_invalidos(values, contexto='produto')
 
                 if campos_invalidos:
                     sg.popup(
@@ -54,15 +53,6 @@ class TelaProdutos(AbstractTelaCadastro):
                         background_color="#2C2F36",
                         text_color="white"
                     )
-                    continue
-
-                try:
-                    preco = float(values['preco'])
-                    if preco <= 0:
-                        raise ValueError("O preço deve ser maior que zero.")
-                except ValueError:
-                    sg.popup("Preço inválido! Insira um valor numérico maior que zero.",
-                             title="Erro no Preço", background_color="#2C2F36", text_color="white")
                     continue
 
                 produto = self.criar_produto(values, codigo)
@@ -81,7 +71,7 @@ class TelaProdutos(AbstractTelaCadastro):
             "tamanho": values['tamanho'].strip(),
             "cor": values['cor'].strip(),
             "codigo": codigo,
-            "preco": float(values['preco'].strip())
+            "preco": float(values['preco'])
         }
 
     def exibir_produto(self, produto: dict):
@@ -190,8 +180,7 @@ class TelaProdutos(AbstractTelaCadastro):
                 break
 
             if event == 'Salvar':
-                campos_invalidos = self.validar_campos(values, ['nome', 'descricao',
-                                                                'tamanho', 'cor', 'preco'])
+                campos_invalidos = self.obter_campos_invalidos(values, contexto='produto')
 
                 if campos_invalidos:
                     sg.popup(
@@ -201,15 +190,6 @@ class TelaProdutos(AbstractTelaCadastro):
                         background_color="#2C2F36",
                         text_color="white"
                     )
-                    continue
-
-                try:
-                    preco = float(values['preco'])
-                    if preco <= 0:
-                        raise ValueError("O preço deve ser maior que zero.")
-                except ValueError:
-                    sg.popup("Preço inválido! Insira um valor numérico maior que zero.",
-                             title="Erro no Preço", background_color="#2C2F36", text_color="white")
                     continue
 
                 novos_dados = {k: values[k] for k in ['nome', 'descricao', 'preco', 'tamanho', 'cor']}

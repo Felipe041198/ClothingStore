@@ -16,7 +16,7 @@ class Validador:
 
         if Validador.VALIDAR_CPF:
             try:
-                cpf = ''.join(filter(str.isdigit, cpf))
+                cpf = ''.join(filter(lambda c: c.isdigit(), cpf))
                 if len(cpf) != 11:
                     return "CPF inválido! Deve conter 11 dígitos."
 
@@ -81,6 +81,30 @@ class Validador:
                 return "Nome inválido! Insira pelo menos dois nomes (nome e sobrenome)."
 
         return nome.title()
+
+    @staticmethod
+    def validar_preco(preco):
+        if preco is None or preco == '':
+            return "inválido: o preço não pode estar vazio."
+        try:
+            preco_formatado = round(float(preco), 2)
+            if preco_formatado < 0:
+                return "inválido: o preço não pode ser negativo."
+            return preco_formatado
+        except (ValueError, TypeError):
+            return "inválido: o preço deve ser um número."
+
+    @staticmethod
+    def validar_codigo(codigo):
+        if codigo is None or codigo == '':
+            return "inválido: o código não pode estar vazio."
+        try:
+            codigo_formatado = int(codigo)
+            if codigo_formatado < 0:
+                return "inválido: o código não pode ser negativo."
+            return codigo_formatado
+        except (ValueError, TypeError):
+            return "inválido: o código deve ser um número inteiro."
 
     @staticmethod
     def validar_endereco(endereco=None):

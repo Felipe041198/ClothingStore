@@ -1,4 +1,5 @@
 from src.controller.abstract_controlador import AbstractControlador
+from src.dao.dao_generic import DAOGeneric
 from src.exceptions.cpf_nao_encontrado_exception import CpfNaoEncontradoException
 from src.exceptions.nenhum_registro_encontrado_exception import NenhumRegistroEncontradoException
 from src.exceptions.valor_invalido_exception import ValorInvalidoException
@@ -13,7 +14,8 @@ class ControladorVendedores(AbstractControlador):
     def __init__(self, controlador_sistema):
         super().__init__(controlador_sistema)
         self.__tela_vendedores = TelaVendedores()
-        self.__vendedores = []
+        self.__vendedores_dao = DAOGeneric("vendedores")
+        self.__vendedores = self.__vendedores_dao.carregar()
 
     @property
     def vendedores(self) -> list[Vendedor]:
@@ -52,26 +54,20 @@ class ControladorVendedores(AbstractControlador):
         if should_exit_to_menu or not dados_vendedor:
             return None
 
-        try:
-            salario = self.validar_salario(dados_vendedor["salario"])
-            dados_vendedor["salario"] = salario
+        salario = self.validar_salario(dados_vendedor["salario"])
+        dados_vendedor["salario"] = salario
 
-            cpf_existente = self.pesquisa_vendedor(dados_vendedor["cpf"])
-            if cpf_existente:
-                self.__tela_vendedores.mostrar_erro("CPF já cadastrado. Insira um CPF diferente.")
-                return None
+        cpf_existente = self.pesquisa_vendedor(dados_vendedor["cpf"])
+        if cpf_existente:
+            self.__tela_vendedores.mostrar_erro("CPF já cadastrado. Insira um CPF diferente.")
+            return None
 
-            vendedor = Vendedor(**dados_vendedor)
-            self.__vendedores.append(vendedor)
+        vendedor = Vendedor(**dados_vendedor)
+        self.__vendedores.append(vendedor)
 
-            self.__tela_vendedores.sucesso_cadastro()
-            self.__tela_vendedores.exibir_vendedor(dados_vendedor)
-            return vendedor
-
-        except ValorInvalidoException as e:
-            self.__tela_vendedores.mostrar_erro(str(e))
-
-        return None
+        self.__tela_vendedores.sucesso_cadastro()
+        self.__tela_vendedores.exibir_vendedor(dados_vendedor)
+        return vendedor
 
     @tratar_excecoes
     def listar_vendedores(self) -> list[Vendedor]:
@@ -115,19 +111,15 @@ class ControladorVendedores(AbstractControlador):
             if dados_vendedor_original == dados_vendedor_atualizado:
                 return None
 
-            try:
-                salario = self.validar_salario(dados_vendedor_atualizado["salario"])
-                dados_vendedor_atualizado["salario"] = salario
+            salario = self.validar_salario(dados_vendedor_atualizado["salario"])
+            dados_vendedor_atualizado["salario"] = salario
 
-                vendedor_atualizado = Vendedor(**dados_vendedor_atualizado)
-                self.__vendedores[self.__vendedores.index(vendedor)] = vendedor_atualizado
+            vendedor_atualizado = Vendedor(**dados_vendedor_atualizado)
+            self.__vendedores[self.__vendedores.index(vendedor)] = vendedor_atualizado
 
-                self.__tela_vendedores.sucesso_alteracao()
-                self.__tela_vendedores.exibir_vendedor(dados_vendedor_atualizado)
-                return vendedor_atualizado
-
-            except ValorInvalidoException as e:
-                self.__tela_vendedores.mostrar_erro(str(e))
+            self.__tela_vendedores.sucesso_alteracao()
+            self.__tela_vendedores.exibir_vendedor(dados_vendedor_atualizado)
+            return vendedor_atualizado
 
         self.__tela_vendedores.cadastro_nao_encontrado()
 
@@ -151,7 +143,8 @@ class ControladorVendedores(AbstractControlador):
                 return vendedor
         return None
 
-    def validar_salario(self, salario: str) -> float:
+    @staticmethod
+    def validar_salario(salario: str) -> float:
         try:
             valor = float(salario)
             if valor <= 0:
@@ -171,3 +164,6 @@ class ControladorVendedores(AbstractControlador):
 
     def mostrar_erro(self, e: str):
         self.__tela_vendedores.mostrar_erro(e)
+
+    def salvar_vendedores(self):
+        self.__vendedores_dao.salvar(self.__vendedores)
