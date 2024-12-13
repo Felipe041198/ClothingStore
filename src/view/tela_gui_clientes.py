@@ -17,20 +17,17 @@ class TelaClientes(AbstractTelaCadastro):
              sg.InputText(key='nome')],
             [sg.Text('CPF:', size=(15, 1), background_color="#2C2F36", text_color="white"),
              sg.InputText(key='cpf')],
-            [sg.Text('Data de Nascimento (dd/mm/yyyy):', size=(25, 1),
+            [sg.Text('Data de nascimento:', size=(15, 1),
                      background_color="#2C2F36", text_color="white"),
              sg.InputText(key='data_nasc')],
             [sg.Text('Código gerado:', size=(15, 1), background_color="#2C2F36", text_color="white"),
              sg.Text(f'{codigo}', size=(15, 1), background_color="#2C2F36", text_color="white")],
             [sg.Text('Categoria:', size=(15, 1), background_color="#2C2F36", text_color="white"),
-             sg.Combo(
-                 [categoria.nome for categoria in CategoriaCliente],
-                 key='categoria',
-                 readonly=True
-             )],
+             sg.Combo([categoria.nome for categoria in CategoriaCliente],
+                      key='categoria',
+                      readonly=True)],
             [sg.Button('Cadastrar', size=(10, 1), button_color=("#FFFFFF", "#3E4349")),
-             sg.Button('Voltar', size=(10, 1), button_color=("#FFFFFF", "#3E4349"))]
-        ]
+             sg.Button('Voltar', size=(10, 1), button_color=("#FFFFFF", "#3E4349"))]]
 
         window = sg.Window('Cadastro de Cliente', layout, background_color="#2C2F36", finalize=True)
         dados_cliente = None
@@ -60,7 +57,8 @@ class TelaClientes(AbstractTelaCadastro):
                     continue
 
                 categoria = next(
-                    (categoria for categoria in CategoriaCliente if categoria.nome == values['categoria']), None
+                    (categoria for categoria in CategoriaCliente
+                     if categoria.nome == values['categoria']), None
                 )
 
                 if not categoria:
@@ -94,13 +92,15 @@ class TelaClientes(AbstractTelaCadastro):
              sg.Text(cliente['cpf'], font=("Arial", 12), background_color="#2C2F36", text_color="white")],
             [sg.Text("Data de Nascimento:", font=("Arial", 12, "bold"),
                      background_color="#2C2F36", text_color="white"),
-             sg.Text(cliente['data_nasc'], font=("Arial", 12), background_color="#2C2F36", text_color="white")],
+             sg.Text(cliente['data_nasc'], font=("Arial", 12),
+                     background_color="#2C2F36", text_color="white")],
             [sg.Text("Código:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
              sg.Text(cliente['codigo'], font=("Arial", 12), background_color="#2C2F36", text_color="white")],
-            [sg.Text("Categoria:", font=("Arial", 12, "bold"), background_color="#2C2F36", text_color="white"),
-             sg.Text(cliente['categoria'].nome, font=("Arial", 12), background_color="#2C2F36", text_color="white")],
-            [sg.Button('OK', button_color=("#FFFFFF", "#3E4349"), size=(10, 1))]
-        ]
+            [sg.Text("Categoria:", font=("Arial", 12, "bold"),
+                     background_color="#2C2F36", text_color="white"),
+             sg.Text(cliente['categoria'].nome, font=("Arial", 12),
+                     background_color="#2C2F36", text_color="white")],
+            [sg.Button('OK', button_color=("#FFFFFF", "#3E4349"), size=(10, 1))]]
 
         sg.Window("Detalhes do Cliente", layout, background_color="#2C2F36").read(close=True)
 
@@ -133,7 +133,7 @@ class TelaClientes(AbstractTelaCadastro):
                         auto_size_columns=False,
                         col_widths=[8, 20, 18, 20, 15],
                         justification='center',
-                        row_height=35,
+                        row_height=40,
                         enable_events=True
                     )]],
                     element_justification='center',
@@ -168,20 +168,32 @@ class TelaClientes(AbstractTelaCadastro):
                  [categoria.nome for categoria in CategoriaCliente],
                  default_value=cliente['categoria'].nome,
                  key='categoria',
-                 readonly=True
-             )],
+                 readonly=True)],
             [sg.Button('Salvar', button_color=("#FFFFFF", "#3E4349"), size=(10, 1)),
-             sg.Button('Cancelar', button_color=("#FFFFFF", "#FF0000"), size=(10, 1))]
-        ]
+             sg.Button('Cancelar', button_color=("#FFFFFF", "#FF0000"), size=(10, 1))]]
 
         window = sg.Window('Editar Cliente', layout, background_color="#2C2F36", finalize=True)
         should_exit_to_menu = False
         dados_cliente = None
 
+        valores_originais = {
+            "nome": cliente['nome'],
+            "cpf": cliente['cpf'],
+            "data_nasc": cliente['data_nasc'],
+            "categoria": cliente['categoria'].nome
+        }
+
         while True:
             event, values = window.read()
 
             if event in (sg.WINDOW_CLOSED, 'Cancelar'):
+                alterado = any(
+                    values[chave].strip() != str(valores_originais[chave]).strip()
+                    for chave in ["nome", "cpf", "data_nasc"]
+                ) or values['categoria'] != valores_originais['categoria']
+
+                if alterado and not self.confirmar_acoes("Há alterações não salvas. Deseja descartar?"):
+                    continue
                 should_exit_to_menu = True
                 break
 
@@ -199,7 +211,8 @@ class TelaClientes(AbstractTelaCadastro):
                     continue
 
                 categoria = next(
-                    (categoria for categoria in CategoriaCliente if categoria.nome == values['categoria']), None
+                    (categoria for categoria in CategoriaCliente
+                     if categoria.nome == values['categoria']), None
                 )
 
                 if not categoria:
