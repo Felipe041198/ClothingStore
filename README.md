@@ -85,4 +85,4 @@ Siga os passos abaixo:
 
 ## Estrutura do projeto
 
-![image](https://github.com/user-attachments/assets/0ac0bc8e-877a-483a-a44c-76767278de80)
+![image](https://github.com/user-attachments/assets/9268ed8e-1161-4f6f-9109-8db5818d6a8c)
