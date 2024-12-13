@@ -7,7 +7,6 @@ class Validador:
     VALIDAR_CPF = False
     VALIDAR_DATA_NASCIMENTO = True
     VALIDAR_NOME = True
-    VALIDAR_ENDERECO = False
 
     @staticmethod
     def validar_cpf(cpf=None):
@@ -102,16 +101,3 @@ class Validador:
             return codigo_formatado
         except (ValueError, TypeError):
             return "inválido: o código deve ser um número inteiro."
-
-    @staticmethod
-    def validar_endereco(endereco=None):
-        if endereco is None:
-            return "Endereço não fornecido."
-
-        if Validador.VALIDAR_ENDERECO:
-            if not isinstance(endereco, str) or not endereco:
-                return "Endereço inválido! O endereço não pode estar vazio."
-            if len(endereco.split()) < 2:
-                return "Endereço inválido! Insira pelo menos duas palavras."
-
-        return endereco.title()
