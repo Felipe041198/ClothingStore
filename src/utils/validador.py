@@ -77,9 +77,6 @@ class Validador:
             if not re.match(r'^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$', nome):
                 return "Nome inválido! O nome não pode conter números ou símbolos."
 
-            if len(nome.split()) < 2:
-                return "Nome inválido! Insira pelo menos dois nomes (nome e sobrenome)."
-
         return nome.title()
 
     @staticmethod
